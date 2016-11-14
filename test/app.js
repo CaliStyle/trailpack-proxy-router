@@ -16,9 +16,26 @@ module.exports = _.defaultsDeep({
     main: {
       packs: [
         smokesignals.Trailpack,
+        require('trailpack-sequelize'),
         require('trailpack-core'),
         require('../')
       ]
+    },
+    database: {
+      stores: {
+        postgresTest: {
+          database: 'ProxyCart',
+          host: '127.0.0.1',
+          dialect: 'postgres',
+          username: 'postgres',
+          password: 'admin',
+          logging: false
+        }
+      },
+      models: {
+        defaultStore: 'postgresTest',
+        migrate: 'drop'
+      }
     }
   }
 }, smokesignals.FailsafeConfig)
