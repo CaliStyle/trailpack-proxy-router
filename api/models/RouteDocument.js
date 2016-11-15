@@ -68,18 +68,6 @@ module.exports = class RouteDocument extends Model {
         document: {
           type: Sequelize.TEXT,
           allowNull: false
-        },
-        // Timestamp the Route Document was Created
-        created: {
-          type: Sequelize.DATE,
-          allowNull: false,
-          defaultValue: Sequelize.NOW
-        },
-        // Timestamp the Route Document was Updated
-        updated: {
-          type: Sequelize.DATE,
-          allowNull: false,
-          defaultValue: Sequelize.NOW
         }
       }
     }

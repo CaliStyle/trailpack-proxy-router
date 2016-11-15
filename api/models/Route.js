@@ -1,3 +1,4 @@
+/* eslint no-console: [0, { allow: ["log","warn", "error"] }] */
 /* eslint new-cap: [0] */
 'use strict'
 
@@ -30,6 +31,9 @@ module.exports = class Route extends Model {
   }
 
   static schema(app, Sequelize) {
+
+    console.log('CONFIG',app.config)
+
     let schema = {}
     if (app.config.database.orm === 'sequelize') {
       schema = {
@@ -71,23 +75,11 @@ module.exports = class Route extends Model {
         parent: {
           type: Sequelize.STRING,
           allowNull: false
-        },
-        // array of siblings route ids. Could be a relationship?
-        siblings: {},
-        // array of children route ids. Could be a relationship?
-        children: {},
-        // Timestamp the Route was Created
-        created: {
-          type: Sequelize.DATE,
-          allowNull: false,
-          defaultValue: Sequelize.NOW
-        },
-        // Timestamp the Route was Updated
-        updated: {
-          type: Sequelize.DATE,
-          allowNull: false,
-          defaultValue: Sequelize.NOW
         }
+        // array of siblings route ids. Could be a relationship?
+        // siblings: {},
+        // array of children route ids. Could be a relationship?
+        // children: {}
       }
     }
     return schema
