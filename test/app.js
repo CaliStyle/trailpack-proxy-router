@@ -49,12 +49,20 @@ module.exports = _.defaultsDeep({
     database: {
       stores: {
         postgresTest: {
-          database: 'ProxyCart',
-          host: '127.0.0.1',
+          logging: false,
           dialect: 'postgres',
-          username: 'scott',
-          // password: 'admin',
-          logging: false
+          database: 'circle_test',
+          host: 'localhost',
+          user: 'ubuntu',
+          password: '',
+          port: 5432,
+          ssl: false
+          // database: 'ProxyCart',
+          // host: '127.0.0.1',
+          // dialect: 'postgres',
+          // username: 'scott',
+          // // password: 'admin',
+          // logging: false
         }
       },
       models: {
