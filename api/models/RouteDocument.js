@@ -5,7 +5,7 @@
 const Model = require('trails-model')
 const _ = require('lodash')
 const TESTS = require('../utils/enums').TESTS
-// const helpers = require('../utils/helpers')
+const helpers = require('../utils/helpers')
 
 /**
  * @module RouteDocument
@@ -71,13 +71,9 @@ module.exports = class RouteDocument extends Model {
           defaultValue: TESTS.A0
         },
         // Meta of the page
-        // meta: helpers.JSON(this, app, Sequelize, 'meta', {
-        //   defaultValue: {}
-        // }),
-        // {
-        //   type: // Sequelize.JSONB,
-        //   defaultValue: {}
-        // },
+        meta: helpers.JSONB('routedocument', app, Sequelize, 'meta', {
+          defaultValue: {}
+        }),
         // The body of a page in HTML and/or Markdown
         content: {
           type: Sequelize.TEXT,

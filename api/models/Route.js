@@ -3,7 +3,7 @@
 'use strict'
 
 const Model = require('trails-model')
-// const helpers = require('../utils/helpers')
+const helpers = require('../utils/helpers')
 
 /**
  * @module Route
@@ -39,9 +39,9 @@ module.exports = class Route extends Model {
     if (app.config.database.orm === 'sequelize') {
       schema = {
         // Array of Variation Tests to run
-        // series: helpers.ARRAY(this, app, Sequelize, {
-        //   defaultValue: []
-        // }),
+        series: helpers.ARRAY('route', app, Sequelize, Sequelize.JSON, 'series', {
+          defaultValue: []
+        }),
         // {
         //   type: Sequelize.ARRAY(Sequelize.JSON)
         // },
@@ -61,33 +61,19 @@ module.exports = class Route extends Model {
           defaultValue: app.config.proxyrouter.baseline
         },
         // Array of Series run for particular demographics
-        // demographic: helpers.ARRAY(this, app, Sequelize, {
-        //   defaultValue: [
-        //     {
-        //       'unknown': [
-        //         {
-        //           document: '',
-        //           runs: 0,
-        //           score: 0.0
-        //         }
-        //       ]
-        //     }
-        //   ]
-        // }),
-        // {
-        //   type: // Sequelize.ARRAY(Sequelize.JSON),
-        //   defaultValue: [
-        //     {
-        //       'unknown': [
-        //         {
-        //           document: '',
-        //           runs: 0,
-        //           score: 0.0
-        //         }
-        //       ]
-        //     }
-        //   ]
-        // },
+        demographic: helpers.ARRAY('route', app, Sequelize, 'demographic', Sequelize.JSON, {
+          defaultValue: [
+            {
+              'unknown': [
+                {
+                  document: '',
+                  runs: 0,
+                  score: 0.0
+                }
+              ]
+            }
+          ]
+        }),
         // id of the parent of the route. Could be a Relationship?
         parent: {
           type: Sequelize.STRING,
