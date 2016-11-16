@@ -26,12 +26,16 @@ Use your own mechanisms to determine what qualifies as a demographic.
 
 ## Principles 
 One of the most difficult feats when dealing with a CMS, from a developer standpoint, is continuity:
+
 - Developing well crafted pages in a CMS requires a local or staging DB and then taking approved changes live in some slow error prone fashion.
 - A/B Testing requires that Marketers and UX specialist have easy access to creating variations of views and running tests. 
 - Database driven view states are notoriously slow.
 - Database content is slow to search.
+
 All of these are issues for the Modern Web, especially for web apps built as single page applications. 
+
 Proxy Engine's router takes care of these pain points by: 
+
 - Giving developers a flat file database for component driven views a with high amount version control.
 - Giving Marketers/UXs an easy way to create variations and automatically run tests when given an appropriate editor.
 - Making documents cache-able and still retaining tests and version control across millions of pages.
