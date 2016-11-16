@@ -13,8 +13,15 @@ module.exports = class RouteController extends Controller {
    * @param {Object} res
    */
   bindToDB(req, res) {
+    const RouterBindToDBService = this.app.services.RouterBindToDBService
+    RouterBindToDBService.build()
+      .then(()=>{
+        return res.sendStatus(200)
+      })
+      .catch((err)=>{
+        return res.serverError(err, req, res)
+      })
 
-    return res.ok()
   }
 
   /**
@@ -23,7 +30,14 @@ module.exports = class RouteController extends Controller {
    * @param {Object} res
    */
   bindToFL(req, res) {
-    return res.ok()
+    const RouterBindToFLService = this.app.services.RouterBindToFLService
+    RouterBindToFLService.build()
+      .then(()=>{
+        return res.sendStatus(200)
+      })
+      .catch((err)=>{
+        return res.serverError(err, req, res)
+      })
   }
 }
 

@@ -7,6 +7,8 @@ const Service = require('trails-service')
  * @description Binds Flat Files to Router Database
  */
 module.exports = class RouterBindToDBService extends Service {
-
+  build() {
+    return Promise.resolve()
+  }
 }
 
