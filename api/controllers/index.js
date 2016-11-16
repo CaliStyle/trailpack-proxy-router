@@ -1,0 +1,1 @@
+exports.RouteController = require('./RouteController')

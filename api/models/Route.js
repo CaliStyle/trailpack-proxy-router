@@ -3,6 +3,7 @@
 'use strict'
 
 const Model = require('trails-model')
+// const helpers = require('../utils/helpers')
 
 /**
  * @module Route
@@ -32,15 +33,18 @@ module.exports = class Route extends Model {
 
   static schema(app, Sequelize) {
 
-    console.log('CONFIG',app.config)
+    // console.log('CONFIG',app.config)
 
     let schema = {}
     if (app.config.database.orm === 'sequelize') {
       schema = {
         // Array of Variation Tests to run
-        series: {
-          type: Sequelize.ARRAY(Sequelize.JSON)
-        },
+        // series: helpers.ARRAY(this, app, Sequelize, {
+        //   defaultValue: []
+        // }),
+        // {
+        //   type: Sequelize.ARRAY(Sequelize.JSON)
+        // },
         // The weight score for a series test
         weight: {
           type: Sequelize.INTEGER,
@@ -57,20 +61,33 @@ module.exports = class Route extends Model {
           defaultValue: app.config.proxyrouter.baseline
         },
         // Array of Series run for particular demographics
-        demographic: {
-          type: Sequelize.ARRAY(Sequelize.JSON),
-          defaultValue: [
-            {
-              'unknown': [
-                {
-                  document: '',
-                  runs: 0,
-                  score: 0.0
-                }
-              ]
-            }
-          ]
-        },
+        // demographic: helpers.ARRAY(this, app, Sequelize, {
+        //   defaultValue: [
+        //     {
+        //       'unknown': [
+        //         {
+        //           document: '',
+        //           runs: 0,
+        //           score: 0.0
+        //         }
+        //       ]
+        //     }
+        //   ]
+        // }),
+        // {
+        //   type: // Sequelize.ARRAY(Sequelize.JSON),
+        //   defaultValue: [
+        //     {
+        //       'unknown': [
+        //         {
+        //           document: '',
+        //           runs: 0,
+        //           score: 0.0
+        //         }
+        //       ]
+        //     }
+        //   ]
+        // },
         // id of the parent of the route. Could be a Relationship?
         parent: {
           type: Sequelize.STRING,

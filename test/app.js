@@ -1,26 +1,66 @@
 'use strict'
-
 const _ = require('lodash')
 const smokesignals = require('smokesignals')
+const fs = require('fs')
 
-module.exports = _.defaultsDeep({
+const packs = [
+  smokesignals.Trailpack,
+  require('trailpack-core'),
+  require('trailpack-router'),
+  require('trailpack-express'),
+  require('../') // trailpack-proxy-route
+]
+
+const ORM = process.env.ORM || 'sequelize'
+
+const stores = {
+  sqlitedev: {
+    adapter: require('sails-disk')
+  }
+}
+
+if (ORM === 'waterline') {
+  packs.push(require('trailpack-waterline'))
+}
+else if (ORM === 'js-data') {
+  packs.push(require('trailpack-js-data'))
+  stores.sqlitedev = {
+    database: 'dev',
+    storage: './.tmp/jsdata.sqlite',
+    host: '127.0.0.1',
+    dialect: 'sqlite'
+  }
+}
+else if (ORM === 'sequelize') {
+  packs.push(require('trailpack-sequelize'))
+  stores.sqlitedev = {
+    database: 'dev',
+    storage: './.tmp/sequelize.sqlite',
+    host: '127.0.0.1',
+    dialect: 'sqlite'
+  }
+}
+
+const App = {
   pkg: {
-    name: require('../package').name + '-test'
+    name: 'proxy-route-trailpack-test',
+    version: '1.0.0'
   },
-  // api: {
-  //   models: { },
-  //   controllers: { },
-  //   services: { }
-  // },
   config: {
+    database: {
+      stores: stores,
+      models: {
+        defaultStore: 'sqlitedev',
+        migrate: 'drop'
+      }
+    },
+    stripe: {
+      public: 'test',
+      secret: 'test',
+      validate: 'false'
+    },
     main: {
-      packs: [
-        smokesignals.Trailpack,
-        require('trailpack-core'),
-        require('trailpack-express'),
-        require('trailpack-sequelize'),
-        require('../')
-      ]
+      packs: packs
     },
     policies: {
 
@@ -43,33 +83,6 @@ module.exports = _.defaultsDeep({
         ]
       }
     },
-    views: {
-      // engine: 'ejs'
-    },
-    database: {
-      stores: {
-        postgresTest: {
-          logging: false,
-          dialect: 'postgres',
-          database: 'circle_test',
-          host: 'localhost',
-          user: 'ubuntu',
-          password: '',
-          port: 5432,
-          ssl: false
-          // database: 'ProxyCart',
-          // host: '127.0.0.1',
-          // dialect: 'postgres',
-          // username: 'scott',
-          // // password: 'admin',
-          // logging: false
-        }
-      },
-      models: {
-        defaultStore: 'postgresTest',
-        migrate: 'drop'
-      }
-    },
     proxyrouter: {
       // Default Threshold
       threshold: 100,
@@ -79,6 +92,11 @@ module.exports = _.defaultsDeep({
       weight: 50
     }
   }
-}, smokesignals.FailsafeConfig)
+}
+const dbPath = __dirname + '/../.tmp/sqlitedev.db'
+if (fs.existsSync(dbPath)) {
+  fs.unlinkSync(dbPath)
+}
 
-
+_.defaultsDeep(App, smokesignals.FailsafeConfig)
+module.exports = App

@@ -1,8 +1,12 @@
+/* eslint no-console: [0, { allow: ["log","warn", "error"] }] */
+/* eslint new-cap: [0] */
 'use strict'
 
 const Model = require('trails-model')
 const _ = require('lodash')
 const TESTS = require('../utils/enums').TESTS
+// const helpers = require('../utils/helpers')
+
 /**
  * @module RouteDocument
  * @description Route Document model
@@ -55,11 +59,14 @@ module.exports = class RouteDocument extends Model {
           defaultValue: TESTS.A0
         },
         // Meta of the page
-        meta: {
-          type: Sequelize.JSONB,
-          defaultValue: {}
-        },
-        // The body of a page
+        // meta: helpers.JSON(this, app, Sequelize, 'meta', {
+        //   defaultValue: {}
+        // }),
+        // {
+        //   type: // Sequelize.JSONB,
+        //   defaultValue: {}
+        // },
+        // The body of a page in HTML and/or Markdown
         content: {
           type: Sequelize.TEXT,
           allowNull: true
@@ -68,6 +75,11 @@ module.exports = class RouteDocument extends Model {
         document: {
           type: Sequelize.TEXT,
           allowNull: false
+        },
+        // An optional style sheet to be applied to the Route Document
+        stylesheet: {
+          type: Sequelize.TEXT,
+          allowNull: true
         }
       }
     }
