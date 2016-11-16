@@ -24,7 +24,8 @@ module.exports = class RouterTrailpack extends Trailpack {
 
     return Promise.all([
       lib.Validator.validateDatabaseConfig(this.app.config.database),
-      lib.Validator.validateProxyrouteConfig(this.app.config.proxyroute)
+      lib.Validator.validateProxyrouteConfig(this.app.config.proxyroute),
+      lib.Validator.validateMiddleware(this.app.config.web.middlewares)
     ])
   }
 

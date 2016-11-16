@@ -1,4 +1,3 @@
-/* eslint no-console: [0, { allow: ["log","warn", "error"] }] */
 /* eslint new-cap: [0] */
 'use strict'
 

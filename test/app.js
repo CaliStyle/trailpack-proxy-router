@@ -2,6 +2,7 @@
 const _ = require('lodash')
 const smokesignals = require('smokesignals')
 const fs = require('fs')
+const lib = require('../lib')
 
 const packs = [
   smokesignals.Trailpack,
@@ -71,11 +72,15 @@ const App = {
           'passportInit',
           'passportSession',
           'methodOverride',
+          'proxyroute',
           'router',
           'www',
           '404',
           '500'
-        ]
+        ],
+        proxyroute: (req, res, next) => {
+          return lib.Middleware.proxyroute(req, res, next)
+        }
       }
     },
     proxyrouter: {
