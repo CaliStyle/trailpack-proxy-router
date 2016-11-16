@@ -30,6 +30,18 @@ module.exports = class RouteDocument extends Model {
             associate: (models) => {
 
             }
+          },
+          hooks: {
+            // Combine meta and content into document
+            afterCreate: (values, options, fn) => {
+
+              fn()
+            },
+            // Combine meta and content into document
+            afterUpdate: (values, options, fn) => {
+
+              fn()
+            }
           }
         }
       }

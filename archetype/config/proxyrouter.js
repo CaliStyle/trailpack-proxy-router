@@ -9,5 +9,7 @@ module.exports = {
   // Default Baseline
   baseline: 0.75,
   // Default Weight
-  weight: 50
+  weight: 50,
+  // Default Flat File Folder
+  folder: 'content'
 }

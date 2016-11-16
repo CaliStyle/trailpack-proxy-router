@@ -54,11 +54,6 @@ const App = {
         migrate: 'drop'
       }
     },
-    stripe: {
-      public: 'test',
-      secret: 'test',
-      validate: 'false'
-    },
     main: {
       packs: packs
     },
@@ -89,7 +84,9 @@ const App = {
       // Default Baseline
       baseline: 0.75,
       // Default Weight
-      weight: 50
+      weight: 50,
+      // Default Flat File Folder
+      folder: 'content'
     }
   }
 }
