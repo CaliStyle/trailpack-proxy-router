@@ -9,7 +9,7 @@ The Proxy Engine Router is an Express middleware built to be used on Trailsjs wi
 It's purpose is to allow for easy development, SEO, and AAA (Triple A) testing (a concept developed by [Scott Wyatt](https://github.com/scott-wyatt))
 from the ground up. 
 
-Views are stored in either a Flat File database or joined with a Postgres database, and are cacheable in a docment store such as Redis.
+Views are stored in either a Flat File database or joined with a Postgres database, and are cache-able in a document store such as Redis.
 Each view has a series of tests that are displayed based on a weight, threshold, and baseline for a given demographic.
 
 Each time a view is run, the engine will determine which series to display and track positive/negative control conversions for the demographic to score it.
@@ -18,7 +18,7 @@ Once a Series threshold and baseline is met, it becomes the default view for a g
 Say good bye to A/B testing as AAA testing can handle hundreds of different series test at once for each view in a web app.
 
 Series documents are given a test number, and version. They default to the lastest version, but the default can be changed to any version while keeping the run and score.
-Large changes to any version should be given another test number.
+Large changes to any version should be given another test number. The documents are markdown documents with yaml that allow you to use normal markdown, HTML, or embeds.
 
 Use your own mechanisms to track negative and positive interactions and then feed them back to Proxy Engine to adjust the score.
 
@@ -38,7 +38,8 @@ Proxy Engine's router takes care of these pain points by:
 - Using the Metadata for each page makes using postgres' JSONB keyword searching fast (and already SEO ready), or easily connect postrgres to an Elasticsearch engine to make conent searching even better.
 
 ### Gotchas
-This style of CMS requires a "Single Source of Truth" for Frontend Components to bind too. Try using Redux or ngRX for your frontend.
+- This style of CMS requires a "Single Source of Truth" for Frontend Components to bind too. Try using Redux or ngRX for your frontend.
+- Mechanisms to determine/set Score and Demographic are up to you.
 
 ## Install
 
@@ -58,7 +59,45 @@ module.exports = {
 }
 ```
 
+```js
+// config/web.js
+  middlewares: {
+    order: [
+      ... other middleware
+      'proxyrouter', // proxyrouter must be before router
+      'router'
+    ],
+    proxyrouter: function(req, res, next){
+      return require('trailpack-proxy-router').lib.Middleware.proxyroute(req, res, next)
+    }
+  }
+```
+
 ## Usage
+
+### Example series document
+
+This is the default home page located at `/content/series/a0/index.md`
+
+```sh
+---
+title: Homepage Hello World
+keywords: proxy-engine, amazing
+runs: 0
+score: 0.0
+---
+<header-component></header-component>
+# Homepage Hello World
+<h2>I can use Normal HTML</h2>
+
+I can even use embeds like a youtube video or my own custom ones.
+{@youtube: 123}
+
+I can even use custom HTML DOM like ones from Angular2
+
+<login></login>
+<footer-component></footer-component>
+```
 
 ### Remarkable
 [Remarkable](https://github.com/jonschlinkert/remarkable) 
