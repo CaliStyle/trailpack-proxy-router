@@ -2,8 +2,8 @@
 /* global describe, it */
 const assert = require('assert')
 
-describe('RouterBindToFLService', () => {
+describe('RouterFLService', () => {
   it('should exist', () => {
-    assert(global.app.api.services['RouterBindToFLService'])
+    assert(global.app.api.services['RouterFLService'])
   })
 })

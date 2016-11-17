@@ -1,3 +1,3 @@
-exports.RouterBindToDBService = require('./RouterBindToDBService')
-exports.RouterBindToFLService = require('./RouterBindToFLService')
+exports.RouterDBService = require('./RouterDBService')
+exports.RouterFLService = require('./RouterFLService')
 exports.RouterControlsService = require('./RouterControlsService')

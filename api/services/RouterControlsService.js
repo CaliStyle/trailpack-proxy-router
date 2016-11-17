@@ -1,20 +1,41 @@
 'use strict'
 
 const Service = require('trails-service')
-
+const lib = require('../../lib')
 /**
  * @module RouterControlsService
  * @description Positive and Negative Controls as a Service
  */
 module.exports = class RouterControlsService extends Service {
+  /**
+   * positive
+   * @param data
+   *    @param {String} data.state
+   *    @param {String} data.demographic
+   *    @param {Object} data.payload
+   * @returns {Promise.<T>}
+   */
+  positive(data){
+    return lib.Validator.validatePositiveData(data)
+      .then((values) => {
 
-  positive(){
-
+      })
   }
 
+  /**
+   * negative
+   * @param data
+   *    @param {String} data.state
+   *    @param {String} data.demographic
+   *    @param {Object} data.payload
+   * @returns {Promise.<T>}
+   */
+  negative(data){
 
-  negative(){
+    return lib.Validator.validateNegativeData(data)
+      .then((values) => {
 
+      })
   }
 }
 

@@ -6,10 +6,23 @@
 const _ = require('lodash')
 
 module.exports = {
+  /**
+   * JSON - Sequalize.JSON only works with postgres, this helper mocks it if postgres is not availible.
+   * @param {String} cls
+   * @param {Object} app
+   * @param {Object} Sequelize
+   * @param {String} field
+   * @param {Object} options
+   * @returns {*}
+   */
   JSON: (cls, app, Sequelize, field, options) => {
     const database = app.config.database
 
     let sJSON
+
+    if (!options) {
+      options = {}
+    }
 
     if (database.models[cls]) {
       if (database.stores[database.models[cls].store].dialect == 'postgres') {
@@ -46,10 +59,24 @@ module.exports = {
 
     return sJSON(field)
   },
+
+  /**
+   * JSONB - Sequalize.JSOB only works in Postgres, this helper mocks it if JSONB is unavailable.
+   * @param {String} cls
+   * @param {Object} app
+   * @param {Object} Sequelize
+   * @param {String} field
+   * @param {Object} options
+   * @returns {*}
+   */
   JSONB: (cls, app, Sequelize, field, options) => {
     const database = app.config.database
 
     let sJSONB
+
+    if (!options) {
+      options = {}
+    }
 
     if (database.models[cls]) {
       if (database.stores[database.models[cls].store].dialect == 'postgres') {
@@ -85,11 +112,25 @@ module.exports = {
     }
     return sJSONB(field)
   },
+
+  /**
+   * ARRAY - Sequelize.ARRAY only works on postgres, this helper mocks it if postgres is unavailable.
+   * @param {String} cls
+   * @param {Object} app
+   * @param {Object} Sequelize
+   * @param {Object} type
+   * @param {String} field
+   * @param {Object} options
+   * @returns {*}
+   */
   ARRAY: (cls, app, Sequelize, type, field, options) => {
     const database = app.config.database
-    // console.log(database.models.defaultStore)
+
     let sARRAY
 
+    if (!options) {
+      options = {}
+    }
     if (database.models[cls]) {
       if (database.stores[database.models[cls].store].dialect == 'postgres') {
         sARRAY = (type) => {

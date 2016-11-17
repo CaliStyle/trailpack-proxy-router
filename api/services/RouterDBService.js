@@ -3,10 +3,10 @@
 const Service = require('trails-service')
 
 /**
- * @module RouterBindToDBService
+ * @module RouterDBService
  * @description Binds Flat Files to Router Database
  */
-module.exports = class RouterBindToDBService extends Service {
+module.exports = class RouterDBService extends Service {
   build() {
     return Promise.resolve()
   }

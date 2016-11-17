@@ -13,8 +13,8 @@ module.exports = class RouteController extends Controller {
    * @param {Object} res
    */
   bindToDB(req, res) {
-    const RouterBindToDBService = this.app.services.RouterBindToDBService
-    RouterBindToDBService.build()
+    const RouterDBService = this.app.services.RouterDBService
+    RouterDBService.build()
       .then(()=>{
         return res.sendStatus(200)
       })
@@ -30,8 +30,8 @@ module.exports = class RouteController extends Controller {
    * @param {Object} res
    */
   bindToFL(req, res) {
-    const RouterBindToFLService = this.app.services.RouterBindToFLService
-    RouterBindToFLService.build()
+    const RouterFLService = this.app.services.RouterFLService
+    RouterFLService.build()
       .then(()=>{
         return res.sendStatus(200)
       })
