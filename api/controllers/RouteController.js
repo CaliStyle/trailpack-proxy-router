@@ -12,7 +12,7 @@ module.exports = class RouteController extends Controller {
    * @param {Object} req
    * @param {Object} res
    */
-  bindToDB(req, res) {
+  buildToDB(req, res) {
     const RouterDBService = this.app.services.RouterDBService
     RouterDBService.build()
       .then(()=>{
@@ -29,7 +29,7 @@ module.exports = class RouteController extends Controller {
    * @param {Object} req
    * @param {Object} res
    */
-  bindToFL(req, res) {
+  buildToFL(req, res) {
     const RouterFLService = this.app.services.RouterFLService
     RouterFLService.build()
       .then(()=>{

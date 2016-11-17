@@ -11,5 +11,7 @@ module.exports = {
   // Default Weight
   weight: 50,
   // Default Flat File Folder
-  folder: 'content'
+  folder: 'content',
+  // Force Flat File and ignore DB
+  forceFL: true
 }

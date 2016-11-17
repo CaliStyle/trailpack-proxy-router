@@ -8,11 +8,13 @@ const packs = [
   smokesignals.Trailpack,
   require('trailpack-core'),
   require('trailpack-router'),
-  require('trailpack-express'),
   require('../') // trailpack-proxy-route
 ]
 
+
+const SERVER = process.env.SERVER || 'express'
 const ORM = process.env.ORM || 'sequelize'
+let web = {}
 
 const stores = {
   sqlitedev: {
@@ -42,6 +44,36 @@ else if (ORM === 'sequelize') {
   }
 }
 
+
+
+if ( SERVER == 'express' ) {
+  packs.push(require('trailpack-express'))
+  web = {
+    express: require('express'),
+    middlewares: {
+      order: [
+        'static',
+        'addMethods',
+        'cookieParser',
+        'session',
+        'bodyParser',
+        'passportInit',
+        'passportSession',
+        'methodOverride',
+        'proxyroute',
+        'router',
+        'www',
+        '404',
+        '500'
+      ],
+      proxyroute: (req, res, next) => {
+        return lib.Middleware.proxyroute(req, res, next)
+      },
+      static: require('express').static('test/static')
+    }
+  }
+}
+
 const App = {
   pkg: {
     name: 'proxy-route-trailpack-test',
@@ -61,37 +93,18 @@ const App = {
     policies: {
 
     },
-    web: {
-      express: require('express'),
-      middlewares: {
-        order: [
-          'addMethods',
-          'cookieParser',
-          'session',
-          'bodyParser',
-          'passportInit',
-          'passportSession',
-          'methodOverride',
-          'proxyroute',
-          'router',
-          'www',
-          '404',
-          '500'
-        ],
-        proxyroute: (req, res, next) => {
-          return lib.Middleware.proxyroute(req, res, next)
-        }
-      }
-    },
+    web: web,
     proxyrouter: {
       // Default Threshold
-      threshold: 100,
+      threshold: 10,
       // Default Baseline
       baseline: 0.75,
       // Default Weight
       weight: 50,
       // Default Flat File Folder
-      folder: 'content'
+      folder: 'content',
+      // Force Flat File and ignore DB
+      forceFL: true
     }
   }
 }

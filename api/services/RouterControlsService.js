@@ -8,6 +8,17 @@ const lib = require('../../lib')
  */
 module.exports = class RouterControlsService extends Service {
   /**
+   * addRun
+   * @param data
+   * @returns {Promise.<T>}
+   */
+  addRun(data){
+    return lib.Validator.validateAddRunData(data)
+      .then((values) => {
+
+      })
+  }
+  /**
    * positive
    * @param data
    *    @param {String} data.state
