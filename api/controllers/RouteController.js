@@ -1,7 +1,7 @@
 'use strict'
 
 const Controller = require('trails-controller')
-
+const lib = require('../../lib')
 /**
  * @module RouteController
  * @description Generated Trails.js Controller.
@@ -70,7 +70,10 @@ module.exports = class RouteController extends Controller {
    */
   addPage(req, res) {
     const RouterService = this.app.services.RouterService
-    RouterService.addPage(req.params.body)
+    lib.Validator.validatePageData(req.body)
+      .then(values => {
+        return RouterService.addPage(req.body)
+      })
       .then(data => {
         return res.json(data)
       })
@@ -86,7 +89,10 @@ module.exports = class RouteController extends Controller {
    */
   updatePage(req, res) {
     const RouterService = this.app.services.RouterService
-    RouterService.updatePage(req.params.body)
+    lib.Validator.validatePageData(req.body)
+      .then(values => {
+        return RouterService.updatePage(req.body)
+      })
       .then(data => {
         return res.json(data)
       })
@@ -102,7 +108,10 @@ module.exports = class RouteController extends Controller {
    */
   removePage(req, res) {
     const RouterService = this.app.services.RouterService
-    RouterService.removePage(req.params.body)
+    lib.Validator.validatePageData(req.body)
+      .then(values => {
+        return RouterService.removePage(req.body)
+      })
       .then(data => {
         return res.json(data)
       })
@@ -118,7 +127,10 @@ module.exports = class RouteController extends Controller {
    */
   addSeries(req, res) {
     const RouterService = this.app.services.RouterService
-    RouterService.addSeries(req.params.body)
+    lib.Validator.validateSeriesData(req.body)
+      .then(values => {
+        return RouterService.addSeries(req.body)
+      })
       .then(data => {
         return res.json(data)
       })
@@ -134,7 +146,10 @@ module.exports = class RouteController extends Controller {
    */
   removeSeries(req, res) {
     const RouterService = this.app.services.RouterService
-    RouterService.removeSeries({})
+    lib.Validator.validateSeriesData(req.body)
+      .then(values => {
+        return RouterService.removeSeries(req.body)
+      })
       .then(data => {
         return res.json(data)
       })
@@ -150,7 +165,10 @@ module.exports = class RouteController extends Controller {
    */
   updateSeries(req, res) {
     const RouterService = this.app.services.RouterService
-    RouterService.updateSeries({})
+    lib.Validator.validateSeriesData(req.body)
+      .then(values => {
+        return RouterService.updateSeries(req.body)
+      })
       .then(data => {
         return res.json(data)
       })
@@ -172,7 +190,7 @@ module.exports = class RouteController extends Controller {
       err.message('Type of control is required to be positive or negative')
       return res.serverError(err)
     }
-    RouterControlsService[type](req.params.body)
+    RouterControlsService[type](req.body)
       .then(data => {
         return res.json(data)
       })
