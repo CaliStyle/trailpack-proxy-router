@@ -36,7 +36,7 @@ All of these are issues for the Modern Web, especially for web apps built as sin
 
 Proxy Engine's router takes care of these pain points by: 
 
-- Giving developers a flat file database for component driven views a with high amount version control.
+- Giving developers a flat file database for component driven views with a high amount of version control.
 - Giving Marketers/UXs an easy way to create variations and automatically run tests when given an appropriate editor.
 - Making documents cache-able and still retaining tests and version control across millions of pages.
 - Using the Metadata for each page makes using postgres' JSONB keyword searching fast (and already SEO ready), or easily connect postrgres to an Elasticsearch engine to make conent searching even better.
@@ -121,53 +121,54 @@ is used to give the flat file readable meta data as well as give the displayed p
 is used to grant the parsed document embed-ables.  This could be youtube, vimeo, your own short codes, whatever!
 
 ### Controllers
-#### RouterController.view
+#### RouteController
+##### RouteController.view
 
-#### RouterController.buildToDB
+##### RouteController.buildToDB
 
-#### RouterController.buildToFL
+##### RouteController.buildToFL
 
-#### RouterController.addPage
+##### RouteController.addPage
 
-#### RouterController.updatePage
+##### RouteController.updatePage
 
-#### RouterController.removePage
+##### RouteController.removePage
 
-#### RouterController.updatePage
+##### RouteController.updatePage
 
-#### RouterController.addSeries
+##### RouteController.addSeries
 
-#### RouterController.updateSeries
+##### RouteController.updateSeries
 
-#### RouterController.removeSeries
+##### RouteController.removeSeries
 
-#### RouterController.control
+##### RouteController.control
 
 ### Services
 #### Controls
-##### RouterControlsService.addRun()
+##### RouteControlsService.addRun()
 
-##### RouterControlsService.positive()
+##### RouteControlsService.positive()
 
-##### RouterControlsService.negative()
+##### RouteControlsService.negative()
 
 #### General
-##### RouterService.addPage()
+##### RouteService.addPage()
 
-##### RouterService.updatePage()
+##### RouteService.updatePage()
 
-##### RouterService.removePage()
+##### RouteService.removePage()
 
-##### RouterService.updatePage()
+##### RouteService.updatePage()
 
-##### RouterService.addSeries()
+##### RouteService.addSeries()
 
-##### RouterService.updateSeries()
+##### RouteService.updateSeries()
 
-##### RouterService.removeSeries()
+##### RouteService.removeSeries()
 
 #### Render
-##### RouterRenderService.render()
+##### RouteRenderService.render()
 
 [npm-image]: https://img.shields.io/npm/v/trailpack-proxy-router.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/trailpack-proxy-router
