@@ -18,11 +18,15 @@ module.exports = class RouteController extends Controller {
       // const RouterControlsService = req.trailsApp.services.RouterControlsService
       // Send addRun and continue immediately
       // RouterControlsService.addRun(req.proxyroute)
-
-      res.writeHead(200, {'Content-Type': 'text/html'})
-      res.write(req.proxyroute.page)
-      res.end()
-      return
+      if (!req.wantsJSON) {
+        res.writeHead(200, {'Content-Type': 'text/html'})
+        res.write(req.proxyroute.page)
+        res.end()
+        return
+      }
+      else {
+        return res.json(req.proxyroute)
+      }
     }
     return res.sendStatus(404)
   }
@@ -57,5 +61,50 @@ module.exports = class RouteController extends Controller {
       .catch((err)=>{
         return res.serverError(err, req, res)
       })
+  }
+
+  /**
+   * addPage
+   * @param {Object} req
+   * @param {Object} res
+   */
+  addPage(req, res) {
+    return res.sendStatus(200)
+  }
+
+  /**
+   * removePage
+   * @param {Object} req
+   * @param {Object} res
+   */
+  removePage(req, res) {
+    return res.sendStatus(200)
+  }
+
+  /**
+   * addSeries
+   * @param {Object} req
+   * @param {Object} res
+   */
+  addSeries(req, res) {
+    return res.sendStatus(200)
+  }
+
+  /**
+   * removeSeries
+   * @param {Object} req
+   * @param {Object} res
+   */
+  removeSeries(req, res) {
+    return res.sendStatus(200)
+  }
+
+  /**
+   * updateSeries
+   * @param {Object} req
+   * @param {Object} res
+   */
+  updateSeries(req, res) {
+    return res.sendStatus(200)
   }
 }

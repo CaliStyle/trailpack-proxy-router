@@ -31,4 +31,44 @@ describe('RouteController', () => {
         done(err)
       })
   })
+  it('should make addPage post request', (done) => {
+    request
+      .post('/route/addPage')
+      .expect(200)
+      .end((err, res) => {
+        done(err)
+      })
+  })
+  it('should make removePage post request', (done) => {
+    request
+      .post('/route/removePage')
+      .expect(200)
+      .end((err, res) => {
+        done(err)
+      })
+  })
+  it('should make addSeries post request', (done) => {
+    request
+      .post('/route/addSeries')
+      .expect(200)
+      .end((err, res) => {
+        done(err)
+      })
+  })
+  it('should make removeSeries post request', (done) => {
+    request
+      .post('/route/removeSeries')
+      .expect(200)
+      .end((err, res) => {
+        done(err)
+      })
+  })
+  it('should make updateSeries post request', (done) => {
+    request
+      .post('/route/updateSeries')
+      .expect(200)
+      .end((err, res) => {
+        done(err)
+      })
+  })
 })

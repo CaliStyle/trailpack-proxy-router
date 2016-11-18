@@ -26,4 +26,14 @@ describe('proxyroute middleware', () => {
         done(err)
       })
   })
+  it('should make index as json request', (done) => {
+    request
+      .get('/')
+      .set('Accept', 'application/json') //set header for this test
+      .expect(200)
+      .end((err, res) => {
+        // console.log(res.body)
+        done(err)
+      })
+  })
 })
