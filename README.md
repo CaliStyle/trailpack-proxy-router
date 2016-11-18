@@ -15,9 +15,11 @@ Each view has a series of tests that are displayed based on a weight, threshold,
 Each time a view is run, the engine will determine which series to display and track positive/negative control conversions for the demographic to score it.
 Once a Series threshold and baseline is met, it becomes the default view for a given demographic.
 
-Say good bye to A/B testing as AAA testing can handle hundreds of different series test at once for each view in a web app.
+Say good bye to A/B testing as AAA testing can handle hundreds of different series test at once for each view in a web app and it can do it automatically.  This makes UI testing purely iterative and personable.
+ - Want to find the best UI for a time of day and show it at the right time?
+ - Want to find the best layouts for males or females or trans and show it to the corresponding audience automatcially?
 
-Series documents are given a test number, and version. They default to the lastest version, but the default can be changed to any version while keeping the run and score.
+AAA Testing isn't about one ~size~ site fits all, it's about finding the right layout per audience. Series documents are given a test number, and version. They default to the latest version, but the default can be changed to any version while keeping the run and score.
 Large changes to any version should be given another test number. The documents are markdown documents with yaml that allow you to use normal markdown, HTML, or embeds.
 
 Use your own mechanisms to track negative and positive interactions and then feed them back to Proxy Engine to adjust the score.
