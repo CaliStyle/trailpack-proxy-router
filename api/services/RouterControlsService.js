@@ -8,9 +8,9 @@ const lib = require('../../lib')
  */
 module.exports = class RouterControlsService extends Service {
   /**
-   * addRun
+   * addRun increments the run on a Route Document
    * @param data
-   * @returns {Promise.<T>}
+   * @returns {Promise.<{}>}
    */
   // TODO
   addRun(data){
@@ -21,11 +21,11 @@ module.exports = class RouterControlsService extends Service {
   }
   /**
    * positive
-   * @param data
+   * @param data increments a positive score on a Route Document
    *    @param {String} data.state
    *    @param {String} data.demographic
    *    @param {Object} data.payload
-   * @returns {Promise.<T>}
+   * @returns {Promise.<{data: string, demographic: string, payload: {}}>}
    */
   // TODO
   positive(data){
@@ -37,11 +37,11 @@ module.exports = class RouterControlsService extends Service {
 
   /**
    * negative
-   * @param data
+   * @param data increments a negative score on a Route Document
    *    @param {String} data.state
    *    @param {String} data.demographic
    *    @param {Object} data.payload
-   * @returns {Promise.<T>}
+   * @returns {Promise.<{data: string, demographic: string, payload: {}}>}
    */
   // TODO
   negative(data){

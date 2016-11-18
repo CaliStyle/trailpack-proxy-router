@@ -3,6 +3,7 @@
 'use strict'
 
 const Service = require('trails-service')
+const _ = require('lodash')
 
 /**
  * @module RouterService
@@ -15,19 +16,51 @@ module.exports = class RouterService extends Service {
    * @returns {boolean} if url matches proxyroute pattern
    */
   isProxyRouteRequest(req) {
-    // transform the method to lowercase and check if Get Request
+    // transform the method to lowercase and check if Get Request, if not, skip
     if ( req.method.toLowerCase() !== 'get') {
       this.app.log.silly('proxyroute:not GET request')
       return false
     }
 
-    // If a Static asset
-    if (/(?:\.([^.]+))?$/.test(req.originalUrl)) {
-      this.app.log.debug('proxyroute:static assest')
+    // TODO If a Static asset then skip
+    // if (/(?:\.([^.]+))?$/.test(req.originalUrl)) {
+    //   this.app.log.debug('proxyroute:static assest')
+    //   return false
+    // }
+    // console.log(/(?:\.([^.]+))?$/.test(req.originalUrl))
+
+    // Check if this has an explicit ignore
+    const pathToRegexp = require('path-to-regexp')
+    let ignore = false
+    this.app.routes.forEach((route) => {
+      // If another catchall route already ignored, break immediately
+      if (ignore) {
+        return
+      }
+      // If the route is not a GET route
+      if (route.method !== 'GET' && (_.isObject(route.method) && route.method.indexOf('GET') == -1)) {
+        return
+      }
+      // If route has a config with ignore
+      const re = pathToRegexp(route.path, [])
+      if (re.exec(req.originalUrl)) {
+        if (route.config && route.config.app && route.config.app.proxyroute && route.config.app.proxyroute.ingnore) {
+          ignore = true
+          return
+        }
+      }
+    })
+    // If this route is ignored.
+    if (ignore) {
       return false
     }
+
     // else return isProxyRouteRequest (true)
     return true
+  }
+  // TODO
+  pickSeries() {
+
   }
   /**
    * flatfileProxyRoute
@@ -36,31 +69,25 @@ module.exports = class RouterService extends Service {
    */
   // TODO
   flatfileProxyRoute(req) {
-    return {
-      id: 1,
-      meta: {},
-      page: 'Hello World'
-    }
+    const RouterFLService = this.app.services.RouterFLService
+    return RouterFLService.get(req)
   }
 
   /**
    * databaseProxyRoute
    * @param req
-   * @returns {Object} proxyroute
+   * @returns {Promise.<proxyroute>}
    */
   // TODO
   databaseProxyRoute(req) {
-    return {
-      id: 1,
-      meta: {},
-      page: 'Hello World'
-    }
+    const RouterDBService = this.app.services.RouterDBService
+    return RouterDBService.get(req)
   }
 
   /**
    * resolveProxyRoute
    * @param req
-   * @returns {Object} proxyroute
+   * @returns {Promise.<proxyroute>}
    */
   resolveProxyRoute(req) {
     if (this.app.config.proxyroute.forceFL) {

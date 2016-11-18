@@ -8,8 +8,22 @@ const Service = require('trails-service')
  */
 module.exports = class RouterDBService extends Service {
   // TODO
+  /**
+   * build
+   * @returns {Promise.<T>}
+   */
   build() {
     return Promise.resolve()
   }
+  /**
+   * get
+   * @returns {Promise.<{id: number, meta: {}, page: string}>}
+   */
+  get() {
+    return Promise.resolve({
+      id: 1,
+      meta: {},
+      page: 'Hello World'
+    })
+  }
 }
-

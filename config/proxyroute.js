@@ -16,14 +16,18 @@ module.exports = {
   forceFL: true,
   // Cache
   cache: {
-
+    // The redis prefix
+    prefix: 'pxy'
   },
   // Remarkable
   remarkable: {
+    // Options for Remarkable
     options: {
+      // Must always be set to true
       html: true
     },
     plugins: [
+      // Required Plugin
       {
         plugin: require('remarkable-meta'),
         options: {}

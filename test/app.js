@@ -92,6 +92,11 @@ const App = {
         method: [ 'GET' ],
         path: '/*',
         handler: 'RouteController.view'
+      },
+      {
+        method: [ 'GET' ],
+        path: '/hello/:world',
+        handler: 'RouteController.view'
       }
     ],
     main: {

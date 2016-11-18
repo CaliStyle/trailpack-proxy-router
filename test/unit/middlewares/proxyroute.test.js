@@ -40,4 +40,12 @@ describe('proxyroute middleware', () => {
         done(err)
       })
   })
+  it('should match pattern /hello/:world', (done) => {
+    request
+      .get('/hello/earth')
+      .expect(200)
+      .end((err, res) => {
+        done(err)
+      })
+  })
 })
