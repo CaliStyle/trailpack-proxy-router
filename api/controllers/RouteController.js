@@ -70,7 +70,7 @@ module.exports = class RouteController extends Controller {
    */
   addPage(req, res) {
     const RouterService = this.app.services.RouterService
-    RouterService.addPage({})
+    RouterService.addPage(req.params.body)
       .then(data => {
         return res.json(data)
       })
@@ -86,7 +86,7 @@ module.exports = class RouteController extends Controller {
    */
   updatePage(req, res) {
     const RouterService = this.app.services.RouterService
-    RouterService.updatePage({})
+    RouterService.updatePage(req.params.body)
       .then(data => {
         return res.json(data)
       })
@@ -102,7 +102,7 @@ module.exports = class RouteController extends Controller {
    */
   removePage(req, res) {
     const RouterService = this.app.services.RouterService
-    RouterService.removePage({})
+    RouterService.removePage(req.params.body)
       .then(data => {
         return res.json(data)
       })
@@ -118,7 +118,7 @@ module.exports = class RouteController extends Controller {
    */
   addSeries(req, res) {
     const RouterService = this.app.services.RouterService
-    RouterService.addSeries({})
+    RouterService.addSeries(req.params.body)
       .then(data => {
         return res.json(data)
       })
