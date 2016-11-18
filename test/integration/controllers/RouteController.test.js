@@ -17,7 +17,7 @@ describe('RouteController', () => {
 
   it('should make bindToDB post request', (done) => {
     request
-      .post('/route/buildToDB')
+      .post('/route/buildToDB',{})
       .expect(200)
       .end((err, res) => {
         done(err)
@@ -25,7 +25,7 @@ describe('RouteController', () => {
   })
   it('should make bindToFL post request', (done) => {
     request
-      .post('/route/buildToFL')
+      .post('/route/buildToFL',{})
       .expect(200)
       .end((err, res) => {
         done(err)
@@ -33,7 +33,7 @@ describe('RouteController', () => {
   })
   it('should make addPage post request', (done) => {
     request
-      .post('/route/addPage')
+      .post('/route/addPage',{})
       .expect(200)
       .end((err, res) => {
         done(err)
@@ -41,7 +41,7 @@ describe('RouteController', () => {
   })
   it('should make updatePage post request', (done) => {
     request
-      .post('/route/updatePage')
+      .post('/route/updatePage',{})
       .expect(200)
       .end((err, res) => {
         done(err)
@@ -49,7 +49,7 @@ describe('RouteController', () => {
   })
   it('should make removePage post request', (done) => {
     request
-      .post('/route/removePage')
+      .post('/route/removePage',{})
       .expect(200)
       .end((err, res) => {
         done(err)
@@ -57,15 +57,7 @@ describe('RouteController', () => {
   })
   it('should make addSeries post request', (done) => {
     request
-      .post('/route/addSeries')
-      .expect(200)
-      .end((err, res) => {
-        done(err)
-      })
-  })
-  it('should make removeSeries post request', (done) => {
-    request
-      .post('/route/removeSeries')
+      .post('/route/addSeries',{})
       .expect(200)
       .end((err, res) => {
         done(err)
@@ -73,7 +65,15 @@ describe('RouteController', () => {
   })
   it('should make updateSeries post request', (done) => {
     request
-      .post('/route/updateSeries')
+      .post('/route/updateSeries',{})
+      .expect(200)
+      .end((err, res) => {
+        done(err)
+      })
+  })
+  it('should make removeSeries post request', (done) => {
+    request
+      .post('/route/removeSeries',{})
       .expect(200)
       .end((err, res) => {
         done(err)

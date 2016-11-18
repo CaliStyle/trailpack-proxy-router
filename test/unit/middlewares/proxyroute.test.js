@@ -15,6 +15,7 @@ describe('proxyroute middleware', () => {
       .get('/test.jpg')
       .expect(200)
       .end((err, res) => {
+        assert(res.type, 'image/jpeg')
         done(err)
       })
   })
@@ -23,6 +24,7 @@ describe('proxyroute middleware', () => {
       .get('/')
       .expect(200)
       .end((err, res) => {
+        assert(res.text)
         done(err)
       })
   })
@@ -32,7 +34,9 @@ describe('proxyroute middleware', () => {
       .set('Accept', 'application/json') //set header for this test
       .expect(200)
       .end((err, res) => {
-        // console.log(res.body)
+        assert(res.body.id)
+        assert(res.body.meta)
+        assert(res.body.page)
         done(err)
       })
   })
