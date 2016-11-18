@@ -15,10 +15,8 @@ module.exports = class RouterService extends Service {
    * @returns {boolean} if url matches proxyroute pattern
    */
   isProxyRouteRequest(req) {
-    // console.log(req)
-
     // transform the method to lowercase and check if Get Request
-    if ( req.method.toLowerCase() != 'get') {
+    if ( req.method.toLowerCase() !== 'get') {
       this.app.log.silly('proxyroute:not GET request')
       return false
     }

@@ -76,6 +76,7 @@ module.exports = {
     }
   }
 ```
+### Add Policies to RouteController Methods
 
 ## Usage
 
@@ -89,6 +90,9 @@ title: Homepage Hello World
 keywords: proxy-engine, amazing
 runs: 0
 score: 0.0
+scripts: 
+ - /path/to/special/page/script.js
+
 ---
 <header-component></header-component>
 # Homepage Hello World

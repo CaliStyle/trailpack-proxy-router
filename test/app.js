@@ -111,7 +111,23 @@ const App = {
       // Default Flat File Folder
       folder: 'content',
       // Force Flat File and ignore DB
-      forceFL: true
+      forceFL: true,
+      // Cache
+      cache: {
+
+      },
+      // Remarkable
+      remarkable: {
+        options: {
+          html: true
+        },
+        plugins: [
+          {
+            plugin: require('remarkable-meta'),
+            options: {}
+          }
+        ]
+      }
     }
   }
 }

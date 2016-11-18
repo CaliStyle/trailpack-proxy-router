@@ -12,10 +12,11 @@ module.exports = class RouterControlsService extends Service {
    * @param data
    * @returns {Promise.<T>}
    */
+  // TODO
   addRun(data){
     return lib.Validator.validateAddRunData(data)
       .then((values) => {
-
+        return data
       })
   }
   /**
@@ -26,10 +27,11 @@ module.exports = class RouterControlsService extends Service {
    *    @param {Object} data.payload
    * @returns {Promise.<T>}
    */
+  // TODO
   positive(data){
     return lib.Validator.validatePositiveData(data)
       .then((values) => {
-
+        return data
       })
   }
 
@@ -41,11 +43,11 @@ module.exports = class RouterControlsService extends Service {
    *    @param {Object} data.payload
    * @returns {Promise.<T>}
    */
+  // TODO
   negative(data){
-
     return lib.Validator.validateNegativeData(data)
       .then((values) => {
-
+        return data
       })
   }
 }
