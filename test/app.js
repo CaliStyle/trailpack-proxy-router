@@ -87,6 +87,13 @@ const App = {
         migrate: 'drop'
       }
     },
+    routes: [
+      {
+        method: [ 'GET' ],
+        path: '/*',
+        handler: 'RouteController.view'
+      }
+    ],
     main: {
       packs: packs
     },

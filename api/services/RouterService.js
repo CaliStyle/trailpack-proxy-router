@@ -9,6 +9,11 @@ const Service = require('trails-service')
  * @description Route Service
  */
 module.exports = class RouterService extends Service {
+  /**
+   * isProxyRouteRequest
+   * @param req
+   * @returns {boolean} if url matches proxyroute pattern
+   */
   isProxyRouteRequest(req) {
     // console.log(req)
 
@@ -23,8 +28,30 @@ module.exports = class RouterService extends Service {
       this.app.log.debug('proxyroute:static assest')
       return false
     }
-    //
+    // else return isProxyRouteRequest (true)
     return true
+  }
+
+  /**
+   * resolveProxyRoute
+   * @param req
+   * @returns {Object} proxyroute
+   */
+  resolveProxyRoute(req) {
+    if (this.app.config.proxyroute.forceFL) {
+      return {
+        id: 1,
+        meta: {},
+        page: 'Hello World'
+      }
+    }
+    else {
+      return {
+        id: 1,
+        meta: {},
+        page: 'Hello World'
+      }
+    }
   }
 }
 

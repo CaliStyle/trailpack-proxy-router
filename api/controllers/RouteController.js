@@ -8,6 +8,25 @@ const Controller = require('trails-controller')
  */
 module.exports = class RouteController extends Controller {
   /**
+   * view
+   * @param req
+   * @param res
+   * @returns html or error
+   */
+  view(req, res) {
+    if (req.proxyroute) {
+      // const RouterControlsService = req.trailsApp.services.RouterControlsService
+      // Send addRun and continue immediately
+      // RouterControlsService.addRun(req.proxyroute)
+
+      res.writeHead(200, {'Content-Type': 'text/html'})
+      res.write(req.proxyroute.page)
+      res.end()
+      return
+    }
+    return res.sendStatus(404)
+  }
+  /**
    * Make Flat File Manifest in Route Database
    * @param {Object} req
    * @param {Object} res
