@@ -90,9 +90,10 @@ title: Homepage Hello World
 keywords: proxy-engine, amazing
 runs: 0
 score: 0.0
-scripts: 
+scripts:
+ - /i/can/do/arrays/too.js
  - /path/to/special/page/script.js
-
+og: {'image': '/and/cool/things/like/og-tags.jpg'}
 ---
 <header-component></header-component>
 # Homepage Hello World
@@ -107,17 +108,66 @@ I can even use custom HTML DOM like ones from Angular2
 <footer-component></footer-component>
 ```
 
-### Remarkable
+### Remarkable (required)
 [Remarkable](https://github.com/jonschlinkert/remarkable) 
-is used to parse the document.
+is used to parse the document from markdown/html to html.
 
-### Remarkable Embed
-[Remarkable Embed](https://github.com/Commander-lol/remarkable-embed) 
-is used to grant the parsed document embedables
-
-### Remarkable Meta
+### Remarkable Meta Plugin (required)
 [Remarkable Meta](https://github.com/eugeneware/remarkable-meta) 
 is used to give the flat file readable meta data as well as give the displayed page meta data.
+
+### Remarkable Embed Plugin (optional)
+[Remarkable Embed](https://github.com/Commander-lol/remarkable-embed) 
+is used to grant the parsed document embed-ables.  This could be youtube, vimeo, your own short codes, whatever!
+
+### Controllers
+#### RouterController.view
+
+#### RouterController.buildToDB
+
+#### RouterController.buildToFL
+
+#### RouterController.addPage
+
+#### RouterController.updatePage
+
+#### RouterController.removePage
+
+#### RouterController.updatePage
+
+#### RouterController.addSeries
+
+#### RouterController.updateSeries
+
+#### RouterController.removeSeries
+
+#### RouterController.control
+
+### Services
+#### Controls
+##### RouterControlsService.addRun()
+
+##### RouterControlsService.positive()
+
+##### RouterControlsService.negative()
+
+#### General
+##### RouterService.addPage()
+
+##### RouterService.updatePage()
+
+##### RouterService.removePage()
+
+##### RouterService.updatePage()
+
+##### RouterService.addSeries()
+
+##### RouterService.updateSeries()
+
+##### RouterService.removeSeries()
+
+#### Render
+##### RouterRenderService.render()
 
 [npm-image]: https://img.shields.io/npm/v/trailpack-proxy-router.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/trailpack-proxy-router

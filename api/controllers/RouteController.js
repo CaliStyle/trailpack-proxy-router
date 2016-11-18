@@ -158,4 +158,26 @@ module.exports = class RouteController extends Controller {
         return res.serverError(err)
       })
   }
+  /**
+   * control
+   * @param {Object} req
+   * @param {Object} res
+   */
+  control(req, res) {
+    const RouterControlsService = this.app.services.RouterControlsService
+    const type = req.params.type
+    if (!type || (type !== ('positive' || 'negative'))) {
+      const err = new Error()
+      err.status(403)
+      err.message('Type of control is required to be positive or negative')
+      return res.serverError(err)
+    }
+    RouterControlsService[type](req.params.body)
+      .then(data => {
+        return res.json(data)
+      })
+      .catch(err => {
+        return res.serverError(err)
+      })
+  }
 }
