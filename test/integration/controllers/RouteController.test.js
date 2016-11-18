@@ -39,6 +39,14 @@ describe('RouteController', () => {
         done(err)
       })
   })
+  it('should make updatePage post request', (done) => {
+    request
+      .post('/route/updatePage')
+      .expect(200)
+      .end((err, res) => {
+        done(err)
+      })
+  })
   it('should make removePage post request', (done) => {
     request
       .post('/route/removePage')

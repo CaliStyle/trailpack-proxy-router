@@ -69,7 +69,30 @@ module.exports = class RouteController extends Controller {
    * @param {Object} res
    */
   addPage(req, res) {
-    return res.sendStatus(200)
+    const RouterService = this.app.services.RouterService
+    RouterService.addPage({})
+      .then(data => {
+        return res.json(data)
+      })
+      .catch(err => {
+        return res.serverError(err)
+      })
+  }
+
+  /**
+   * updatePage
+   * @param {Object} req
+   * @param {Object} res
+   */
+  updatePage(req, res) {
+    const RouterService = this.app.services.RouterService
+    RouterService.updatePage({})
+      .then(data => {
+        return res.json(data)
+      })
+      .catch(err => {
+        return res.serverError(err)
+      })
   }
 
   /**
@@ -78,7 +101,14 @@ module.exports = class RouteController extends Controller {
    * @param {Object} res
    */
   removePage(req, res) {
-    return res.sendStatus(200)
+    const RouterService = this.app.services.RouterService
+    RouterService.removePage({})
+      .then(data => {
+        return res.json(data)
+      })
+      .catch(err => {
+        return res.serverError(err)
+      })
   }
 
   /**
@@ -87,7 +117,14 @@ module.exports = class RouteController extends Controller {
    * @param {Object} res
    */
   addSeries(req, res) {
-    return res.sendStatus(200)
+    const RouterService = this.app.services.RouterService
+    RouterService.addSeries({})
+      .then(data => {
+        return res.json(data)
+      })
+      .catch(err => {
+        return res.serverError(err)
+      })
   }
 
   /**
@@ -96,7 +133,14 @@ module.exports = class RouteController extends Controller {
    * @param {Object} res
    */
   removeSeries(req, res) {
-    return res.sendStatus(200)
+    const RouterService = this.app.services.RouterService
+    RouterService.removeSeries({})
+      .then(data => {
+        return res.json(data)
+      })
+      .catch(err => {
+        return res.serverError(err)
+      })
   }
 
   /**
@@ -105,6 +149,13 @@ module.exports = class RouteController extends Controller {
    * @param {Object} res
    */
   updateSeries(req, res) {
-    return res.sendStatus(200)
+    const RouterService = this.app.services.RouterService
+    RouterService.updateSeries({})
+      .then(data => {
+        return res.json(data)
+      })
+      .catch(err => {
+        return res.serverError(err)
+      })
   }
 }

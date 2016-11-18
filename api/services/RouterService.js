@@ -31,6 +31,33 @@ module.exports = class RouterService extends Service {
     // else return isProxyRouteRequest (true)
     return true
   }
+  /**
+   * flatfileProxyRoute
+   * @param req
+   * @returns {Object} proxyroute
+   */
+  // TODO
+  flatfileProxyRoute(req) {
+    return {
+      id: 1,
+      meta: {},
+      page: 'Hello World'
+    }
+  }
+
+  /**
+   * databaseProxyRoute
+   * @param req
+   * @returns {Object} proxyroute
+   */
+  // TODO
+  databaseProxyRoute(req) {
+    return {
+      id: 1,
+      meta: {},
+      page: 'Hello World'
+    }
+  }
 
   /**
    * resolveProxyRoute
@@ -39,19 +66,69 @@ module.exports = class RouterService extends Service {
    */
   resolveProxyRoute(req) {
     if (this.app.config.proxyroute.forceFL) {
-      return {
-        id: 1,
-        meta: {},
-        page: 'Hello World'
-      }
+      return this.flatfileProxyRoute(req)
     }
     else {
-      return {
-        id: 1,
-        meta: {},
-        page: 'Hello World'
-      }
+      return this.databaseProxyRoute(req)
     }
+  }
+
+  /**
+   * addPage
+   * @param data
+   * @returns {Promise.<T> Object} proxyroute
+   */
+  // TODO
+  addPage(data) {
+    return Promise.resolve(data)
+  }
+  /**
+   * updatePage
+   * @param data
+   * @returns {Object} proxyroute
+   */
+  // TODO
+  updatePage(data) {
+    return Promise.resolve(data)
+  }
+  /**
+   * removePage
+   * @param data
+   * @returns {Promise.<T> Object} proxyroute
+   */
+  // TODO
+  removePage(data) {
+    return Promise.resolve(data)
+  }
+
+  /**
+   * addSeries
+   * @param data
+   * @returns {Promise.<T> Object} proxyroute
+   */
+  // TODO
+  addSeries(data) {
+    return Promise.resolve(data)
+  }
+
+  /**
+   * updateSeries
+   * @param data
+   * @returns {Promise.<T> Object} proxyroute
+   */
+  // TODO
+  updateSeries(data) {
+    return Promise.resolve(data)
+  }
+
+  /**
+   * removeSeries
+   * @param data
+   * @returns {Promise.<T> Object} proxyroute
+   */
+  // TODO
+  removeSeries(data) {
+    return Promise.resolve(data)
   }
 }
 
