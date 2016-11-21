@@ -29,7 +29,7 @@ module.exports = class RouterControlsService extends Service {
    */
   // TODO
   positive(data){
-    return lib.Validator.validatePositiveData(data)
+    return lib.Validator.validateControlData(data)
       .then((values) => {
         return data
       })
@@ -45,7 +45,7 @@ module.exports = class RouterControlsService extends Service {
    */
   // TODO
   negative(data){
-    return lib.Validator.validateNegativeData(data)
+    return lib.Validator.validateControlData(data)
       .then((values) => {
         return data
       })

@@ -33,7 +33,10 @@ describe('RouteController', () => {
   })
   it('should make addPage post request', (done) => {
     request
-      .post('/route/addPage',{})
+      .post('/route/addPage')
+      .send({
+        identifier: '/'
+      })
       .expect(200)
       .end((err, res) => {
         done(err)
@@ -41,7 +44,10 @@ describe('RouteController', () => {
   })
   it('should make updatePage post request', (done) => {
     request
-      .post('/route/updatePage',{})
+      .post('/route/updatePage')
+      .send({
+        identifier: '/'
+      })
       .expect(200)
       .end((err, res) => {
         done(err)
@@ -49,7 +55,10 @@ describe('RouteController', () => {
   })
   it('should make removePage post request', (done) => {
     request
-      .post('/route/removePage',{})
+      .post('/route/removePage')
+      .send({
+        identifier: '/'
+      })
       .expect(200)
       .end((err, res) => {
         done(err)
@@ -57,7 +66,11 @@ describe('RouteController', () => {
   })
   it('should make addSeries post request', (done) => {
     request
-      .post('/route/addSeries',{})
+      .post('/route/addSeries')
+      .send({
+        identifier: '/',
+        document: 'Hello'
+      })
       .expect(200)
       .end((err, res) => {
         done(err)
@@ -65,7 +78,11 @@ describe('RouteController', () => {
   })
   it('should make updateSeries post request', (done) => {
     request
-      .post('/route/updateSeries',{})
+      .post('/route/updateSeries')
+      .send({
+        identifier: '/',
+        document: 'Updated Hello'
+      })
       .expect(200)
       .end((err, res) => {
         done(err)
@@ -73,7 +90,40 @@ describe('RouteController', () => {
   })
   it('should make removeSeries post request', (done) => {
     request
-      .post('/route/removeSeries',{})
+      .post('/route/removeSeries')
+      .send({
+        identifier: '/'
+      })
+      .expect(200)
+      .end((err, res) => {
+        done(err)
+      })
+  })
+  it('should make positive control post request', (done) => {
+    request
+      .post('/route/control?type=positive')
+      .send({
+        identifier: '/',
+        demographic: 'test',
+        payload: {
+          'event:click': 1
+        }
+      })
+      .expect(200)
+      .end((err, res) => {
+        done(err)
+      })
+  })
+  it('should make negative control post request', (done) => {
+    request
+      .post('/route/control?type=negative')
+      .send({
+        identifier: '/',
+        demographic: 'test',
+        payload: {
+          'event:click': 1
+        }
+      })
       .expect(200)
       .end((err, res) => {
         done(err)

@@ -47,7 +47,7 @@ module.exports = class RouteDocument extends Model {
     }
     return config
   }
-
+  // TODO a way to track positive and negative controls. This would require huge volumes of storage, hadoop?
   static schema (app, Sequelize) {
     let schema = {}
     if (app.config.database.orm === 'sequelize') {

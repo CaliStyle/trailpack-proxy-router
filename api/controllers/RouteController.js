@@ -1,3 +1,4 @@
+/* eslint no-console: [0, { allow: ["log","warn", "error"] }] */
 'use strict'
 
 const Controller = require('trails-controller')
@@ -108,7 +109,7 @@ module.exports = class RouteController extends Controller {
    */
   removePage(req, res) {
     const RouterService = this.app.services.RouterService
-    lib.Validator.validatePageData(req.body)
+    lib.Validator.validatePageRemoveData(req.body)
       .then(values => {
         return RouterService.removePage(req.body)
       })
@@ -146,7 +147,7 @@ module.exports = class RouteController extends Controller {
    */
   removeSeries(req, res) {
     const RouterService = this.app.services.RouterService
-    lib.Validator.validateSeriesData(req.body)
+    lib.Validator.validateSeriesRemoveData(req.body)
       .then(values => {
         return RouterService.removeSeries(req.body)
       })
@@ -183,14 +184,14 @@ module.exports = class RouteController extends Controller {
    */
   control(req, res) {
     const RouterControlsService = this.app.services.RouterControlsService
-    const type = req.params.type
-    if (!type || (type !== ('positive' || 'negative'))) {
-      const err = new Error()
-      err.status(403)
-      err.message('Type of control is required to be positive or negative')
-      return res.serverError(err)
-    }
-    RouterControlsService[type](req.body)
+    console.log(req.body)
+    // Type query validated by route
+    const type = req.query.type
+    // Validate the control data
+    lib.Validator.validateControlData(req.body)
+      .then(values => {
+        return RouterControlsService[type](req.body)
+      })
       .then(data => {
         return res.json(data)
       })
