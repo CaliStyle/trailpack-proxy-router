@@ -3,7 +3,7 @@
 'use strict'
 
 const Service = require('trails-service')
-const _ = require('lodash')
+// const _ = require('lodash')
 
 /**
  * @module RouterService
@@ -32,22 +32,16 @@ module.exports = class RouterService extends Service {
     // Check if this has an explicit ignore
     const pathToRegexp = require('path-to-regexp')
     let ignore = false
-    this.app.routes.forEach((route) => {
+    this.app.config.proxyroute.ignoreRoutes.forEach((route) => {
       // If another catchall route already ignored, break immediately
       if (ignore) {
         return
       }
-      // If the route is not a GET route
-      if (route.method !== 'GET' && (_.isObject(route.method) && route.method.indexOf('GET') == -1)) {
-        return
-      }
       // If route has a config with ignore
-      const re = pathToRegexp(route.path, [])
+      const re = pathToRegexp(route, [])
       if (re.exec(req.originalUrl)) {
-        if (route.config && route.config.app && route.config.app.proxyroute && route.config.app.proxyroute.ingnore) {
-          ignore = true
-          return
-        }
+        ignore = true
+        return
       }
     })
     // If this route is ignored.
@@ -105,7 +99,12 @@ module.exports = class RouterService extends Service {
    */
   // TODO
   addPage(data) {
-    return Promise.resolve(data)
+    return new Promise((resolve, reject) => {
+      if (this.app.config.proxyroute.forceFL) {
+        return resolve(data)
+      }
+      return resolve(data)
+    })
   }
   /**
    * updatePage

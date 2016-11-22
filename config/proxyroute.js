@@ -14,11 +14,24 @@ module.exports = {
   folder: 'content',
   // Force Flat File and ignore DB
   forceFL: true,
+  // The number of controls to enqueue before flushing.
+  flushAt: 20,
+  // The number of milliseconds to wait before flushing the queue automatically.
+  flushAfter: 10000,
   // Cache
   cache: {
-    // The redis prefix
+    // The redis datastore prefix
     prefix: 'pxy'
   },
+  // Hooks for events
+  // hooks: {
+  //   beforeControl: (data) => {
+  //
+  //   },
+  //   afterControl: (data) => {
+  //
+  //   }
+  // },
   // Remarkable
   remarkable: {
     // Options for Remarkable

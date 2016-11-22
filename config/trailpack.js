@@ -20,11 +20,18 @@ module.exports = {
       /**
        * List of events emitted by the configure lifecycle method
        */
-      emit: []
+      emit: [
+        'trailpack:proxyrouter:configured'
+      ]
     },
     initialize: {
-      listen: [],
-      emit: []
+      listen: [
+        // Trailpack-proxy-router should wait til after routes have been fully configured before adding to them.
+        'trailpack:router:initialized'
+      ],
+      emit: [
+        'trailpack:proxyrouter:initialized'
+      ]
     }
   }
 }

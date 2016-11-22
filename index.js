@@ -33,7 +33,10 @@ module.exports = class RouterTrailpack extends Trailpack {
    * TODO document method
    */
   configure () {
-    lib.ProxyRoute.addRoutes(this.app)
+    return Promise.all([
+      lib.ProxyRoute.addRoutes(this.app),
+      lib.ProxyRoute.ignoreRoutes(this.app)
+    ])
   }
 
   /**

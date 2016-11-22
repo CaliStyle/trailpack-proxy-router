@@ -36,7 +36,7 @@ module.exports = class RouterRenderService extends Service {
    * render
    * @param document
    * @param {Object} options (optional)
-   * @returns {Object} remarkable meta
+   * @returns {meta, page} remarkable meta rendered document
    */
   render(document, options) {
     const md = this._init(options)
