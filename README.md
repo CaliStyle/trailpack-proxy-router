@@ -47,6 +47,18 @@ Proxy Engine's router takes care of these pain points by:
 - This style of CMS requires a "Single Source of Truth" for Frontend Components to bind too. Try using Redux or ngRX for your frontend.
 - Mechanisms to determine/set Score and Demographic are up to you.
 
+## Support
+### Supported ORMs
+| Repo          |  Build Status (edge)                  |
+|---------------|---------------------------------------|
+| [trailpack-sequelize](https://github.com/trailsjs/trailpack-sequelize) | [![Build status][ci-sequelize-image]][ci-sequelize-url] |
+
+### Supported Webserver
+| Repo          |  Build Status (edge)                  |
+|---------------|---------------------------------------|
+| [trailpack-express](https://github.com/trailsjs/trailpack-express) | [![Build status][ci-express-image]][ci-express-url] |
+
+
 ## Install
 
 ```sh
@@ -181,3 +193,8 @@ is used to grant the parsed document embed-ables.  This could be youtube, vimeo,
 [codeclimate-image]: https://img.shields.io/codeclimate/github/calistyle/trailpack-proxy-router.svg?style=flat-square
 [codeclimate-url]: https://codeclimate.com/github/calistyle/trailpack-proxy-router
 
+[ci-sequelize-image]: https://img.shields.io/travis/trailsjs/trailpack-sequelize/master.svg?style=flat-square
+[ci-sequelize-url]: https://travis-ci.org/trailsjs/trailpack-sequelize
+
+[ci-express-image]: https://img.shields.io/travis/trailsjs/trailpack-express/master.svg?style=flat-square
+[ci-express-url]: https://travis-ci.org/trailsjs/trailpack-express
