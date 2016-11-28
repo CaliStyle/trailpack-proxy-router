@@ -7,6 +7,7 @@ const path = require('path')
 const fs = require('fs')
 const mkdirp = require('mkdirp')
 const rmdir = require('rmdir')
+const TESTS = require('../utils/enums').TESTS
 
 /**
  * @module RouterFLService
@@ -91,6 +92,22 @@ module.exports = class RouterFLService extends Service {
       catch (err) {
         return reject(err)
       }
+      console.log(dir)
+      let dirParts = path.normalize(dir).split('/')
+      // Remove the test folder from the path
+      if (_.values(TESTS).indexOf(dirParts[dirParts.length - 1] != -1)) {
+        dirParts.splice(-1,1)
+      }
+      // Remove the series folder of the path
+      if (dirParts[dirParts.length - 1] == 'series') {
+        dirParts.splice(-1,1)
+      }
+      // Remove the folder entirely if it is not the root
+      // if (dirParts[dirParts.length - 1] != this.app.config.proxyroute.folder){
+      //   dirParts.splice(-1,1)
+      // }
+      dir = path.normalize(dirParts.join('/'))
+      console.log(dir)
       rmdir(dir, (err, dirs, files) => {
         if (err) {
           return reject(err)
@@ -108,7 +125,7 @@ module.exports = class RouterFLService extends Service {
    * @returns {string|*}
    */
   resolveFlatFilePathFromString(orgPath, options){
-    const parts = orgPath.split('/')
+    const parts = path.normalize(orgPath).split('/')
     let outPath = ['','a0','0.0.0.md']
     _.each(parts, (part, index) => {
       if (index + 1 == parts.length) {

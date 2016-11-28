@@ -4,6 +4,7 @@
 
 const Service = require('trails-service')
 // const _ = require('lodash')
+const pathToRegexp = require('path-to-regexp')
 
 /**
  * @module RouterService
@@ -23,14 +24,13 @@ module.exports = class RouterService extends Service {
     }
 
     // TODO If a Static asset then skip
-    // if (/(?:\.([^.]+))?$/.test(req.originalUrl)) {
+    // var reg = new RegExp('(?:\.([^.]+))?$','g')
+    // if (reg.test(req.originalUrl)) {
     //   this.app.log.debug('proxyroute:static assest')
     //   return false
     // }
-    // console.log(/(?:\.([^.]+))?$/.test(req.originalUrl))
 
     // Check if this has an explicit ignore
-    const pathToRegexp = require('path-to-regexp')
     let ignore = false
     this.app.config.proxyroute.ignoreRoutes.forEach((route) => {
       // If another catchall route already ignored, break immediately
@@ -201,14 +201,6 @@ module.exports = class RouterService extends Service {
             throw new Error(`Can not resolve ${data.identifier}, make sure it is in "path" format eg. '/hello/world'`)
           }
           return RouterFLService.resolveFlatFilePathFromString(identifier.path, data.options)
-          // if (identifier.path) {
-          // }
-          // else {
-          //   return this.findPageByID(identifier.id)
-          //     .then(page => {
-          //       return RouterFLService.resolveFlatFilePathFromString(page.path, data.options)
-          //     })
-          // }
         })
         .then(resolvedPath => {
           pagePath = resolvedPath
