@@ -37,6 +37,12 @@ module.exports = class Route extends Model {
     let schema = {}
     if (app.config.database.orm === 'sequelize') {
       schema = {
+        // The path of the Page
+        path: {
+          type: Sequelize.STRING,
+          unique: true,
+          allowNull: false
+        },
         // Array of Variation Tests to run
         series: helpers.ARRAY('route', app, Sequelize, Sequelize.JSON, 'series', {
           defaultValue: []
@@ -60,7 +66,7 @@ module.exports = class Route extends Model {
           defaultValue: app.config.proxyrouter.baseline
         },
         // Array of Series run for particular demographics
-        demographic: helpers.ARRAY('route', app, Sequelize, 'demographic', Sequelize.JSON, {
+        demographics: helpers.ARRAY('route', app, Sequelize, 'demographic', Sequelize.JSON, {
           defaultValue: [
             {
               'unknown': [
@@ -75,8 +81,8 @@ module.exports = class Route extends Model {
         }),
         // id of the parent of the route. Could be a Relationship?
         parent: {
-          type: Sequelize.STRING,
-          allowNull: false
+          type: Sequelize.STRING
+          // allowNull: false
         }
         // array of siblings route ids. Could be a relationship?
         // siblings: {},

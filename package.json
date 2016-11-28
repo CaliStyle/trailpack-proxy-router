@@ -16,10 +16,12 @@
     "trailjs"
   ],
   "dependencies": {
+    "mkdirp": "^0.5.1",
     "pg": "^6.1.0",
     "remarkable": "^1.7.1",
     "remarkable-embed": "^0.3.6",
     "remarkable-meta": "^1.0.1",
+    "rmdir": "^1.2.0",
     "trailpack": "latest",
     "trailpack-express": "^1.0.14",
     "trailpack-router": "^1.0.7",

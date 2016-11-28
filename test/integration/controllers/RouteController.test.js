@@ -35,9 +35,22 @@ describe('RouteController', () => {
     request
       .post('/route/addPage')
       .send({
-        identifier: '/'
+        identifier: '/hello/earth'
       })
       .expect(200)
+      .end((err, res) => {
+        console.log(res.body)
+        done(err)
+      })
+  })
+  // NEGATIVE
+  it('should fail addPage post request as it was just created', (done) => {
+    request
+      .post('/route/addPage')
+      .send({
+        identifier: '/hello/earth'
+      })
+      .expect(500)
       .end((err, res) => {
         done(err)
       })
@@ -46,7 +59,7 @@ describe('RouteController', () => {
     request
       .post('/route/updatePage')
       .send({
-        identifier: '/'
+        identifier: '/hello/earth'
       })
       .expect(200)
       .end((err, res) => {
@@ -57,10 +70,11 @@ describe('RouteController', () => {
     request
       .post('/route/removePage')
       .send({
-        identifier: '/'
+        identifier: '/hello/earth'
       })
       .expect(200)
       .end((err, res) => {
+        console.log(res.body)
         done(err)
       })
   })
