@@ -48,14 +48,15 @@ module.exports = class RouterService extends Service {
     if (ignore) {
       return false
     }
-
     // else return isProxyRouteRequest (true)
     return true
   }
+
   // TODO
   pickSeries() {
 
   }
+
   /**
    * flatfileProxyRoute
    * @param req
@@ -76,6 +77,13 @@ module.exports = class RouterService extends Service {
   databaseProxyRoute(req) {
     const RouterDBService = this.app.services.RouterDBService
     return RouterDBService.get(req)
+  }
+  cachedProxyRoute(req){
+
+  }
+  // TODO
+  proxyRoute(req) {
+
   }
 
   /**
@@ -131,7 +139,7 @@ module.exports = class RouterService extends Service {
       // Remove all query strings just in case
       path = path.split('?')[0]
       const FootprintService = this.app.services.FootprintService
-      FootprintService.find('Route', {path: path})
+      FootprintService.find('Route', { path: path })
         .then(routes => {
           if (routes.length == 0){
             throw new Error(`Route not found for: ${path}`)
@@ -166,8 +174,17 @@ module.exports = class RouterService extends Service {
         lookupFunc = 'findPageByID'
         page.id = identifier
       }
+
+      if (!page.id && !page.path) {
+        const err = new Error(`Completely failed to look up ${identifier} make sure it is in "path" format eg. '/hello/world' or as an ID eg. '123'`)
+        return reject(err)
+      }
       // If this is a forced lookup
       if (lookup) {
+        if (this.app.config.proxyroute.forceFL) {
+          const err = new Error('RouterService.resolveIdentifier lookup=true is disabled while proxyroute.forceFL is true')
+          return reject(err)
+        }
         this[lookupFunc](identifier)
           .then(result => {
             page.id = page.id ? page.id : result.id
@@ -178,6 +195,7 @@ module.exports = class RouterService extends Service {
             return reject(err)
           })
       }
+      // Otherwise just resolve the path
       else {
         return resolve(page)
       }
@@ -193,6 +211,7 @@ module.exports = class RouterService extends Service {
     return new Promise((resolve, reject) => {
       const RouterFLService = this.app.services.RouterFLService
       let pagePath
+      let regPath
 
       this.resolveIdentifier(data.identifier)
         .then(identifier => {
@@ -200,7 +219,8 @@ module.exports = class RouterService extends Service {
           if (!identifier.path) {
             throw new Error(`Can not resolve ${data.identifier}, make sure it is in "path" format eg. '/hello/world'`)
           }
-          return RouterFLService.resolveFlatFilePathFromString(identifier.path, data.options)
+          regPath = identifier.path
+          return RouterFLService.resolveFlatFilePathFromString(identifier.path)
         })
         .then(resolvedPath => {
           pagePath = resolvedPath
@@ -208,9 +228,9 @@ module.exports = class RouterService extends Service {
         })
         .then(isCreated => {
           if (isCreated) {
-            throw new Error(`${pagePath} is already created, use RouterController.updatePage or RouterService.updatePage instead`)
+            throw new Error(`${pagePath} is already created, use RouterController.editPage or RouterService.editPage instead`)
           }
-          return this.createPage(pagePath)
+          return this.createPage(pagePath, regPath)
         })
         .then(page => {
           return resolve(page)
@@ -226,7 +246,7 @@ module.exports = class RouterService extends Service {
    * @param pagePath
    * @returns {Promise.<proxyroute>}
    */
-  createPage(pagePath) {
+  createPage(pagePath, regPath) {
     return new Promise((resolve, reject) => {
       const RouterFLService = this.app.services.RouterFLService
       const RouterDBService = this.app.services.RouterDBService
@@ -235,7 +255,8 @@ module.exports = class RouterService extends Service {
         RouterFLService.create(pagePath)
           .then(createdFile => {
             return resolve({
-              path: pagePath,
+              id: null,
+              path: regPath,
               series: [],
               demographics: []
             })
@@ -266,10 +287,11 @@ module.exports = class RouterService extends Service {
    * @returns {Promise.<proxyroute>}
    */
   // TODO
-  updatePage(data) {
+  editPage(data) {
     return new Promise((resolve, reject) => {
       const RouterFLService = this.app.services.RouterFLService
-      // let pagePath
+      let pagePath
+      let regPath
 
       this.resolveIdentifier(data.identifier)
         .then(identifier => {
@@ -277,15 +299,67 @@ module.exports = class RouterService extends Service {
           if (!identifier.path && !identifier.id) {
             throw new Error(`Can not resolve ${data.identifier}, make sure it is in "path" format eg. '/hello/world' or as an ID eg. '123'`)
           }
-          return RouterFLService.resolveFlatFilePathFromString(identifier.path, data.options)
+          regPath = identifier.path
+          return RouterFLService.resolveFlatFilePathFromString(regPath)
         })
         .then(resolvedPath => {
-          // pagePath = resolvedPath
-          return resolve(data)
+          pagePath = resolvedPath
+          return RouterFLService.checkIfFile(pagePath)
+        })
+        .then(isCreated => {
+          if (!isCreated) {
+            throw new Error(`${pagePath} is does not exist and can not be updated`)
+          }
+          return this.updatePage(pagePath, regPath, data.options)
+        })
+        .then(page => {
+          return resolve(page)
         })
         .catch(err => {
           return reject(err)
         })
+    })
+  }
+
+  /**
+   *
+   * @param pagePath
+   * @param regPath
+   * @param options
+   * @returns {Promise}
+   */
+  updatePage(pagePath, regPath, options){
+    return new Promise((resolve, reject) => {
+      const RouterFLService = this.app.services.RouterFLService
+      const RouterDBService = this.app.services.RouterDBService
+      if (this.app.config.proxyroute.forceFL) {
+        RouterFLService.update(pagePath)
+          .then(updateFile => {
+            return resolve({
+              id: null,
+              path: regPath,
+              series: [],
+              demographics: []
+            })
+          })
+          .catch(err => {
+            return reject(err)
+          })
+      }
+      else {
+        let updated
+        RouterDBService.update(regPath)
+          .then(updatedRecord => {
+            updated = updatedRecord[0]
+            return RouterFLService.update(pagePath)
+          })
+          .then(updatedFile => {
+            return resolve(updated)
+          })
+          .catch(err => {
+            return reject(err)
+          })
+      }
     })
   }
   /**
@@ -297,14 +371,15 @@ module.exports = class RouterService extends Service {
     return new Promise((resolve, reject) => {
       const RouterFLService = this.app.services.RouterFLService
       let pagePath
-
+      let regPath
       this.resolveIdentifier(data.identifier)
         .then(identifier => {
           this.app.log.debug('routerservice:removePage', identifier)
           if (!identifier.path && !identifier.id) {
             throw new Error(`Can not resolve ${data.identifier}, make sure it is in "path" format eg. '/hello/world' or as an ID eg. '123'`)
           }
-          return RouterFLService.resolveFlatFilePathFromString(identifier.path, data.options)
+          regPath = identifier.path
+          return RouterFLService.resolveFlatFilePathFromString(regPath)
         })
         .then(resolvedPath => {
           pagePath = resolvedPath
@@ -314,7 +389,7 @@ module.exports = class RouterService extends Service {
           if (!isCreated) {
             throw new Error(`${pagePath} is does not exist and can not be removed`)
           }
-          return this.destroyPage(pagePath)
+          return this.destroyPage(pagePath, regPath)
         })
         .then(page => {
           return resolve(page)
@@ -330,7 +405,7 @@ module.exports = class RouterService extends Service {
    * @param {String} pagePath
    * @returns {Promise.<proxyroute>}
    */
-  destroyPage(pagePath){
+  destroyPage(pagePath, regPath){
     return new Promise((resolve, reject) => {
       const RouterFLService = this.app.services.RouterFLService
       const RouterDBService = this.app.services.RouterDBService
@@ -338,7 +413,8 @@ module.exports = class RouterService extends Service {
         RouterFLService.destroy(pagePath)
           .then(destroyedFile => {
             return resolve({
-              path: pagePath,
+              id: null,
+              path: regPath,
               series: [],
               demographics: []
             })
@@ -349,7 +425,7 @@ module.exports = class RouterService extends Service {
       }
       else {
         let destroyed
-        RouterDBService.destroy(pagePath)
+        RouterDBService.destroy(regPath)
           .then(destroyedRecord => {
             destroyed = destroyedRecord[0]
             return RouterFLService.destroy(pagePath)
@@ -366,7 +442,7 @@ module.exports = class RouterService extends Service {
   /**
    * addSeries
    * @param data
-   * @returns {Promise.<T> Object} proxyroute
+   * @returns {Promise.<proxyroute>}
    */
   // TODO
   addSeries(data) {
@@ -374,12 +450,12 @@ module.exports = class RouterService extends Service {
   }
 
   /**
-   * updateSeries
+   * editSeries
    * @param data
-   * @returns {Promise.<T> Object} proxyroute
+   * @returns {Promise.<proxyroute>}
    */
   // TODO
-  updateSeries(data) {
+  editSeries(data) {
     return Promise.resolve(data)
   }
 

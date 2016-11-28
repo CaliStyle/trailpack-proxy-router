@@ -3,6 +3,7 @@
 
 const Controller = require('trails-controller')
 const lib = require('../../lib')
+const _ = require('lodash')
 /**
  * @module RouteController
  * @description Generated Trails.js Controller.
@@ -15,21 +16,36 @@ module.exports = class RouteController extends Controller {
    * @returns html or error
    */
   view(req, res) {
+    // console.log(req)
     if (req.proxyroute) {
       // const RouterControlsService = req.trailsApp.services.RouterControlsService
       // Send addRun and continue immediately
       // RouterControlsService.addRun(req.proxyroute)
       if (!req.wantsJSON) {
         res.writeHead(200, {'Content-Type': 'text/html'})
-        res.write(req.proxyroute.page)
+        console.log('RouterContoller.view', req.proxyroute)
+        if (req.proxyroute.page) {
+          res.write(req.proxyroute.page)
+        }
+        else {
+          res.write(req.proxyroute)
+        }
         res.end()
         return
       }
       else {
-        return res.json(req.proxyroute)
+        if (_.isObject(req.proxyroute)) {
+          return res.json(req.proxyroute)
+        }
+        else {
+          return res.json({page: req.proxyroute})
+        }
+
       }
     }
-    return res.sendStatus(404)
+    else {
+      return res.sendStatus(404)
+    }
   }
   /**
    * Make Flat File Manifest in Route Database
@@ -84,15 +100,15 @@ module.exports = class RouteController extends Controller {
   }
 
   /**
-   * updatePage
+   * editPage
    * @param {Object} req
    * @param {Object} res
    */
-  updatePage(req, res) {
+  editPage(req, res) {
     const RouterService = this.app.services.RouterService
     lib.Validator.validatePageData(req.body)
       .then(values => {
-        return RouterService.updatePage(req.body)
+        return RouterService.editPage(req.body)
       })
       .then(data => {
         return res.json(data)
@@ -160,15 +176,15 @@ module.exports = class RouteController extends Controller {
   }
 
   /**
-   * updateSeries
+   * editSeries
    * @param {Object} req
    * @param {Object} res
    */
-  updateSeries(req, res) {
+  editSeries(req, res) {
     const RouterService = this.app.services.RouterService
     lib.Validator.validateSeriesData(req.body)
       .then(values => {
-        return RouterService.updateSeries(req.body)
+        return RouterService.editSeries(req.body)
       })
       .then(data => {
         return res.json(data)

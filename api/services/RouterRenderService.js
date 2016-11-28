@@ -1,3 +1,4 @@
+/* eslint no-console: [0, { allow: ["log","warn", "error"] }] */
 'use strict'
 
 const Service = require('trails-service')
@@ -26,8 +27,13 @@ module.exports = class RouterRenderService extends Service {
     options = _.defaults(options, this.app.config.proxyroute.remarkable.options)
     md.set(options)
     // Set Plugins
-    _.each(this.app.config.proxyroute.remarkable, (plugin) => {
-      md.use(plugin.plugin, plugin.options)
+    _.each(this.app.config.proxyroute.remarkable.plugins, (plugin) => {
+      if (plugin.options) {
+        md.use(plugin.plugin, plugin.options)
+      }
+      else {
+        md.use(plugin.plugin)
+      }
     })
     return md
   }

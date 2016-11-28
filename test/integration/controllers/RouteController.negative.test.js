@@ -18,6 +18,29 @@ describe('RouteController', () => {
         done(err)
       })
   })
+  it('should fail addPage post request as it is created', (done) => {
+    request
+      .post('/route/addPage')
+      .send({
+        identifier: '/hello/:world'
+      })
+      .expect(500)
+      .end((err, res) => {
+        done(err)
+      })
+  })
+  it('should fail editPage post request as it does not exists', (done) => {
+    request
+      .post('/route/editPage')
+      .send({
+        identifier: '/hello/mercury',
+        options: {}
+      })
+      .expect(500)
+      .end((err, res) => {
+        done(err)
+      })
+  })
   it('should make addSeries post request and fail validation', (done) => {
     request
       .post('/route/addSeries',{})

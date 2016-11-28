@@ -17,7 +17,8 @@ describe('RouteController', () => {
 
   it('should make bindToDB post request', (done) => {
     request
-      .post('/route/buildToDB',{})
+      .post('/route/buildToDB')
+      .send({})
       .expect(200)
       .end((err, res) => {
         done(err)
@@ -25,7 +26,8 @@ describe('RouteController', () => {
   })
   it('should make bindToFL post request', (done) => {
     request
-      .post('/route/buildToFL',{})
+      .post('/route/buildToFL')
+      .send({})
       .expect(200)
       .end((err, res) => {
         done(err)
@@ -35,7 +37,7 @@ describe('RouteController', () => {
     request
       .post('/route/addPage')
       .send({
-        identifier: '/hello/earth'
+        identifier: '/hello/jupiter'
       })
       .expect(200)
       .end((err, res) => {
@@ -43,23 +45,12 @@ describe('RouteController', () => {
         done(err)
       })
   })
-  // NEGATIVE
-  it('should fail addPage post request as it was just created', (done) => {
+  it('should make editPage post request', (done) => {
     request
-      .post('/route/addPage')
+      .post('/route/editPage')
       .send({
-        identifier: '/hello/earth'
-      })
-      .expect(500)
-      .end((err, res) => {
-        done(err)
-      })
-  })
-  it('should make updatePage post request', (done) => {
-    request
-      .post('/route/updatePage')
-      .send({
-        identifier: '/hello/earth'
+        identifier: '/hello/jupiter',
+        options: {}
       })
       .expect(200)
       .end((err, res) => {
@@ -70,7 +61,7 @@ describe('RouteController', () => {
     request
       .post('/route/removePage')
       .send({
-        identifier: '/hello/earth'
+        identifier: '/hello/jupiter'
       })
       .expect(200)
       .end((err, res) => {
@@ -90,9 +81,9 @@ describe('RouteController', () => {
         done(err)
       })
   })
-  it('should make updateSeries post request', (done) => {
+  it('should make editSeries post request', (done) => {
     request
-      .post('/route/updateSeries')
+      .post('/route/editSeries')
       .send({
         identifier: '/',
         document: 'Updated Hello'

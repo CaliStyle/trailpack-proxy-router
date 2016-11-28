@@ -144,15 +144,13 @@ is used to grant the parsed document embed-ables.  This could be youtube, vimeo,
 
 ##### RouteController.addPage
 
-##### RouteController.updatePage
+##### RouteController.editPage
 
 ##### RouteController.removePage
 
-##### RouteController.updatePage
-
 ##### RouteController.addSeries
 
-##### RouteController.updateSeries
+##### RouteController.editSeries
 
 ##### RouteController.removeSeries
 
@@ -173,11 +171,11 @@ is used to grant the parsed document embed-ables.  This could be youtube, vimeo,
 
 ##### RouteService.removePage()
 
-##### RouteService.updatePage()
+##### RouteService.editPage()
 
 ##### RouteService.addSeries()
 
-##### RouteService.updateSeries()
+##### RouteService.editSeries()
 
 ##### RouteService.removeSeries()
 

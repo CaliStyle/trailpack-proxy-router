@@ -30,15 +30,59 @@ module.exports = class RouterFLService extends Service {
    * @returns {Promise.<{id: number, meta: object, page: string}>}
    */
   get(req) {
-    console.log('orginal: ', req.originalUrl, 'base: ', req.baseUrl)
-
-    return Promise.resolve({
-      id: 1,
-      meta: {},
-      page: 'Hello World'
+    // return Promise.resolve({
+    //   id: 1,
+    //   meta: {},
+    //   page: 'Hello World'
+    // })
+    return new Promise((resolve, reject) => {
+      console.log('RouterFLService.get orginal:', req.originalUrl, 'base:', req.baseUrl)
+      const pagePath = req.originalUrl
+      const alternatePath = req.route && req.route.path ? req.route.path : null
+      this.renderPage(pagePath, alternatePath)
+        .then(renderedPage => {
+          return resolve(renderedPage)
+        })
+        .catch(err => {
+          return reject(err)
+        })
     })
   }
 
+  /**
+   * renderPage
+   * @param pagePath (relative to domain)
+   * @param alternatePath (relative to domain)
+   * @returns {Promise.<T>}
+   */
+  renderPage(pagePath, alternatePath){
+    return new Promise((resolve, reject) => {
+      console.log('RouterFLService.renderPage', pagePath, alternatePath)
+      const RouterRenderService = this.app.services.RouterRenderService
+      pagePath = this.resolveFlatFilePathFromString(pagePath)
+
+      this.checkIfFile(pagePath)
+        .then(fileExists => {
+          if (fileExists && path.extname(pagePath) === '.md') {
+            const doc = fs.readFileSync(pagePath, 'utf8')
+            // console.log('RouterFLService.renderPage', doc)
+            return RouterRenderService.render(doc)
+          }
+          else {
+            throw new Error(`${pagePath} is not a qualified resource`)
+          }
+        })
+        .then(renderedDoc => {
+          // Set a blank ID
+          // console.log(renderedDoc)
+          // renderedDoc.id = null
+          return resolve(renderedDoc)
+        })
+        .catch(err => {
+          return reject(err)
+        })
+    })
+  }
   /**
    * create
    * @param pagePath
@@ -72,8 +116,18 @@ module.exports = class RouterFLService extends Service {
       })
     })
   }
-  update(pagePath, options){
 
+  /**
+   * update
+   * @param pagePath
+   * @param options
+   * @returns {Promise}
+   */
+  update(pagePath, options){
+    return new Promise((resolve, reject) => {
+      // We can't update a page because FlatFile is not aware of pages, only documents
+      return resolve(true)
+    })
   }
 
   /**
@@ -92,7 +146,6 @@ module.exports = class RouterFLService extends Service {
       catch (err) {
         return reject(err)
       }
-      console.log(dir)
       let dirParts = path.normalize(dir).split('/')
       // Remove the test folder from the path
       if (_.values(TESTS).indexOf(dirParts[dirParts.length - 1] != -1)) {
@@ -107,7 +160,6 @@ module.exports = class RouterFLService extends Service {
       //   dirParts.splice(-1,1)
       // }
       dir = path.normalize(dirParts.join('/'))
-      console.log(dir)
       rmdir(dir, (err, dirs, files) => {
         if (err) {
           return reject(err)
@@ -160,7 +212,7 @@ module.exports = class RouterFLService extends Service {
             return reject(err)
           }
         }
-        console.log(stats)
+        // console.log('RouterFLService.checkIfFile',stats)
         return resolve(stats.isFile())
       })
     })
