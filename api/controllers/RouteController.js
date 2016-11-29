@@ -24,21 +24,16 @@ module.exports = class RouteController extends Controller {
       if (!req.wantsJSON) {
         res.writeHead(200, {'Content-Type': 'text/html'})
         console.log('RouterContoller.view', req.proxyroute)
-        if (req.proxyroute.page) {
-          res.write(req.proxyroute.page)
-        }
-        else {
-          res.write(req.proxyroute)
-        }
-        res.end()
-        return
+        res.write(req.proxyroute.document)
+        return res.end()
+
       }
       else {
         if (_.isObject(req.proxyroute)) {
           return res.json(req.proxyroute)
         }
         else {
-          return res.json({page: req.proxyroute})
+          return res.json({document: req.proxyroute})
         }
 
       }

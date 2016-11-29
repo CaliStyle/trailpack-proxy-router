@@ -29,19 +29,27 @@ module.exports = class RouterFLService extends Service {
    * @param req
    * @returns {Promise.<{id: number, meta: object, page: string}>}
    */
+  // TODO pass options
   get(req) {
-    // return Promise.resolve({
-    //   id: 1,
-    //   meta: {},
-    //   page: 'Hello World'
-    // })
     return new Promise((resolve, reject) => {
-      console.log('RouterFLService.get orginal:', req.originalUrl, 'base:', req.baseUrl)
+      // console.log('RouterFLService.get orginal:', req.originalUrl, 'base:', req.baseUrl)
       const pagePath = req.originalUrl
       const alternatePath = req.route && req.route.path ? req.route.path : null
-      this.renderPage(pagePath, alternatePath)
+      const options = {
+        series: 'a0',
+        version: '0.0.0'
+      }
+      this.renderPage(pagePath, alternatePath, options)
         .then(renderedPage => {
-          return resolve(renderedPage)
+          const proxyroute = {
+            id: renderedPage.id ? renderedPage.id : null,
+            path: renderedPage.path ? renderedPage.path : pagePath,
+            series: renderedPage.series ? renderedPage.series : 'a0',
+            version: renderedPage.version ? renderedPage.version : '0.0.0',
+            meta: renderedPage.meta ? renderedPage.meta : {},
+            document: renderedPage.document ? renderedPage.document : renderedPage
+          }
+          return resolve(proxyroute)
         })
         .catch(err => {
           return reject(err)
@@ -53,30 +61,48 @@ module.exports = class RouterFLService extends Service {
    * renderPage
    * @param pagePath (relative to domain)
    * @param alternatePath (relative to domain)
+   * @param options to be passed to resolveFlatFilePathFromString
    * @returns {Promise.<T>}
    */
-  renderPage(pagePath, alternatePath){
+  renderPage(pagePath, alternatePath, options){
     return new Promise((resolve, reject) => {
-      console.log('RouterFLService.renderPage', pagePath, alternatePath)
+      console.log('RouterFLService.renderPage', pagePath, alternatePath, options)
       const RouterRenderService = this.app.services.RouterRenderService
-      pagePath = this.resolveFlatFilePathFromString(pagePath)
-
-      this.checkIfFile(pagePath)
+      let fullPagePath = this.resolveFlatFilePathFromString(pagePath, options)
+      let choosenPath
+      this.checkIfFile(fullPagePath)
+        .then(fileExists =>{
+          if (fileExists) {
+            choosenPath = pagePath
+            return fileExists
+          }
+          else {
+            choosenPath = alternatePath
+            this.app.log.silly(`RouterFLService.renderPage rendering ${alternatePath} as ${pagePath} is not set`)
+            fullPagePath = this.resolveFlatFilePathFromString(alternatePath, options)
+            return this.checkIfFile(fullPagePath)
+          }
+        })
         .then(fileExists => {
-          if (fileExists && path.extname(pagePath) === '.md') {
-            const doc = fs.readFileSync(pagePath, 'utf8')
+          if (fileExists && path.extname(fullPagePath) === '.md') {
+            const doc = fs.readFileSync(fullPagePath, 'utf8')
             // console.log('RouterFLService.renderPage', doc)
             return RouterRenderService.render(doc)
           }
           else {
-            throw new Error(`${pagePath} is not a qualified resource`)
+            throw new Error(`${pagePath} and ${alternatePath} are not qualified resources`)
           }
         })
         .then(renderedDoc => {
-          // Set a blank ID
-          // console.log(renderedDoc)
-          // renderedDoc.id = null
-          return resolve(renderedDoc)
+          const proxyroute = {
+            id: null,
+            path: choosenPath,
+            series: options.series ? options.series : 'a0',
+            version: options.version ? options.version : '0.0.0',
+            meta: renderedDoc.meta ? renderedDoc.meta : {},
+            document: renderedDoc.page ? renderedDoc.page : renderedDoc
+          }
+          return resolve(proxyroute)
         })
         .catch(err => {
           return reject(err)

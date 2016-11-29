@@ -15,12 +15,18 @@ module.exports = {
   // Force Flat File and ignore DB
   forceFL: true,
   // The number of controls to enqueue before flushing.
+  // The number of controls to enqueue before flushing to processor.
   flushAt: 20,
-  // The number of milliseconds to wait before flushing the queue automatically.
+  // The number of milliseconds to wait before flushing the queue automatically to processor.
   flushAfter: 10000,
   // Cache
   cache: {
-
+    // The redis datastore prefix
+    prefix: 'pxy',
+    // Allow Caching
+    allow: true,
+    // Milliseconds before cache is ejected
+    eject: 10000
   },
   // Remarkable
   remarkable: {
@@ -28,10 +34,11 @@ module.exports = {
       html: true
     },
     plugins: [
-      {
-        plugin: require('remarkable-meta'),
-        options: {}
-      }
+      // Example Plugin (remarkable-meta is required and already installed)
+      // {
+      //   plugin: require('remarkable-meta'),
+      //   options: {}
+      // }
     ]
   }
 }

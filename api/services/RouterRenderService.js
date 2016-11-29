@@ -3,6 +3,9 @@
 
 const Service = require('trails-service')
 const _ = require('lodash')
+const Remarkable = require('remarkable')
+const meta = require('remarkable-meta')
+
 /**
  * @module RouterRenderService
  * @description Render Service
@@ -19,21 +22,20 @@ module.exports = class RouterRenderService extends Service {
     if (!options) {
       options = {}
     }
-    // Import remarkable
-    const Remarkable = require('remarkable')
-    // Make new instance
-    const md = new Remarkable()
     // Set options
     options = _.defaults(options, this.app.config.proxyroute.remarkable.options)
-    md.set(options)
-    // Set Plugins
+    // console.log('RouterRenderService._init', options)
+
+    // Make new instance
+    const md = new Remarkable('full', options)
+    // Add remarkable-meta
+    md.use(meta)
+    // Set Plugins additional plugins
     _.each(this.app.config.proxyroute.remarkable.plugins, (plugin) => {
-      if (plugin.options) {
-        md.use(plugin.plugin, plugin.options)
+      if (!plugin.options) {
+        plugin.options = {}
       }
-      else {
-        md.use(plugin.plugin)
-      }
+      md.use(plugin.plugin, plugin.options)
     })
     return md
   }
@@ -45,8 +47,10 @@ module.exports = class RouterRenderService extends Service {
    * @returns {meta, page} remarkable meta rendered document
    */
   render(document, options) {
-    const md = this._init(options)
-    return md.render(document)
+    const remarkable = this._init(options)
+    const renderedDocument =  remarkable.render(document)
+    console.log('RouterRenderService.render', renderedDocument)
+    return renderedDocument
   }
 }
 

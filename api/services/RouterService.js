@@ -1,9 +1,9 @@
-/* eslint no-console: [0, { allow: ["log","warn", "error"] }] */
+/* eslint no-console: [0] */
 
 'use strict'
 
 const Service = require('trails-service')
-// const _ = require('lodash')
+const _ = require('lodash')
 const pathToRegexp = require('path-to-regexp')
 
 /**
@@ -12,11 +12,56 @@ const pathToRegexp = require('path-to-regexp')
  */
 module.exports = class RouterService extends Service {
   /**
+   * isCaached
+   * @param req
+   * @returns {Promise.<boolean>}
+   */
+  // TODO implement cache
+  isCached(req) {
+    if (!req.trailsApp.config.proxyroute.cache.allow) {
+      return Promise.resolve(false)
+    }
+    return Promise.resolve(false)
+  }
+  /**
+   * setPreReqRoute
+   * @param req
+   * @returns {Promise.<*>}
+   */
+  setPreReqRoute(req) {
+    // console.log(req)
+    // console.time('alternative')
+    let alternative
+    req.trailsApp.routes.forEach((route)=> {
+      if (alternative) {
+        return
+      }
+      if (route.method !== 'GET' && (_.isObject(route.method) && route.method.indexOf('GET') == -1)) {
+        return
+      }
+      if (req.trailsApp.config.proxyroute.ignoreRoutes.indexOf(route.path) !== -1){
+        return
+      }
+      const re = pathToRegexp(route.path, [])
+      if (re.exec(req.originalUrl)) {
+        // console.log('RouterService.setPreReqRoute MATCHED', route)
+        alternative = {
+          path: route.path,
+          stack: [],
+          methods: { get: true }
+        }
+      }
+    })
+    // console.timeEnd('alternative')
+    return Promise.resolve(alternative)
+  }
+  /**
    * isProxyRouteRequest
    * @param req
    * @returns {boolean} if url matches proxyroute pattern
    */
   isProxyRouteRequest(req) {
+    // console.time('isProxyRouteRequest')
     // transform the method to lowercase and check if Get Request, if not, skip
     if ( req.method.toLowerCase() !== 'get') {
       this.app.log.silly('proxyroute:not GET request')
@@ -26,11 +71,12 @@ module.exports = class RouterService extends Service {
     // TODO If a Static asset then skip
     // var reg = new RegExp('(?:\.([^.]+))?$','g')
     // if (reg.test(req.originalUrl)) {
-    //   this.app.log.debug('proxyroute:static assest')
+    //   this.app.log.silly('proxyroute:static asset')
     //   return false
     // }
 
     // Check if this has an explicit ignore
+    console.time('ignore')
     let ignore = false
     this.app.config.proxyroute.ignoreRoutes.forEach((route) => {
       // If another catchall route already ignored, break immediately
@@ -48,6 +94,8 @@ module.exports = class RouterService extends Service {
     if (ignore) {
       return false
     }
+    // console.timeEnd('ignore')
+    // console.timeEnd('isProxyRouteRequest')
     // else return isProxyRouteRequest (true)
     return true
   }
