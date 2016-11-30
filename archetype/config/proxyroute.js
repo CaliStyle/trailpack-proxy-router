@@ -14,7 +14,6 @@ module.exports = {
   folder: 'content',
   // Force Flat File and ignore DB
   forceFL: true,
-  // The number of controls to enqueue before flushing.
   // The number of controls to enqueue before flushing to processor.
   flushAt: 20,
   // The number of milliseconds to wait before flushing the queue automatically to processor.
@@ -34,9 +33,9 @@ module.exports = {
       html: true
     },
     plugins: [
-      // Example Plugin (remarkable-meta is required and already installed)
+      // Example Plugin (remarkable meta and remarkable components are required and already installed)
       // {
-      //   plugin: require('remarkable-meta'),
+      //   plugin: require('remarkable-embed'),
       //   options: {}
       // }
     ]
