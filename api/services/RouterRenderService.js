@@ -29,8 +29,10 @@ module.exports = class RouterRenderService extends Service {
 
     // Make new instance
     const md = new Remarkable('full', options)
-    // Add remarkable-meta
+    // Add remarkable meta
     md.use(meta)
+    // Add remarkable components
+    // md.use(components)
     // Set Plugins additional plugins
     _.each(this.app.config.proxyroute.remarkable.plugins, (plugin) => {
       if (!plugin.options) {

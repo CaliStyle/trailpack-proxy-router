@@ -29,7 +29,8 @@
     "trails-controller": "^1.0.0-beta-2",
     "trails-model": "^1.0.0-beta-2",
     "trails-policy": "^1.0.2",
-    "trails-service": "^1.0.0-beta-2"
+    "trails-service": "^1.0.0-beta-2",
+    "version_compare": "0.0.3"
   },
   "devDependencies": {
     "eslint": "^2.4",

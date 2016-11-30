@@ -8,6 +8,7 @@ const fs = require('fs')
 const mkdirp = require('mkdirp')
 const rmdir = require('rmdir')
 const TESTS = require('../utils/enums').TESTS
+const vc = require('version_compare')
 
 /**
  * @module RouterFLService
@@ -37,7 +38,7 @@ module.exports = class RouterFLService extends Service {
       const alternatePath = req.route && req.route.path ? req.route.path : null
       const options = {
         series: 'a0',
-        version: '0.0.0'
+        version: 'latest'
       }
       this.renderPage(pagePath, alternatePath, options)
         .then(renderedPage => {
@@ -212,13 +213,36 @@ module.exports = class RouterFLService extends Service {
       else {
         outPath[0] = `/${outPath[0]}/${part}`
       }
-      if (options && options.series && options.series !== '') {
-        outPath[1] = options.series
-      }
-      if (options && options.version && options.version !== '') {
-        outPath[2] = `${options.version}.md`
-      }
     })
+    // Override default series and version if set
+    if (options && options.series && options.series !== '') {
+      outPath[1] = options.series
+    }
+    // If Requesting Latest Version
+    if (options && options.version && options.version == 'latest') {
+      try {
+        const directory = path.join(__dirname, '../../', this.app.config.proxyroute.folder, outPath[0], outPath[1])
+        const files = fs.readdirSync(directory)
+        let version = '0.0.0'
+        for (let i of files) {
+          const tryVersion = i.split('.md')[0]
+          if (vc.compare(version, tryVersion)) {
+            // console.log('routerflservice.resolveflatfilepathfromstring: Later Version', tryVersion)
+            version = tryVersion
+          }
+        }
+        outPath[2] = `${version}.md`
+      }
+      catch (err) {
+        // console.log(err)
+      }
+    }
+    // If options version is set explicitly
+    else if (options && options.version && options.version !== ''){
+      outPath[2] = `${options.version}.md`
+    }
+
+
     return path.join(__dirname, '../../', this.app.config.proxyroute.folder, outPath.join('/'))
   }
 
