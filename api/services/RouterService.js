@@ -3,7 +3,7 @@
 'use strict'
 
 const Service = require('trails-service')
-const _ = require('lodash')
+// const _ = require('lodash')
 const pathToRegexp = require('path-to-regexp')
 
 /**
@@ -29,24 +29,17 @@ module.exports = class RouterService extends Service {
    * @returns {Promise.<*>}
    */
   setPreReqRoute(req) {
-    // console.log(req)
     // console.time('alternative')
     let alternative
-    req.trailsApp.routes.forEach((route)=> {
+    req.trailsApp.config.proxyroute.alternateRoutes.forEach((route)=> {
       if (alternative) {
         return
       }
-      if (route.method !== 'GET' && (_.isObject(route.method) && route.method.indexOf('GET') == -1)) {
-        return
-      }
-      if (req.trailsApp.config.proxyroute.ignoreRoutes.indexOf(route.path) !== -1){
-        return
-      }
-      const re = pathToRegexp(route.path, [])
+      const re = pathToRegexp(route, [])
       if (re.exec(req.originalUrl)) {
         // console.log('RouterService.setPreReqRoute MATCHED', route)
         alternative = {
-          path: route.path,
+          path: route,
           stack: [],
           methods: { get: true }
         }

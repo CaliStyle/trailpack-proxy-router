@@ -119,16 +119,18 @@ I can even use embeds like a youtube video or my own custom ones.
 I can even use custom HTML DOM like ones from Angular2
 
 <login></login>
-<footer-component></footer-component>
+<footer-component [wow]="amazing"></footer-component>
 ```
 
 ### Remarkable (required)
 [Remarkable](https://github.com/jonschlinkert/remarkable) 
 is used to parse the document from markdown/html to html.
 
-### Remarkable Meta Plugin (required)
-[Remarkable Meta](https://github.com/eugeneware/remarkable-meta) 
+### Remarkable Meta Plugin (Default)
 is used to give the flat file readable meta data as well as give the displayed page meta data.
+
+### Remarkable Component Plugin (Default)
+is used to give the flat files the ability to use html components typical of angular, angular2 and react
 
 ### Remarkable Embed Plugin (optional)
 [Remarkable Embed](https://github.com/Commander-lol/remarkable-embed) 
