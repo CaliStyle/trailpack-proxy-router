@@ -5,7 +5,7 @@ const Service = require('trails-service')
 const _ = require('lodash')
 const Remarkable = require('remarkable')
 const meta = require('../../lib/remarkable/meta')
-// const components = require('../../lib/remarkable/components')
+const components = require('../../lib/remarkable/components')
 
 /**
  * @module RouterRenderService
@@ -32,7 +32,7 @@ module.exports = class RouterRenderService extends Service {
     // Add remarkable meta
     md.use(meta)
     // Add remarkable components
-    // md.use(components)
+    md.use(components, {})
     // Set Plugins additional plugins
     _.each(this.app.config.proxyroute.remarkable.plugins, (plugin) => {
       if (!plugin.options) {

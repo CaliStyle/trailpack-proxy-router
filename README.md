@@ -5,7 +5,7 @@
 [![Dependency Status][daviddm-image]][daviddm-url]
 [![Code Climate][codeclimate-image]][codeclimate-url]
 
-## Content Management built for speed, scalability, and testing
+## Content Management built for speed, scalability, testing, and love from [Cali Style Technologies](https://cali-style.com)
 
 The Proxy Engine Router is an Express middleware built to be used on Trailsjs with Proxy Engine.
 It's purpose is to allow for easy development, SEO, and AAA (Triple A) testing from the ground up. (a concept developed by [Scott Wyatt](https://github.com/scott-wyatt)) This means that you can still use your own controllers to handle views and add Proxy Route content to them as needed.
@@ -33,7 +33,7 @@ One of the most difficult feats when dealing with a CMS, from a developer standp
 - Developing well crafted pages in a CMS requires a local or staging DB and then taking approved changes live in some slow error prone fashion.
 - A/B Testing requires that Marketers and UX specialist have easy access to creating variations of views and running tests. 
 - Database driven view states are notoriously slow.
-- Database content is slow to search.
+- Database content with large amounts of HTML is slow to search.
 
 All of these are issues for the Modern Web, especially for web apps built as single page applications. 
 
@@ -42,17 +42,17 @@ Proxy Engine's router takes care of these pain points by:
 - Giving developers a flat file database for component driven views with a high amount of version control.
 - Giving Marketers/UXs an easy way to create variations and automatically run tests when given an appropriate editor.
 - Making documents cache-able and still retaining tests and version control across millions of pages.
-- Using the Metadata for each page makes using postgres' JSONB keyword searching fast (and already SEO ready), or easily connect postrgres to an Elasticsearch engine to make conent searching even better.
-
-### Gotchas
-- This style of CMS requires a "Single Source of Truth" for Frontend Components to bind too. Try using Redux or ngRX for your frontend.
-- Mechanisms to determine/set Score and Demographic are up to you.
+- Using the Metadata for each page makes using postgres' JSONB keyword searching fast (and already SEO ready), or easily connect postrgres to an Elasticsearch engine to make content searching even better.
 
 ### Additional Use Cases
 - Assign demographics to users and display or withhold content based on it.
 - Complete version control for technical manuals and blogs
 - Flatfile CMS for non database driven web apps.
 - Versioned display structure for web apps using Angular2 ngRX or React Flux.
+
+### Gotchas
+- This style of CMS requires a "Single Source of Truth" for Frontend Components to bind too. Try using Redux or ngRX for your frontend.
+- Mechanisms to determine/set Score and Demographic are up to you.
 
 ## Dependencies
 ### Supported ORMs
