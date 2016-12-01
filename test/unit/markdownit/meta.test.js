@@ -1,16 +1,16 @@
 const fs = require('fs')
 const path = require('path')
-const Remarkable = require('remarkable')
+const MarkdownIt = require('markdown-it')
 const meta = require('../../../lib/remarkable/meta')
 const assert = require('assert')
 
 function fixture(name) {
   return fs.readFileSync(path.join(__dirname, 'fixtures', name), 'utf8')
 }
-describe('Remarkable Meta', () => {
+describe('Markdown-it Meta', () => {
   it('should parse metadata', function () {
     const mdText = fixture('../../../../content/test/series/a0/0.0.0.md')
-    const md = new Remarkable()
+    const md = new MarkdownIt()
     md.use(meta)
     const html = md.render(mdText)
     const expectedHtml = [
@@ -31,7 +31,7 @@ describe('Remarkable Meta', () => {
 
   it('should handle empty meta data', function () {
     const mdText = fixture('../../../../content/empty/series/a0/0.0.0.md')
-    const md = new Remarkable()
+    const md = new MarkdownIt()
     md.use(meta)
     const html = md.render(mdText)
     const expectedHtml = [
@@ -52,7 +52,7 @@ describe('Remarkable Meta', () => {
 
   it('should handle missing meta data', function () {
     const mdText = fixture('../../../../content/missing/series/a0/0.0.0.md')
-    const md = new Remarkable()
+    const md = new MarkdownIt()
     md.use(meta)
     const html = md.render(mdText)
     const expectedHtml = [
@@ -73,7 +73,7 @@ describe('Remarkable Meta', () => {
 
   it('should handle misplaced meta data', function () {
     const mdText = fixture('../../../../content/misplaced/series/a0/0.0.0.md')
-    const md = new Remarkable()
+    const md = new MarkdownIt()
     md.use(meta)
     const html = md.render(mdText)
     const expectedHtml = [
@@ -103,7 +103,7 @@ describe('Remarkable Meta', () => {
 
   it('should only parse metadata at the top of the file', function () {
     const mdText = fixture('../../../../content/notfirst/series/a0/0.0.0.md')
-    const md = new Remarkable()
+    const md = new MarkdownIt()
     md.use(meta)
     const html = md.render(mdText)
     const expectedHtml = [

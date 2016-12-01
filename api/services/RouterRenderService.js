@@ -3,7 +3,7 @@
 
 const Service = require('trails-service')
 const _ = require('lodash')
-const Remarkable = require('remarkable')
+const MarkdownIt = require('markdown-it')
 const meta = require('../../lib/remarkable/meta')
 const components = require('../../lib/remarkable/components')
 
@@ -28,7 +28,7 @@ module.exports = class RouterRenderService extends Service {
     // console.log('RouterRenderService._init', options)
 
     // Make new instance
-    const md = new Remarkable('full', options)
+    const md = new MarkdownIt(options)
     // Add remarkable meta
     md.use(meta)
     // Add remarkable components
@@ -50,12 +50,12 @@ module.exports = class RouterRenderService extends Service {
    * @returns {meta, page} remarkable meta rendered document
    */
   render(document, options) {
-    const remarkable = this._init(options)
-    const renderedDocument =  remarkable.render(document)
+    const md = this._init(options)
+    const renderedDocument =  md.render(document)
     // console.log('RouterRenderService.render', renderedDocument, remarkable.meta)
     return {
       page: renderedDocument,
-      meta: remarkable.meta
+      meta: md.meta
     }
   }
 }

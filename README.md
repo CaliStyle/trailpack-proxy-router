@@ -228,7 +228,7 @@ og: {'image': '/and/cool/things/like/og-tags.jpg'}
 <h2>I can use Normal HTML</h2>
 
 I can even use embeds like a youtube video or my own custom ones.
-{@youtube: 123}
+@[youtube](lJIrF4YjHfQ)
 
 I can even use custom HTML DOM like ones from Angular2
 
@@ -236,18 +236,18 @@ I can even use custom HTML DOM like ones from Angular2
 <footer-component [wow]="amazing"></footer-component>
 ```
 
-### Remarkable (required)
-[Remarkable](https://github.com/jonschlinkert/remarkable) 
+### Markdown-it (required)
+[Markdown-it](https://www.npmjs.com/package/markdown-it) 
 is used to parse the document from markdown/html to html.
 
-### Remarkable Meta Plugin (Default)
-is used to give the flat file readable meta data as well as give the displayed page meta data.
+### Markdown-it Meta Plugin (Default)
+Is used to give the flat file readable meta data as well as give the displayed page meta data.
 
-### Remarkable Component Plugin (Default)
-is used to give the flat files the ability to use html components typical of angular, angular2 and react
+### Markdown-it Component Plugin (Default)
+Is used to give the flat files the ability to use html components typical of angular, angular2 and react
 
-### Remarkable Embed Plugin (optional)
-[Remarkable Embed](https://github.com/Commander-lol/remarkable-embed) 
+### Markdown-it Block Embed (optional)
+[Markdown-it Block Embed Embed](https://github.com/rotorz/markdown-it-block-embed) 
 is used to grant the parsed document embed-ables.  This could be youtube, vimeo, your own short codes, whatever!
 
 ### Controllers
