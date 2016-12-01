@@ -223,7 +223,8 @@ scripts:
  - /path/to/special/page/script.js
 og: {'image': '/and/cool/things/like/og-tags.jpg'}
 ---
-<header-component></header-component>
+<header-component>
+</header-component>
 # Homepage Hello World
 <h2>I can use Normal HTML</h2>
 
@@ -232,9 +233,14 @@ I can even use embeds like a youtube video or my own custom ones.
 
 I can even use custom HTML DOM like ones from Angular2
 
-<login></login>
-<footer-component [wow]="amazing"></footer-component>
+<login>
+</login>
+<footer-component [wow]="amazing">
+</footer-component>
 ```
+
+*** Note: Html components must end on a newline or else they are wrapped by a paragraph tag. 
+This is part of Common Mark Spec.
 
 ### Markdown-it (required)
 [Markdown-it](https://www.npmjs.com/package/markdown-it) 
