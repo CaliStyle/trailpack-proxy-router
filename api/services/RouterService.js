@@ -261,7 +261,7 @@ module.exports = class RouterService extends Service {
             throw new Error(`Can not resolve ${data.identifier}, make sure it is in "path" format eg. '/hello/world'`)
           }
           regPath = identifier.path
-          return RouterFLService.resolveFlatFilePathFromString(identifier.path)
+          return RouterFLService.resolveFlatFilePathFromString(identifier.path).path
         })
         .then(resolvedPath => {
           pagePath = resolvedPath
@@ -341,7 +341,7 @@ module.exports = class RouterService extends Service {
             throw new Error(`Can not resolve ${data.identifier}, make sure it is in "path" format eg. '/hello/world' or as an ID eg. '123'`)
           }
           regPath = identifier.path
-          return RouterFLService.resolveFlatFilePathFromString(regPath)
+          return RouterFLService.resolveFlatFilePathFromString(regPath).path
         })
         .then(resolvedPath => {
           pagePath = resolvedPath
@@ -420,7 +420,7 @@ module.exports = class RouterService extends Service {
             throw new Error(`Can not resolve ${data.identifier}, make sure it is in "path" format eg. '/hello/world' or as an ID eg. '123'`)
           }
           regPath = identifier.path
-          return RouterFLService.resolveFlatFilePathFromString(regPath)
+          return RouterFLService.resolveFlatFilePathFromString(regPath).path
         })
         .then(resolvedPath => {
           pagePath = resolvedPath

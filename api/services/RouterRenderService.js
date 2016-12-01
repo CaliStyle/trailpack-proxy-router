@@ -54,7 +54,7 @@ module.exports = class RouterRenderService extends Service {
     const renderedDocument =  md.render(document)
     // console.log('RouterRenderService.render', renderedDocument, md.meta)
     return {
-      page: renderedDocument,
+      document: renderedDocument,
       meta: md.meta
     }
   }
