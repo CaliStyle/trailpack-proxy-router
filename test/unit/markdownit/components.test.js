@@ -1,7 +1,6 @@
 const fs = require('fs')
 const path = require('path')
 const MarkdownIt = require('markdown-it')
-const components = require('../../../lib/markdownit/components')
 const assert = require('assert')
 
 function fixture(name) {
@@ -11,7 +10,6 @@ describe('Markdown-it Components', () => {
   it('should parse html components', function () {
     const mdText = fixture('../../../../content/components/series/a0/0.0.0.md')
     const md = new MarkdownIt()
-    md.use(components)
     const html = md.render(mdText)
     const expectedHtml = [
       '<hello></hello>',

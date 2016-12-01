@@ -5,7 +5,6 @@ const Service = require('trails-service')
 const _ = require('lodash')
 const MarkdownIt = require('markdown-it')
 const meta = require('../../lib/markdownit/meta')
-const components = require('../../lib/markdownit/components')
 
 /**
  * @module RouterRenderService
@@ -31,8 +30,6 @@ module.exports = class RouterRenderService extends Service {
     const md = new MarkdownIt(options)
     // Add markdown-it meta
     md.use(meta)
-    // Add markdown-it components
-    md.use(components, {})
     // Set Plugins additional plugins
     _.each(this.app.config.proxyroute.markdownit.plugins, (plugin) => {
       if (!plugin.options) {

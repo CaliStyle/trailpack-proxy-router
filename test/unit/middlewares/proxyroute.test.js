@@ -34,7 +34,7 @@ describe('proxyroute middleware', () => {
       .set('Accept', 'application/json') //set header for this test
       .expect(200)
       .end((err, res) => {
-        console.log(res.body)
+        // console.log(res.body)
         assert.strictEqual(res.body.id, null)
         assert(res.body.version)
         assert(res.body.series)
@@ -60,6 +60,7 @@ describe('proxyroute middleware', () => {
       .get('/hello/saturn')
       .expect(200)
       .end((err, res) => {
+        // console.log(res)
         const expectedHtml = [
           '<h1>Hi There, I\'m Saturn</h1>\n'
         ].join('\n')
