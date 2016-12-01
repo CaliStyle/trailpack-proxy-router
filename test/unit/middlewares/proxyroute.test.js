@@ -34,11 +34,10 @@ describe('proxyroute middleware', () => {
       .set('Accept', 'application/json') //set header for this test
       .expect(200)
       .end((err, res) => {
-        // console.log(res.body)
         assert.strictEqual(res.body.id, null)
-        assert(res.body.version)
-        assert(res.body.series)
-        assert(res.body.meta)
+        assert(res.body.version, '0.0.1')
+        assert(res.body.series, 'a0')
+        assert(res.body.meta, { title: 'Homepage Hello World', keywords: 'proxy-engine, amazing' })
         assert(res.body.document)
         done(err)
       })

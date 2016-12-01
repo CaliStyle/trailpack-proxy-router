@@ -170,7 +170,8 @@ By default the Proxy Route content directory is `content` in the root directory 
 ```
 
 ### req.locals
-Proxy Route merges any document's id, series, test, and metadata with req.locals so it can be used in any view template engine required.
+Proxy Route merges the document's id, series, version, and metadata with req.locals so it can be used in any view template engine required.
+To access it in your template engine use `proxyroute`
 
 ### Ignore Routes and Alternate Routes
 When the trails app starts, two configurations are added to trailsApp.config.proxyroute:
@@ -289,6 +290,35 @@ Removes a RouteDocument Model (Document)
 Adds a Positive or Negative value for a series
 
 ### Services
+#### Flat Files
+##### RouterFlService.get(req)
+Gets a rendered page from a flatfile given the express request object
+@returns
+```js
+{ 
+  id: String, // The id of the Route Model (in this case the ID is null since it's a flat file)
+  path: String, // The original request path
+  series: String, // The Series Test of the Route Document Model
+  version: String, // The Test Version of the Route Document Model
+  meta: Object, // The Meta Data from the Route Document Model
+  document: String  // The Rendered HTML of the Route Doucment Model
+}
+```
+#### Database Files
+##### RouterDBService.get(req)
+Gets a rendered page from the database given the express request object
+@returns
+```js
+{ 
+  id: String, // The id of the Route Model
+  path: String, // The original request path
+  series: String, // The Series Test of the Route Document Model
+  version: String, // The Test Version of the Route Document Model
+  meta: Object, // The Meta Data from the Route Document Model
+  document: String  // The Rendered HTML of the Route Doucment Model
+}
+```
+
 #### Controls
 ##### RouteControlsService.addRun()
 Adds a run score to a series
@@ -324,12 +354,8 @@ Renders a markdown document using remarkable and all the plugins configured
 @returns
 ```js
 { 
-  id: String,
-  path: String,
-  series: String,
-  version: String,
-  meta: Object,
-  document: String 
+  meta: Object, // The Meta Data from the Document
+  document: String  // The Rendered HTML of the Document
 }
 ```
 

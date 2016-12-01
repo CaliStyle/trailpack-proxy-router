@@ -248,7 +248,7 @@ module.exports = class RouterFLService extends Service {
       // The final Series that was run
       series: outPath[1],
       // The final Version that was run
-      version: outPath[2],
+      version: outPath[2].split('.md')[0],
       // The Original path (relative to url)
       orgPath: orgPath,
       // The Server path
