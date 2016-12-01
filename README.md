@@ -20,8 +20,8 @@ Say good bye to A/B testing as AAA testing can handle hundreds of different seri
  - Want to find the best UI for a time of day and show it at the right time?
  - Want to find the best layouts for males or females or trans and show it to the corresponding audience automatcially?
 
-AAA Testing isn't about one ~size~ site fits all, it's about finding the right layout per audience. Series documents are given a test number, and version. They default to the latest version, but the default can be changed to any version while keeping the run and score.
-Large changes to any version should be given another test number. The documents are markdown documents with yaml that allow you to use normal markdown, HTML, or embeds.
+AAA Testing isn't about one ~~size~~ site fits all, it's about finding the right layout per audience. Series documents are given a test number, and version. They default to the latest version, but the default can be changed to any version while keeping the run and score.
+Large changes to any version should be given another test number. The documents are markdown documents with yaml that allow you to use normal markdown, HTML, or even your own embeds.
 
 Use your own mechanisms to track negative and positive interactions and then feed them back to Proxy Engine to adjust the score.
 
@@ -180,6 +180,7 @@ When the trails app starts, two configurations are added to trailsApp.config.pro
 
 Ignored Routes are any routes that do not use the GET method or have an app config with ignore set to true 
 ```js
+  // config/routes.js
   {
     method: ['GET'],
     path: '/ignore/me',
@@ -242,6 +243,15 @@ I can even use custom HTML DOM like ones from Angular2
 
 *** Note: Html components must end on a newline or else they are wrapped by a paragraph tag. 
 This is part of Common Mark Spec.
+
+#### Demographics
+Demographics is a generic term because they can literally be anything. For example Let's say we have a site that's homepage needs some simple A/B testing.  We have no information about our user, so we can classify them as "Unknown" which is the default demographic. Now, we can set up two series: a0 and b0 and split visits equally with a weight of 50. When our user visits the home page, Proxy Router will send them a0 or b0 and track the view that was run. Now the user does something on the home page which should issue a Positive or Negative control.  
+
+#### Scores and Positive/Negative Controls
+When a user does something we don't like on the page, we want to send a negative control back to Proxy Router. For example, if they leave the website, then we might send a negative control. That said, if the user was visiting the a0 series of the homepage, then a0 would get a reduction in it's overall score. If the user does something that we like on the page, for example clicks "Buy Now", then we might want to send a positive control that increases the score of a0. We continue this process until the Baseline and Threshold is met.
+   
+#### Baseline and Threshold
+Every Page has a baseline. The baseline is the minimal times the page can be viewed before the threshold comes into effect.  Imagine it as a survey, where you want 1000 people to take the survey before you review the results. From the previous example between a0 and b0, let's say a 1000 people visit the home page. After that 1000 people have visited, we should have some decent scores from a0 and b0 for example a0 scored .89 and b0 score .70. Proxy Route now examines the threshold and will predict that a0 is more productive then b0. If we set the threshold to .90, then we will stop testing between a0 and b0 when a0 reaches .90 and begin serving only a0 for the "unknown" demographic. 
 
 ### Markdown-it (required)
 [Markdown-it](https://www.npmjs.com/package/markdown-it) 
