@@ -201,13 +201,13 @@ module.exports = class RouterService extends Service {
    */
   resolveIdentifier(identifier, lookup) {
     return new Promise((resolve, reject) => {
-      const pattern = new RegExp('^(.*/)([^/]*)$', 'g')
+      const pathPattern = new RegExp('^(.*/)([^/]*)$', 'g')
       const page = {
         id: null,
         path: null
       }
       let lookupFunc
-      if (pattern.test(identifier)) {
+      if (pathPattern.test(identifier)) {
         lookupFunc = 'findPageByPath'
         page.path = identifier
       }
@@ -223,7 +223,7 @@ module.exports = class RouterService extends Service {
       // If this is a forced lookup
       if (lookup) {
         if (this.app.config.proxyroute.forceFL) {
-          const err = new Error('RouterService.resolveIdentifier lookup=true is disabled while proxyroute.forceFL is true')
+          const err = new Error('RouterService.resolveIdentifier lookup == true is disabled while proxyroute.forceFL is true')
           return reject(err)
         }
         this[lookupFunc](identifier)
@@ -283,8 +283,9 @@ module.exports = class RouterService extends Service {
   }
 
   /**
-   *
+   * createPage
    * @param pagePath
+   * @param regPath
    * @returns {Promise.<proxyroute>}
    */
   createPage(pagePath, regPath) {

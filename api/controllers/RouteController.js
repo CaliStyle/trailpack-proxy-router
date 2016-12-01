@@ -3,7 +3,7 @@
 
 const Controller = require('trails-controller')
 const lib = require('../../lib')
-const _ = require('lodash')
+// const _ = require('lodash')
 /**
  * @module RouteController
  * @description Generated Trails.js Controller.
@@ -16,26 +16,14 @@ module.exports = class RouteController extends Controller {
    * @returns html or error
    */
   view(req, res) {
-    // console.log(req)
     if (req.proxyroute) {
-      // const RouterControlsService = req.trailsApp.services.RouterControlsService
-      // Send addRun and continue immediately
-      // RouterControlsService.addRun(req.proxyroute)
       if (!req.wantsJSON) {
         res.writeHead(200, {'Content-Type': 'text/html'})
-        console.log('RouterContoller.view', req.proxyroute)
         res.write(req.proxyroute.document)
         return res.end()
-
       }
       else {
-        if (_.isObject(req.proxyroute)) {
-          return res.json(req.proxyroute)
-        }
-        else {
-          return res.json({document: req.proxyroute})
-        }
-
+        return res.json(req.proxyroute)
       }
     }
     else {
@@ -195,7 +183,7 @@ module.exports = class RouteController extends Controller {
    */
   control(req, res) {
     const RouterControlsService = this.app.services.RouterControlsService
-    console.log(req.body)
+    // console.log(req.body)
     // Type query validated by route
     const type = req.query.type
     // Validate the control data

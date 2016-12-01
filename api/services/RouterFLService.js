@@ -67,7 +67,7 @@ module.exports = class RouterFLService extends Service {
    */
   renderPage(pagePath, alternatePath, options){
     return new Promise((resolve, reject) => {
-      console.log('RouterFLService.renderPage', pagePath, alternatePath, options)
+      this.app.log.debug('RouterFLService.renderPage', pagePath, alternatePath, options)
       const RouterRenderService = this.app.services.RouterRenderService
       let fullPagePath = this.resolveFlatFilePathFromString(pagePath, options)
       let choosenPath
@@ -87,7 +87,6 @@ module.exports = class RouterFLService extends Service {
         .then(fileExists => {
           if (fileExists && path.extname(fullPagePath.path) === '.md') {
             const doc = fs.readFileSync(fullPagePath.path, 'utf8')
-            // console.log('RouterFLService.renderPage', doc)
             return RouterRenderService.render(doc)
           }
           else {
@@ -139,7 +138,7 @@ module.exports = class RouterFLService extends Service {
         if (err) {
           return reject(err)
         }
-        this.app.log.debug(`routersflservice:create ${pagePath} was created`)
+        this.app.log.debug(`RouterFLService.create ${pagePath} was created`)
         return resolve(true)
       })
     })
@@ -192,7 +191,7 @@ module.exports = class RouterFLService extends Service {
         if (err) {
           return reject(err)
         }
-        this.app.log.debug(`routersflservice:destroy ${dir} and it's files were destroyed`)
+        this.app.log.debug(`RouterFLService.destroy ${dir} and it's files were destroyed`)
         return resolve(true)
       })
     })
@@ -229,17 +228,18 @@ module.exports = class RouterFLService extends Service {
         for (let i of files) {
           const tryVersion = i.split('.md')[0]
           if (vc.compare(version, tryVersion)) {
-            // console.log('routerflservice.resolveflatfilepathfromstring: Later Version', tryVersion)
+            this.app.log.silly('RouterFLService.resolveFlatFilePathFromString: Later Version', tryVersion)
             version = tryVersion
           }
         }
         outPath[2] = `${version}.md`
       }
       catch (err) {
+        // This is normal to throw an error here, because this directory may not exists
         // console.log(err)
       }
     }
-    // If options version is set explicitly
+    // If options version is set explicitly and not "latest"
     else if (options && options.version && options.version !== ''){
       outPath[2] = `${options.version}.md`
     }
@@ -249,7 +249,7 @@ module.exports = class RouterFLService extends Service {
       series: outPath[1],
       // The final Version that was run
       version: outPath[2].split('.md')[0],
-      // The Original path (relative to url)
+      // The Original path (the url)
       orgPath: orgPath,
       // The Server path
       path: path.join(__dirname, '../../', this.app.config.proxyroute.folder, outPath.join('/'))
@@ -278,6 +278,4 @@ module.exports = class RouterFLService extends Service {
       })
     })
   }
-
 }
-
