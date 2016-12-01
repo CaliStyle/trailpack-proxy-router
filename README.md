@@ -335,8 +335,8 @@ Renders a markdown document using remarkable and all the plugins configured
 
 [npm-image]: https://img.shields.io/npm/v/trailpack-proxy-router.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/trailpack-proxy-router
-[ci-image]: https://img.shields.io/travis/calistyle/trailpack-proxy-router/master.svg?style=flat-square
-[ci-url]: https://travis-ci.org/calistyle/trailpack-proxy-router
+[ci-image]: https://img.shields.io/circleci/project/github/CaliStyle/trailpack-proxy-router/master.svg
+[ci-url]: https://circleci.com/gh/CaliStyle/trailpack-proxy-router/tree/master
 [daviddm-image]: http://img.shields.io/david/calistyle/trailpack-proxy-router.svg?style=flat-square
 [daviddm-url]: https://david-dm.org/calistyle/trailpack-proxy-router
 [codeclimate-image]: https://img.shields.io/codeclimate/github/calistyle/trailpack-proxy-router.svg?style=flat-square
