@@ -27,15 +27,17 @@ module.exports = {
     // Milliseconds before cache is ejected
     eject: 10000
   },
-  // Remarkable
-  remarkable: {
+  // Markdown-it
+  markdownit: {
+    // Options for Markdown-it
     options: {
+      // Must always be set to true
       html: true
     },
     plugins: [
-      // Example Plugin (remarkable meta and remarkable components are required and already installed)
+      // Example Plugin (markdownit-meta is required and already installed)
       // {
-      //   plugin: require('remarkable-embed'),
+      //   plugin: require('markdownit-meta'),
       //   options: {}
       // }
     ]

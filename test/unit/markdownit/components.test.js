@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const MarkdownIt = require('markdown-it')
-const components = require('../../../lib/remarkable/components')
+const components = require('../../../lib/markdownit/components')
 const assert = require('assert')
 
 function fixture(name) {

@@ -130,15 +130,17 @@ const App = {
         // Milliseconds before cache is ejected
         eject: 10000
       },
-      // Remarkable
-      remarkable: {
+      // Markdown-it
+      markdownit: {
+        // Options for Markdown-it
         options: {
+          // Must always be set to true
           html: true
         },
         plugins: [
-          // Example Plugin (remarkable-meta is required and already installed)
+          // Example Plugin (markdownit-meta is required and already installed)
           // {
-          //   plugin: require('remarkable-meta'),
+          //   plugin: require('markdownit-meta'),
           //   options: {}
           // }
         ]

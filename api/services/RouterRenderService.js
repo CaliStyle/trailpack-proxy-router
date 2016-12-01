@@ -4,8 +4,8 @@
 const Service = require('trails-service')
 const _ = require('lodash')
 const MarkdownIt = require('markdown-it')
-const meta = require('../../lib/remarkable/meta')
-const components = require('../../lib/remarkable/components')
+const meta = require('../../lib/markdownit/meta')
+const components = require('../../lib/markdownit/components')
 
 /**
  * @module RouterRenderService
@@ -13,9 +13,9 @@ const components = require('../../lib/remarkable/components')
  */
 module.exports = class RouterRenderService extends Service {
   /**
-   * _init Initializes a new instance of Remarkable with Plugins
+   * _init Initializes a new instance of Markdown-it with Plugins
    * @param options
-   * @returns {Instance} remarkable instance
+   * @returns {Instance} markdown-it instance
    * @private
    */
   _init(options) {
@@ -24,17 +24,17 @@ module.exports = class RouterRenderService extends Service {
       options = {}
     }
     // Set options
-    options = _.defaults(options, this.app.config.proxyroute.remarkable.options)
+    options = _.defaults(options, this.app.config.proxyroute.markdownit.options)
     // console.log('RouterRenderService._init', options)
 
     // Make new instance
     const md = new MarkdownIt(options)
-    // Add remarkable meta
+    // Add markdown-it meta
     md.use(meta)
-    // Add remarkable components
+    // Add markdown-it components
     md.use(components, {})
     // Set Plugins additional plugins
-    _.each(this.app.config.proxyroute.remarkable.plugins, (plugin) => {
+    _.each(this.app.config.proxyroute.markdownit.plugins, (plugin) => {
       if (!plugin.options) {
         plugin.options = {}
       }
@@ -47,12 +47,12 @@ module.exports = class RouterRenderService extends Service {
    * render
    * @param document
    * @param {Object} options (optional)
-   * @returns {meta, page} remarkable meta rendered document
+   * @returns {meta, page} markdown-it meta rendered document
    */
   render(document, options) {
     const md = this._init(options)
     const renderedDocument =  md.render(document)
-    // console.log('RouterRenderService.render', renderedDocument, remarkable.meta)
+    // console.log('RouterRenderService.render', renderedDocument, md.meta)
     return {
       page: renderedDocument,
       meta: md.meta
