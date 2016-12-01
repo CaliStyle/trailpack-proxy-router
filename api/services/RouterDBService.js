@@ -76,4 +76,26 @@ module.exports = class RouterDBService extends Service {
   }
   // TODO
   resolveDBFromFlatFileString(orgPath, options) {}
+
+  /**
+   * checkIfRecord
+   * @param orgPath
+   * @returns {Promise}
+   */
+  checkIfRecord(idenfitifer){
+    return new Promise((resolve, reject) => {
+
+      const FootprintService = this.app.services.FootprintService
+      FootprintService.find('Route', idenfitifer)
+        .then(routes => {
+          if (routes.length == 0){
+            throw new Error(`Route not found for: ${idenfitifer}`)
+          }
+          return resolve(routes[0])
+        })
+        .catch(err =>{
+          return reject(err)
+        })
+    })
+  }
 }

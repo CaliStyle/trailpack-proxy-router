@@ -307,6 +307,7 @@ Gets a rendered page from a flatfile given the express request object
 #### Database Files
 ##### RouterDBService.get(req)
 Gets a rendered page from the database given the express request object
+
 @returns
 ```js
 { 
@@ -350,7 +351,8 @@ Removes a RouteDocument Model (Document)
 
 #### Render
 ##### RouteRenderService.render()
-Renders a markdown document using remarkable and all the plugins configured
+Renders a markdown document using Markdown-it and all the plugins configured
+
 @returns
 ```js
 { 
