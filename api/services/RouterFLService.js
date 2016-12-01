@@ -225,6 +225,7 @@ module.exports = class RouterFLService extends Service {
         const directory = path.join(__dirname, '../../', this.app.config.proxyroute.folder, outPath[0], outPath[1])
         const files = fs.readdirSync(directory)
         let version = '0.0.0'
+        // TODO this should compare all dirs instead of just one after another
         for (let i of files) {
           const tryVersion = i.split('.md')[0]
           if (vc.compare(version, tryVersion)) {

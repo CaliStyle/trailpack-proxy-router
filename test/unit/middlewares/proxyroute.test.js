@@ -28,7 +28,6 @@ describe('proxyroute middleware', () => {
         done(err)
       })
   })
-  // TODO
   it('should make index as json request', (done) => {
     request
       .get('/')
@@ -44,12 +43,27 @@ describe('proxyroute middleware', () => {
         done(err)
       })
   })
-  // TODO
   it('should match pattern /hello/:world', (done) => {
     request
       .get('/hello/earth')
       .expect(200)
       .end((err, res) => {
+        const expectedHtml = [
+          '<h1>Hi There, I\'m :world</h1>\n'
+        ].join('\n')
+        assert(res.text, expectedHtml)
+        done(err)
+      })
+  })
+  it('should match pattern /hello/saturn', (done) => {
+    request
+      .get('/hello/saturn')
+      .expect(200)
+      .end((err, res) => {
+        const expectedHtml = [
+          '<h1>Hi There, I\'m Saturn</h1>\n'
+        ].join('\n')
+        assert(res.text, expectedHtml)
         done(err)
       })
   })

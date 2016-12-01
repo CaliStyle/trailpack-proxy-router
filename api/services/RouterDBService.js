@@ -74,4 +74,6 @@ module.exports = class RouterDBService extends Service {
       path: regPath
     })
   }
+  // TODO
+  resolveDBFromFlatFileString(orgPath, options) {}
 }
