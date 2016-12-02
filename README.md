@@ -8,7 +8,7 @@
 ## Content Management built for speed, scalability, testing, and love from [Cali Style Technologies](https://cali-style.com)
 
 The Proxy Engine Router is an Express middleware built to be used on Trailsjs with Proxy Engine.
-It's purpose is to allow for easy development, SEO, and AAA (Triple A) testing from the ground up. (a concept developed by [Scott Wyatt](https://github.com/scott-wyatt)) This means that you can still use your own controllers to handle views and add Proxy Route content to them as needed.
+It's purpose is to allow for easy development, SEO, and AAA (Triple A - Automated Analytical Assessment) testing from the ground up (a concept developed by [Scott Wyatt](https://github.com/scott-wyatt)). This means that you can automate UI testing and can still use your own controllers to handle views and add Proxy Route content to them as needed.
 
 Views are stored in either a Flat File database or joined with a Postgres database, and are cache-able in a document store such as Redis.
 Each view has a series of tests that are displayed based on a weight, threshold, and baseline for a given demographic.
@@ -206,7 +206,7 @@ By default trailpack-proxy-route has no policies to prevent anything from hittin
 For Proxy Router to work on a server cluster as a Flat File server, Redis is required. 
 After any route or series is updated as a Flat File, an event is produced to all other servers in the cluster to copy the flat files to their folder structure. This is quick, but expect a few milliseconds of lag.
 
-## Pull Requests to Source (TODO)
+### Pull Requests to Source (TODO)
 If you are hosting your repository on GitHub, then great news, when you create/update/destroy a Page or Series on a production web app, Proxy Router can issue a pull request to your repo. This keeps your remote Flat Files in sync with your production application.
 ```
 ```
