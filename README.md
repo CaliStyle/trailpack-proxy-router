@@ -203,8 +203,13 @@ This is useful for when a child route may not have a specific view eg. `/product
 By default trailpack-proxy-route has no policies to prevent anything from hitting the RouteController endpoints. You will need to create policies with your authentication strategy to determine what is allowed to hit them. 
 
 ### Server Clusters with Flat File (TODO)
-For trailpack-proxy-route to work on a server cluster as a Flat File server, Redis is required. 
-After any route or series is updated as a Flat File, an event is produced to all other servers in the cluster to copy the flat files to their folder structure.
+For Proxy Router to work on a server cluster as a Flat File server, Redis is required. 
+After any route or series is updated as a Flat File, an event is produced to all other servers in the cluster to copy the flat files to their folder structure. This is quick, but expect a few milliseconds of lag.
+
+## Pull Requests to Source (TODO)
+If you are hosting your repository on GitHub, then great news, when you create/update/destroy a Page or Series on a production web app, Proxy Router can issue a pull request to your repo. This keeps your remote Flat Files in sync with your production application.
+```
+```
 
 ## Usage
 
@@ -251,7 +256,13 @@ Demographics is a generic term because they can literally be anything. For examp
 When a user does something we don't like on the page, we want to send a negative control back to Proxy Router. For example, if they leave the website, then we might send a negative control. That said, if the user was visiting the a0 series of the homepage, then a0 would get a reduction in it's overall score. If the user does something that we like on the page, for example clicks "Buy Now", then we might want to send a positive control that increases the score of a0. We continue this process until the Baseline and Threshold is met.
    
 #### Baseline and Threshold
-Every Page has a baseline. The baseline is the minimal times the page can be viewed before the threshold comes into effect.  Imagine it as a survey, where you want 1000 people to take the survey before you review the results. From the previous example between a0 and b0, let's say a 1000 people visit the home page. After that 1000 people have visited, we should have some decent scores from a0 and b0 for example a0 scored .89 and b0 score .70. Proxy Route now examines the threshold and will predict that a0 is more productive then b0. If we set the threshold to .90, then we will stop testing between a0 and b0 when a0 reaches .90 and begin serving only a0 for the "unknown" demographic. 
+Every Page has a baseline. The baseline is the minimal times the page can be viewed before the threshold comes into effect.  Imagine it as a survey, where you want 1000 people to take the survey before you review the results. From the previous example between a0 and b0, let's say a 1000 people visit the home page. After that 1000 people have visited, we should have some decent scores from a0 and b0 for example a0 scored 0.89 and b0 score 0.70. Proxy Route now examines the threshold and will predict that a0 is more productive then b0. If we set the threshold to .90, then we will stop testing between a0 and b0 when a0 reaches 0.90 and begin serving only a0 for the "unknown" demographic. 
+
+#### Scoring
+A max series score is 1.0 and a min series score is 0.0.  This score is the result of positive/negative scores from some machine learning (nothing too fancy) and user interactions. When a user clicks on let's say a button, we can issue a click event with a score between 1 and 100 based on how important that is too us. For example, a page link maybe get a issue a score of 1, while a "Buy Now" may issue a score of 100. Proxy-engine will take that event score and compare it to the previous score, runs of the series, the threshold of the page, and the weight of series distribution.  
+
+TODO
+Truncate tests that are failing a standard deviation from the mean after the baseline is met. 
 
 ### Markdown-it (required)
 [Markdown-it](https://www.npmjs.com/package/markdown-it) 
@@ -342,22 +353,22 @@ Adds a negative score to a series
 
 #### General
 ##### RouteService.addPage()
-Adds a Route Model (Page)
+Adds a Page (Route Model)
 
 ##### RouteService.editPage()
-Edits a Route Model (Page)
+Edits a Page (Route Model)
 
 ##### RouteService.removePage()
-Removes a Route Model (Page)
+Removes a Page (Route Model)
 
 ##### RouteService.addSeries()
-Adds a RouteDocument Model (Document)
+Adds a Document (RouteDocument Model)
 
 ##### RouteService.editSeries()
-Edits a RouteDocument Model (Document)
+Edits a Document (RouteDocument Model)
 
 ##### RouteService.removeSeries()
-Removes a RouteDocument Model (Document)
+Removes a Document (RouteDocument Model)
 
 #### Render
 ##### RouteRenderService.render()

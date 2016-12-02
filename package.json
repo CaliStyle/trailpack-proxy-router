@@ -1,7 +1,7 @@
 {
   "name": "trailpack-proxy-router",
   "version": "0.0.2",
-  "description": "Router for Proxy",
+  "description": "Router for Proxy Engine",
   "homepage": "http://trailsjs.io",
   "author": {
     "name": "scott-wyatt",
@@ -45,7 +45,11 @@
     "trails": "latest"
   },
   "scripts": {
-    "test": "eslint . && mocha"
+    "test": "eslint --fix . && mocha",
+    "publishPatch": "npm version patch && npm run push",
+    "publishMinor": "npm version minor && npm run push",
+    "publishMajor": "npm version major && npm run push",
+    "push": "git push --tags && git push"
   },
   "engines": {
     "node": ">= 4.0.0"
