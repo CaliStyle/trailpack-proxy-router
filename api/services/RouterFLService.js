@@ -9,6 +9,7 @@ const mkdirp = require('mkdirp')
 const rmdir = require('rmdir')
 const TESTS = require('../utils/enums').TESTS
 const vc = require('version_compare')
+const errors = require('../../lib/errors')
 
 /**
  * @module RouterFLService
@@ -90,7 +91,7 @@ module.exports = class RouterFLService extends Service {
             return RouterRenderService.render(doc)
           }
           else {
-            throw new Error(`${pagePath} and ${alternatePath} are not qualified resources`)
+            throw new errors.FoundError(Error(`${pagePath} and ${alternatePath} are not qualified resources`))
           }
         })
         .then(renderedDoc => {

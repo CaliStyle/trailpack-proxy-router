@@ -8,6 +8,7 @@ const packs = [
   smokesignals.Trailpack,
   require('trailpack-core'),
   require('trailpack-router'),
+  require('trailpack-proxy-engine'),
   require('../') // trailpack-proxy-route
 ]
 

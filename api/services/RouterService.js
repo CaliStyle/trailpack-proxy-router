@@ -5,6 +5,7 @@
 const Service = require('trails-service')
 // const _ = require('lodash')
 const pathToRegexp = require('path-to-regexp')
+const errors = require('../../lib/errors')
 
 /**
  * @module RouterService
@@ -148,7 +149,7 @@ module.exports = class RouterService extends Service {
   findPageByID(id) {
     return new Promise((resolve, reject) => {
       if (this.app.config.proxyroute.forceFL) {
-        const err = new Error('RouterService.findPageByID is disabled while proxyroute.forceFL is true')
+        const err = new errors.ValidationError(Error('RouterService.findPageByID is disabled while proxyroute.forceFL is true'))
         return reject(err)
       }
       const FootprintService = this.app.services.FootprintService
@@ -173,7 +174,7 @@ module.exports = class RouterService extends Service {
   findPageByPath(path) {
     return new Promise((resolve, reject) => {
       if (this.app.config.proxyroute.forceFL) {
-        const err = new Error('RouterService.findPageByPath is disabled while proxyroute.forceFL is true')
+        const err = new errors.ValidationError(Error('RouterService.findPageByPath is disabled while proxyroute.forceFL is true'))
         return reject(err)
       }
       // Remove all query strings just in case
@@ -216,13 +217,13 @@ module.exports = class RouterService extends Service {
       }
 
       if (!page.id && !page.path) {
-        const err = new Error(`Completely failed to look up ${identifier} make sure it is in "path" format eg. '/hello/world' or as an ID eg. '123'`)
+        const err = new errors.FoundError(Error(`Completely failed to look up ${identifier} make sure it is in "path" format eg. '/hello/world' or as an ID eg. '123'`))
         return reject(err)
       }
       // If this is a forced lookup
       if (lookup) {
         if (this.app.config.proxyroute.forceFL) {
-          const err = new Error('RouterService.resolveIdentifier lookup == true is disabled while proxyroute.forceFL is true')
+          const err = new errors.ValidationError(Error('RouterService.resolveIdentifier lookup == true is disabled while proxyroute.forceFL is true'))
           return reject(err)
         }
         this[lookupFunc](identifier)
@@ -257,7 +258,7 @@ module.exports = class RouterService extends Service {
         .then(identifier => {
           this.app.log.debug('routerservice:addPage identifier', identifier)
           if (!identifier.path) {
-            throw new Error(`Can not resolve ${data.identifier}, make sure it is in "path" format eg. '/hello/world'`)
+            throw new errors.FoundError(Error(`Can not resolve ${data.identifier}, make sure it is in "path" format eg. '/hello/world'`))
           }
           regPath = identifier.path
           return RouterFLService.resolveFlatFilePathFromString(identifier.path).path
@@ -273,7 +274,7 @@ module.exports = class RouterService extends Service {
         })
         .then(isCreated => {
           if (isCreated) {
-            throw new Error(`${pagePath} is already created, use RouterController.editPage or RouterService.editPage instead`)
+            throw new errors.ConflictError(Error(`${pagePath} is already created, use RouterController.editPage or RouterService.editPage instead`))
           }
           return this.createPage(pagePath, regPath)
         })
@@ -361,7 +362,7 @@ module.exports = class RouterService extends Service {
         })
         .then(isCreated => {
           if (!isCreated) {
-            throw new Error(`${pagePath} is does not exist and can not be updated`)
+            throw new errors.FoundError(Error(`${pagePath} does not exist and can not be updated`))
           }
           return this.updatePage(pagePath, regPath, data.options)
         })
@@ -431,7 +432,7 @@ module.exports = class RouterService extends Service {
         .then(identifier => {
           this.app.log.debug('routerservice:removePage', identifier)
           if (!identifier.path && !identifier.id) {
-            throw new Error(`Can not resolve ${data.identifier}, make sure it is in "path" format eg. '/hello/world' or as an ID eg. '123'`)
+            throw new errors.FoundError(Error(`Can not resolve ${data.identifier}, make sure it is in "path" format eg. '/hello/world' or as an ID eg. '123'`))
           }
           regPath = identifier.path
           return RouterFLService.resolveFlatFilePathFromString(regPath).path
@@ -447,7 +448,7 @@ module.exports = class RouterService extends Service {
         })
         .then(isCreated => {
           if (!isCreated) {
-            throw new Error(`${pagePath} does not exist and can not be removed`)
+            throw new errors.FoundError(Error(`${pagePath} does not exist and can not be removed`))
           }
           return this.destroyPage(pagePath, regPath)
         })

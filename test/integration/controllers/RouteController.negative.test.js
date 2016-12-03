@@ -13,7 +13,7 @@ describe('RouteController', () => {
   it('should make addPage post request and fail validation', (done) => {
     request
       .post('/route/addPage',{})
-      .expect(500)
+      .expect(400)
       .end((err, res) => {
         done(err)
       })
@@ -44,7 +44,7 @@ describe('RouteController', () => {
   it('should make addSeries post request and fail validation', (done) => {
     request
       .post('/route/addSeries',{})
-      .expect(500)
+      .expect(400)
       .end((err, res) => {
         done(err)
       })
@@ -53,7 +53,7 @@ describe('RouteController', () => {
     request
       .post('/route/control?type=positive')
       .send({})
-      .expect(500)
+      .expect(400)
       .end((err, res) => {
         done(err)
       })
@@ -62,7 +62,7 @@ describe('RouteController', () => {
     request
       .post('/route/control?type=negative')
       .send({})
-      .expect(500)
+      .expect(400)
       .end((err, res) => {
         done(err)
       })
