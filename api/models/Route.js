@@ -21,7 +21,15 @@ module.exports = class Route extends Model {
              * Associate Models
              */
             associate: (models) => {
-
+              models.Route.hasMany(models.RouteDocument, {
+                as: 'documents',
+                onDelete: 'CASCADE'
+                // ,
+                // foreignKey: {
+                //   name: 'routeName',
+                //   allowNull: false
+                // }
+              })
             }
           }
         }
@@ -78,12 +86,12 @@ module.exports = class Route extends Model {
               ]
             }
           ]
-        }),
+        })
         // id of the parent of the route. Could be a Relationship?
-        parent: {
-          type: Sequelize.STRING
-          // allowNull: false
-        }
+        // parent: {
+        //   type: Sequelize.STRING
+        //   // allowNull: false
+        // }
         // array of siblings route ids. Could be a relationship?
         // siblings: {},
         // array of children route ids. Could be a relationship?

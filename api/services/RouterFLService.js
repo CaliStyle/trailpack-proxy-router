@@ -258,6 +258,26 @@ module.exports = class RouterFLService extends Service {
     return res
   }
 
+  resolveFlatFileSeriesFromString(orgPath, options) {
+    const parts = path.normalize(orgPath).split('/')
+    let outPath = ['']
+    _.each(parts, (part, index) => {
+      if (index + 1 == parts.length) {
+        outPath[0] = `/${outPath[0]}/${part}/series`
+      }
+      else {
+        outPath[0] = `/${outPath[0]}/${part}`
+      }
+    })
+
+    const res = {
+      // The Original path (the url)
+      orgPath: orgPath,
+      // The Server path
+      path: path.join(__dirname, '../../', this.app.config.proxyroute.folder, outPath.join('/'))
+    }
+    return res
+  }
   /**
    * checkIfFile
    * @param file
@@ -276,6 +296,23 @@ module.exports = class RouterFLService extends Service {
         }
         // console.log('RouterFLService.checkIfFile',stats)
         return resolve(stats.isFile())
+      })
+    })
+  }
+
+  checkIfDir(file) {
+    return new Promise((resolve, reject) => {
+      fs.stat(file, (err, stats) => {
+        if (err) {
+          if (err.code === 'ENOENT') {
+            return resolve(false)
+          }
+          else {
+            return reject(err)
+          }
+        }
+        // console.log('RouterFLService.checkIfFile',stats)
+        return resolve(stats.isDirectory())
       })
     })
   }

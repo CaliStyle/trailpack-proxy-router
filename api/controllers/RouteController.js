@@ -166,7 +166,7 @@ module.exports = class RouteController extends Controller {
    */
   editSeries(req, res) {
     const RouterService = this.app.services.RouterService
-    lib.Validator.validateSeriesData(req.body)
+    lib.Validator.validateSeriesEditData(req.body)
       .then(values => {
         return RouterService.editSeries(req.body)
       })

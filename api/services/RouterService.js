@@ -269,7 +269,7 @@ module.exports = class RouterService extends Service {
             return RouterFLService.checkIfFile(pagePath)
           }
           else {
-            return RouterDBService.checkIfRecord({path: pagePath})
+            return RouterDBService.checkIfRecord({path: regPath})
           }
         })
         .then(isCreated => {
@@ -315,7 +315,7 @@ module.exports = class RouterService extends Service {
       }
       else {
         let created
-        RouterDBService.create(pagePath)
+        RouterDBService.create(regPath)
           .then(createdRecord => {
             created = createdRecord
             return RouterFLService.create(pagePath)
@@ -342,7 +342,7 @@ module.exports = class RouterService extends Service {
       let pagePath
       let regPath
 
-      this.resolveIdentifier(data.identifier)
+      this.resolveIdentifier(data.identifier, !this.app.config.proxyroute.forceFL)
         .then(identifier => {
           this.app.log.debug('routerservice:updatePage', identifier)
           if (!identifier.path && !identifier.id) {
@@ -357,7 +357,7 @@ module.exports = class RouterService extends Service {
             return RouterFLService.checkIfFile(pagePath)
           }
           else {
-            return RouterDBService.checkIfRecord({path: pagePath})
+            return RouterDBService.checkIfRecord({path: regPath})
           }
         })
         .then(isCreated => {
@@ -428,7 +428,7 @@ module.exports = class RouterService extends Service {
       const RouterDBService = this.app.services.RouterDBService
       let pagePath
       let regPath
-      this.resolveIdentifier(data.identifier)
+      this.resolveIdentifier(data.identifier, !this.app.config.proxyroute.forceFL)
         .then(identifier => {
           this.app.log.debug('routerservice:removePage', identifier)
           if (!identifier.path && !identifier.id) {
@@ -443,7 +443,7 @@ module.exports = class RouterService extends Service {
             return RouterFLService.checkIfFile(pagePath)
           }
           else {
-            return RouterDBService.checkIfRecord({path: pagePath})
+            return RouterDBService.checkIfRecord({path: regPath})
           }
         })
         .then(isCreated => {
@@ -506,8 +506,52 @@ module.exports = class RouterService extends Service {
    * @param data
    * @returns {Promise.<proxyroute>}
    */
-  // TODO
   addSeries(data) {
+    return new Promise((resolve, reject) => {
+      const RouterFLService = this.app.services.RouterFLService
+      const RouterDBService = this.app.services.RouterDBService
+      this.resolveIdentifier(data.identifier, !this.app.config.proxyroute.forceFL)
+        .then(identifier => {
+          this.app.log.debug('routerservice:addSeries identifier', identifier)
+          if (!identifier.path && !identifier.id) {
+            throw new errors.FoundError(Error(`Can not resolve ${data.identifier}, make sure it is in "path" format eg. '/hello/world'`))
+          }
+          // Setup Data for addSeries
+          delete data.identifier
+          data.path = identifier.path
+          data.id = identifier.id
+
+          // console.log('RouterService.addSeries',identifier.path)
+          return RouterFLService.resolveFlatFileSeriesFromString(identifier.path).path
+        })
+        .then(resolvedPath => {
+          // Add the Series Path
+          data.seriesPath = resolvedPath
+          if (this.app.config.proxyroute.forceFL) {
+            return RouterFLService.checkIfDir(data.seriesPath)
+          }
+          else {
+            return RouterDBService.checkIfRecord({path: data.path})
+          }
+        })
+        .then(isCreated => {
+          // console.log('RouterService.addSeries', isCreated)
+          if (!isCreated) {
+            throw new errors.FoundError(Error(`${data.path} does not exist and can not have a series added to it.`))
+          }
+          return this.createSeries(data)
+        })
+        .then(series => {
+          return resolve(series)
+        })
+        .catch(err => {
+          return reject(err)
+        })
+    })
+  }
+  // TODO
+  createSeries(data) {
+    console.log('RouteService.createSeries', data)
     return Promise.resolve(data)
   }
 
@@ -518,6 +562,56 @@ module.exports = class RouterService extends Service {
    */
   // TODO
   editSeries(data) {
+    return new Promise((resolve, reject) => {
+      const RouterFLService = this.app.services.RouterFLService
+      const RouterDBService = this.app.services.RouterDBService
+      this.resolveIdentifier(data.identifier, !this.app.config.proxyroute.forceFL)
+        .then(identifier => {
+          this.app.log.debug('routerservice:addSeries identifier', identifier)
+          if (!identifier.path && !identifier.id) {
+            throw new errors.FoundError(Error(`Can not resolve ${data.identifier}, make sure it is in "path" format eg. '/hello/world'`))
+          }
+          // Setup Data for addSeries
+          delete data.identifier
+          data.path = identifier.path
+          data.id = identifier.id
+
+          console.log('RouterService.addSeries',identifier.path)
+          return RouterFLService.resolveFlatFilePathFromString(identifier.path, {
+            version: data.version,
+            series: data.series
+          }).path
+        })
+        .then(resolvedPath => {
+          // Add the Series Path
+          data.seriesPath = resolvedPath
+          if (this.app.config.proxyroute.forceFL) {
+            return RouterFLService.checkIfFile(data.seriesPath)
+          }
+          else {
+            return RouterDBService.checkIfRecord({path: data.path})
+          }
+        })
+        .then(isCreated => {
+          // console.log('RouterService.editSeries', isCreated)
+          // TODO
+          if (!isCreated) {
+            throw new errors.FoundError(Error(`${data.path} does not exist.`))
+          }
+          return this.updateSeries(data)
+        })
+        .then(series => {
+          return resolve(series)
+        })
+        .catch(err => {
+          return reject(err)
+        })
+    })
+  }
+
+  // TODO
+  updateSeries(data) {
+    console.log('RouterService.updateSeries',data)
     return Promise.resolve(data)
   }
 
@@ -528,6 +622,51 @@ module.exports = class RouterService extends Service {
    */
   // TODO
   removeSeries(data) {
+    return new Promise((resolve, reject) => {
+      const RouterFLService = this.app.services.RouterFLService
+      const RouterDBService = this.app.services.RouterDBService
+      this.resolveIdentifier(data.identifier, !this.app.config.proxyroute.forceFL)
+        .then(identifier => {
+          this.app.log.debug('routerservice:addSeries identifier', identifier)
+          if (!identifier.path && !identifier.id) {
+            throw new errors.FoundError(Error(`Can not resolve ${data.identifier}, make sure it is in "path" format eg. '/hello/world'`))
+          }
+          // Setup Data for addSeries
+          delete data.identifier
+          data.path = identifier.path
+          data.id = identifier.id
+
+          // console.log('RouterService.removeSeries',identifier.path)
+          return RouterFLService.resolveFlatFileSeriesFromString(identifier.path).path
+        })
+        .then(resolvedPath => {
+          // Add the Series Path
+          data.seriesPath = resolvedPath
+          if (this.app.config.proxyroute.forceFL) {
+            return RouterFLService.checkIfDir(data.seriesPath)
+          }
+          else {
+            return RouterDBService.checkIfRecord({path: data.path})
+          }
+        })
+        .then(isCreated => {
+          console.log('RouterService.removeSeries', isCreated)
+          if (!isCreated) {
+            throw new errors.FoundError(Error(`${data.path} does not exist and can not have a series removed from it.`))
+          }
+          return this.destroySeries(data)
+        })
+        .then(series => {
+          return resolve(series)
+        })
+        .catch(err => {
+          return reject(err)
+        })
+    })
+  }
+  // TODO
+  destroySeries(data) {
+    console.log('RouterService.destroySeries', data)
     return Promise.resolve(data)
   }
 }

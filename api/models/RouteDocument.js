@@ -27,7 +27,16 @@ module.exports = class RouteDocument extends Model {
              * Associate Models
              */
             associate: (models) => {
-
+              models.RouteDocument.belongsTo(models.Route, {
+                as: 'route_id',
+                onDelete: 'CASCADE'
+                // ,
+                // foreignKey: {
+                //   primaryKey: true,
+                //   name: 'routePath',
+                //   allowNull: false
+                // }
+              })
             }
           },
           hooks: {
@@ -53,10 +62,14 @@ module.exports = class RouteDocument extends Model {
     if (app.config.database.orm === 'sequelize') {
       schema = {
         // non-unique url can be a normal string or regex (should match the regex of a Route model)
-        url: {
-          type: Sequelize.STRING,
-          allowNull: false
-        },
+        // url: {
+        //   type: Sequelize.STRING,
+        //   allowNull: false
+        // },
+        // The Page this Document belongs to
+        // parent: {
+        //   type: Sequelize.String
+        // },
         // The version of this route and series test,
         version: {
           type: Sequelize.STRING,

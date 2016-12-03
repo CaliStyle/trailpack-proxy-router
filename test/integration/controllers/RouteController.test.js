@@ -86,6 +86,8 @@ describe('RouteController', () => {
       .post('/route/editSeries')
       .send({
         identifier: '/',
+        version: '0.0.0',
+        series: 'c0',
         document: 'Updated Hello'
       })
       .expect(200)
@@ -97,7 +99,8 @@ describe('RouteController', () => {
     request
       .post('/route/removeSeries')
       .send({
-        identifier: '/'
+        identifier: '/',
+        series: 'c0'
       })
       .expect(200)
       .end((err, res) => {
