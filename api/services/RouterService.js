@@ -274,7 +274,7 @@ module.exports = class RouterService extends Service {
         })
         .then(isCreated => {
           if (isCreated) {
-            throw new errors.ConflictError(Error(`${pagePath} is already created, use RouterController.editPage or RouterService.editPage instead`))
+            throw new errors.ConflictError(Error(`${regPath} is already created, use RouterController.editPage or RouterService.editPage instead`))
           }
           return this.createPage(pagePath, regPath)
         })
@@ -362,7 +362,7 @@ module.exports = class RouterService extends Service {
         })
         .then(isCreated => {
           if (!isCreated) {
-            throw new errors.FoundError(Error(`${pagePath} does not exist and can not be updated`))
+            throw new errors.FoundError(Error(`${regPath} does not exist and can not be updated`))
           }
           return this.updatePage(pagePath, regPath, data.options)
         })
@@ -448,7 +448,7 @@ module.exports = class RouterService extends Service {
         })
         .then(isCreated => {
           if (!isCreated) {
-            throw new errors.FoundError(Error(`${pagePath} does not exist and can not be removed`))
+            throw new errors.FoundError(Error(`${regPath} does not exist and can not be removed`))
           }
           return this.destroyPage(pagePath, regPath)
         })

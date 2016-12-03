@@ -78,7 +78,7 @@ module.exports = class RouteController extends Controller {
         return res.json(data)
       })
       .catch(err => {
-        // console.log('RouterContoller.addpage', err.name)
+        // console.log('RouterContoller.addpage', err)
         return res.serverError(err)
       })
   }
