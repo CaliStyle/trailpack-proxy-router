@@ -353,22 +353,46 @@ Adds a negative score to a series
 
 #### General
 ##### RouteService.addPage()
+Adds a Page (Route Model).
+Calls `RouteService.createPage()`
+
+##### RouteService.createPage()
 Adds a Page (Route Model)
 
 ##### RouteService.editPage()
-Edits a Page (Route Model)
+Edits a Page (Route Model).
+Calls `RouteService.updatePage()`
+
+##### RouteService.updatePage()
+Updates a Page (Route Model)
 
 ##### RouteService.removePage()
+Removes a Page (Route Model).
+Calls `RouteService.destroyPage()`
+
+##### RouteService.destroyPage()
 Removes a Page (Route Model)
 
 ##### RouteService.addSeries()
-Adds a Document (RouteDocument Model)
+Adds a Document (RouteDocument Model).
+Calls `RouterService.createSeries()`
+
+##### RouteService.createSeries()
+Creates a Document (RouteDocument Model)
 
 ##### RouteService.editSeries()
-Edits a Document (RouteDocument Model)
+Edits a Document (RouteDocument Model).
+Calls `RouteService.updateSeries()`
+
+##### RouteService.updateSeries()
+Updates a Document (RouteDocument Model)
 
 ##### RouteService.removeSeries()
-Removes a Document (RouteDocument Model)
+Removes a Document (RouteDocument Model).
+Calls `RouteService.destroySeries()`
+
+##### RouteService.destroySeries()
+Destroys a Document (RouteDocument Model)
 
 #### Render
 ##### RouteRenderService.render()
@@ -381,6 +405,17 @@ Renders a markdown document using Markdown-it and all the plugins configured
   document: String  // The Rendered HTML of the Document
 }
 ```
+
+#### Flat Files
+##### RouterFLService.get()
+Gets a Route Document from Request
+
+##### RouterFLService.renderPage()
+Resolves and Renders a Document
+
+#### Database Files
+##### RouterDBService.get()
+Gets a Route Document from Request
 
 [npm-image]: https://img.shields.io/npm/v/trailpack-proxy-router.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/trailpack-proxy-router
