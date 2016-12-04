@@ -325,6 +325,10 @@ Gets a rendered page from a flatfile given the express request object
   document: String  // The Rendered HTML of the Route Doucment Model
 }
 ```
+
+##### RouterFLService.renderPage()
+Resolves and Renders a Route Document
+
 #### Database Files
 ##### RouterDBService.get(req)
 Gets a rendered page from the database given the express request object
@@ -405,17 +409,6 @@ Renders a markdown document using Markdown-it and all the plugins configured
   document: String  // The Rendered HTML of the Document
 }
 ```
-
-#### Flat Files
-##### RouterFLService.get()
-Gets a Route Document from Request
-
-##### RouterFLService.renderPage()
-Resolves and Renders a Document
-
-#### Database Files
-##### RouterDBService.get()
-Gets a Route Document from Request
 
 [npm-image]: https://img.shields.io/npm/v/trailpack-proxy-router.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/trailpack-proxy-router
