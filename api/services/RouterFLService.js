@@ -37,6 +37,7 @@ module.exports = class RouterFLService extends Service {
       // console.log('RouterFLService.get orginal:', req.originalUrl, 'base:', req.baseUrl)
       const pagePath = req.originalUrl
       const alternatePath = req.route && req.route.path ? req.route.path : null
+      // TODO get options form req
       const options = {
         series: 'a0',
         version: 'latest'
@@ -45,6 +46,8 @@ module.exports = class RouterFLService extends Service {
         .then(renderedPage => {
           const proxyroute = {
             id: renderedPage.id ? renderedPage.id : null,
+            // TODO multi-site support
+            host: 'localhost',
             path: renderedPage.orgPath ? renderedPage.orgPath : pagePath,
             series: renderedPage.series ? renderedPage.series : 'a0',
             version: renderedPage.version ? renderedPage.version : '0.0.0',
@@ -97,6 +100,8 @@ module.exports = class RouterFLService extends Service {
         .then(renderedDoc => {
           const proxyroute = {
             id: null,
+            // TODO mulit-site support
+            host: 'localhost',
             path: choosenPath.path,
             orgPath: choosenPath.orgPath,
             series: choosenPath.series ? choosenPath.series : 'a0',
@@ -303,6 +308,9 @@ module.exports = class RouterFLService extends Service {
   resolveFlatFilePathFromString(orgPath, options){
     const parts = path.normalize(orgPath).split('/')
     let outPath = ['','a0','0.0.0.md']
+    if (options && options.host) {
+      outPath[0] = `/${options.host}`
+    }
     _.each(parts, (part, index) => {
       if (index + 1 == parts.length) {
         outPath[0] = `/${outPath[0]}/${part}/series`
@@ -342,6 +350,9 @@ module.exports = class RouterFLService extends Service {
     }
     // Construct Final Response
     const res = {
+      // TODO multi-site support
+      // The Final site the page was rendered from
+      host: 'localhost',
       // The final Series that was run
       series: outPath[1],
       // The final Version that was run
@@ -363,6 +374,9 @@ module.exports = class RouterFLService extends Service {
   resolveFlatFileSeriesFromString(orgPath, options) {
     const parts = path.normalize(orgPath).split('/')
     let outPath = ['']
+    if (options && options.host) {
+      outPath[0] = `/${options.host}`
+    }
     _.each(parts, (part, index) => {
       if (index + 1 == parts.length) {
         outPath[0] = `/${outPath[0]}/${part}/series`

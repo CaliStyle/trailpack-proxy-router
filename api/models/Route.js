@@ -45,9 +45,10 @@ module.exports = class Route extends Model {
     let schema = {}
     if (app.config.database.orm === 'sequelize') {
       schema = {
-        // Multi-site support
+        // The host if using Multi-Site, localhost if not using Multi-Site
         host: {
-          type: Sequelize.STRING
+          type: Sequelize.STRING,
+          defaultValue: 'localhost'
         },
         // The path of the Page
         path: {

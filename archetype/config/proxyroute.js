@@ -41,5 +41,7 @@ module.exports = {
       //   options: {}
       // }
     ]
-  }
+  },
+  // If multi-site is enabled either false or an array e.g. ['website1.com','website2.com']
+  multisite: false
 }

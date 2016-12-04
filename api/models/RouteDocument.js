@@ -70,10 +70,13 @@ module.exports = class RouteDocument extends Model {
         // parent: {
         //   type: Sequelize.String
         // },
-        // The version of this route and series test,
+
+        // The host if using Multi-Site, localhost if not using Multi-Site
         host: {
-          type: Sequelize.STRING
+          type: Sequelize.STRING,
+          defaultValue: 'localhost'
         },
+        // The version of this route and series test,
         version: {
           type: Sequelize.STRING,
           allowNull: false,
