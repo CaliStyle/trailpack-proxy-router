@@ -71,6 +71,9 @@ module.exports = class RouteDocument extends Model {
         //   type: Sequelize.String
         // },
         // The version of this route and series test,
+        host: {
+          type: Sequelize.STRING
+        },
         version: {
           type: Sequelize.STRING,
           allowNull: false,
