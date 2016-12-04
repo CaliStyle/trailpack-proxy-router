@@ -594,7 +594,6 @@ module.exports = class RouterService extends Service {
    * @param data
    * @returns {Promise.<proxyroute>}
    */
-  // TODO
   editSeries(data) {
     return new Promise((resolve, reject) => {
       const RouterFLService = this.app.services.RouterFLService
@@ -627,8 +626,6 @@ module.exports = class RouterService extends Service {
           }
         })
         .then(isCreated => {
-          // console.log('RouterService.editSeries', isCreated)
-          // TODO
           if (!isCreated) {
             throw new errors.FoundError(Error(`${data.path} does not exist.`))
           }
@@ -652,9 +649,8 @@ module.exports = class RouterService extends Service {
   /**
    * removeSeries
    * @param data
-   * @returns {Promise.<T> Object} proxyroute
+   * @returns {Promise.<proxyroute>}
    */
-  // TODO
   removeSeries(data) {
     return new Promise((resolve, reject) => {
       const RouterFLService = this.app.services.RouterFLService
@@ -698,10 +694,43 @@ module.exports = class RouterService extends Service {
         })
     })
   }
-  // TODO
+
+  /**
+   * destroySeries
+   * @param data
+   * @returns {Promise.<proxyroute>}
+   */
   destroySeries(data) {
-    console.log('RouterService.destroySeries', data)
-    return Promise.resolve(data)
+    // console.log('RouterService.destroySeries', data)
+    return new Promise((resolve, reject) => {
+      const RouterFLService = this.app.services.RouterFLService
+      const RouterDBService = this.app.services.RouterDBService
+
+      if (this.app.config.proxyroute.forceFL) {
+        RouterFLService.destroySeries(data)
+          .then(destroyed => {
+            // Mock the DB return
+            return resolve(destroyed)
+          })
+          .catch(err => {
+            return reject(err)
+          })
+      }
+      else {
+        let destroyed
+        RouterDBService.destroySeries(data)
+          .then(destroyedRecord => {
+            destroyed = destroyedRecord
+            return RouterFLService.destroySeries(data)
+          })
+          .then(destroyedFile => {
+            return resolve(destroyed)
+          })
+          .catch(err => {
+            return reject(err)
+          })
+      }
+    })
   }
 }
 

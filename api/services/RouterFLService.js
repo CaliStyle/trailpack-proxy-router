@@ -251,6 +251,31 @@ module.exports = class RouterFLService extends Service {
   }
 
   /**
+   * destroySeries
+   * @param data
+   * @returns {Promise}
+   */
+  destroySeries(data){
+    return new Promise((resolve, reject) => {
+      // Try and get the directory name of the pagePath
+      let dir
+      try {
+        dir = path.join(data.seriesPath, data.series)
+        data.seriesPath = dir
+      }
+      catch (err) {
+        return reject(err)
+      }
+      rmdir(dir, (err, dirs, files) => {
+        if (err) {
+          return reject(err)
+        }
+        this.app.log.debug(`RouterFLService.destroySeries ${dir} and was destroyed`)
+        return resolve(data)
+      })
+    })
+  }
+  /**
    * resolveFlatFilePathFromString
    * @param orgPath
    * @param options

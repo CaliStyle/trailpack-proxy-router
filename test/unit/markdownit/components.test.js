@@ -9,14 +9,24 @@ function fixture(name) {
 describe('Markdown-it Components', () => {
   it('should parse html components', function () {
     const mdText = fixture('../../../../content/components/series/a0/0.0.0.md')
-    const md = new MarkdownIt()
+    const md = new MarkdownIt({
+      html: true
+    })
     const html = md.render(mdText)
     const expectedHtml = [
-      '<hello></hello>',
-      '<hello-world></hello-world>',
-      '<hello-earth>My Name is Scott</hello-earth>',
-      '<hello-mars [awesome]="yes"></hello-mars>'
+      '<hello>',
+      '</hello>',
+      '<hello-world>',
+      '</hello-world>',
+      '<hello-earth>',
+      'My Name is Scott',
+      '</hello-earth>',
+      '<hello-mars [awesome]="yes">',
+      '</hello-mars>',
+      ''
     ].join('\n')
-    assert(expectedHtml, html)
+    // console.log(expectedHtml)
+    // console.log(html)
+    assert.equal(expectedHtml, html)
   })
 })

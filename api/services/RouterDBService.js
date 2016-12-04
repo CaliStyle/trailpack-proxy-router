@@ -46,6 +46,10 @@ module.exports = class RouterDBService extends Service {
       path: regPath
     })
   }
+  // TODO
+  createSeries(data) {
+    return Promise.resolve(data)
+  }
 
   /**
    * update
@@ -61,6 +65,10 @@ module.exports = class RouterDBService extends Service {
     })
     return FootprintService.update('Route', { path: regPath }, update)
   }
+  // TODO
+  updateSeries(data) {
+    return Promise.resolve(data)
+  }
 
   /**
    * destroy
@@ -73,6 +81,10 @@ module.exports = class RouterDBService extends Service {
     return FootprintService.destroy('Route', {
       path: regPath
     })
+  }
+  // TODO
+  destroySeries(data){
+    return Promise.resolve(data)
   }
   // TODO
   resolveDBFromFlatFileString(orgPath, options) {}

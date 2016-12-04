@@ -45,7 +45,26 @@ describe('RouteController', () => {
   })
   it('should make addSeries post request and fail validation', (done) => {
     request
-      .post('/route/addSeries',{})
+      .post('/route/addSeries')
+      .send({})
+      .expect(400)
+      .end((err, res) => {
+        done(err)
+      })
+  })
+  it('should make editSeries post request and fail validation', (done) => {
+    request
+      .post('/route/editSeries')
+      .send({})
+      .expect(400)
+      .end((err, res) => {
+        done(err)
+      })
+  })
+  it('should make removeSeries post request and fail validation', (done) => {
+    request
+      .post('/route/removeSeries')
+      .send({})
       .expect(400)
       .end((err, res) => {
         done(err)

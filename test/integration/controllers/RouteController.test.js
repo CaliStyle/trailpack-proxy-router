@@ -78,6 +78,11 @@ describe('RouteController', () => {
       })
       .expect(200)
       .end((err, res) => {
+        console.log(res.body)
+        assert.equal(res.body.path, '/')
+        assert.equal(res.body.series, 'c0')
+        assert.equal(res.body.version, '0.0.0')
+        assert.equal(res.body.document, 'Hello')
         done(err)
       })
   })
@@ -92,6 +97,10 @@ describe('RouteController', () => {
       })
       .expect(200)
       .end((err, res) => {
+        assert.equal(res.body.path, '/')
+        assert.equal(res.body.series, 'c0')
+        assert.equal(res.body.version, '0.0.0')
+        assert.equal(res.body.document, 'Updated Hello')
         done(err)
       })
   })
@@ -104,6 +113,8 @@ describe('RouteController', () => {
       })
       .expect(200)
       .end((err, res) => {
+        assert.equal(res.body.series,'c0')
+        assert.equal(res.body.path,'/')
         done(err)
       })
   })
