@@ -123,15 +123,15 @@ module.exports = {
     // Milliseconds before cache is ejected
     eject: 10000
   },
-  // Remarkable
-  remarkable: {
+  // Markdown-it
+  markdownit: {
     options: {
       html: true
     },
     plugins: [
-      // Example Plugin (remarkable meta and remarkable components are required and already installed)
+      // Example Plugin (markdown-it meta and markdown-it components are required and already installed)
       // {
-      //   plugin: require('remarkable-embed'),
+      //   plugin: require('markdown-it-embed'),
       //   options: {}
       // }
     ]
