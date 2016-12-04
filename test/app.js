@@ -38,14 +38,12 @@ else if (ORM === 'js-data') {
 else if (ORM === 'sequelize') {
   packs.push(require('trailpack-sequelize'))
   stores.sqlitedev = {
-    database: 'dev',
-    storage: './.tmp/sequelize.sqlite',
+    database: 'ProxyRouter',
+    storage: './test/test.sqlite',
     host: '127.0.0.1',
     dialect: 'sqlite'
   }
 }
-
-
 
 if ( SERVER == 'express' ) {
   packs.push(require('trailpack-express'))
