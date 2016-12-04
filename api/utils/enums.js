@@ -3,7 +3,7 @@
 module.exports = {
   TESTS: {
     A0: 'a0',
-    B0: 'B0',
+    B0: 'b0',
     C0: 'c0',
     D0: 'd0',
     E0: 'e0',
@@ -29,7 +29,7 @@ module.exports = {
     Y0: 'y0',
     Z0: 'z0',
     A1: 'a1',
-    B1: 'B1',
+    B1: 'b1',
     C1: 'c1',
     D1: 'd1',
     E1: 'e1',

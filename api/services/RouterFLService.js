@@ -145,6 +145,58 @@ module.exports = class RouterFLService extends Service {
     })
   }
 
+  createSeries(data) {
+    return new Promise((resolve, reject) => {
+      let directories
+      let series = data.series
+      let version = data.version
+      if (!series) {
+        try {
+          directories = this.getDirectories(data.seriesPath)
+        }
+        catch (err) {
+          return reject(err)
+        }
+        if (directories.length > TESTS.length) {
+          const err = new Error('You have exceeded the amount of available series numbers')
+          return reject(err)
+        }
+        const latest = directories[directories.length - 1]
+        const available = _.values(TESTS)
+        const index = available.indexOf(latest)
+        series = available[index + 1]
+      }
+      if (!version) {
+        version = '0.0.0'
+      }
+      if (!series || !version) {
+        const err = new Error('Series or version is not available')
+        return reject(err)
+      }
+
+      const dir = path.join(data.seriesPath, series)
+      const file = path.join(dir, `${version}.md`)
+      try {
+        mkdirp.sync(dir)
+      }
+      catch (err) {
+        return reject(err)
+      }
+      // Redress data with updates
+      data.seriesPath = dir
+      data.series = series
+      data.version = version
+
+      fs.writeFile(file, data.document, (err) => {
+        if (err) {
+          return reject(err)
+        }
+        this.app.log.debug(`RouterFLService.create ${data.seriesPath} was created`)
+        return resolve(data)
+      })
+    })
+  }
+
   /**
    * update
    * @param pagePath
@@ -314,6 +366,12 @@ module.exports = class RouterFLService extends Service {
         // console.log('RouterFLService.checkIfFile',stats)
         return resolve(stats.isDirectory())
       })
+    })
+  }
+
+  getDirectories(srcpath) {
+    return fs.readdirSync(srcpath).filter((file) => {
+      return fs.statSync(path.join(srcpath, file)).isDirectory()
     })
   }
 }

@@ -549,10 +549,44 @@ module.exports = class RouterService extends Service {
         })
     })
   }
-  // TODO
+
+  /**
+   * createSeries
+   * @param data
+   * @returns {Promise}
+   */
   createSeries(data) {
     console.log('RouteService.createSeries', data)
-    return Promise.resolve(data)
+    // return Promise.resolve(data)
+    return new Promise((resolve, reject) => {
+      const RouterFLService = this.app.services.RouterFLService
+      const RouterDBService = this.app.services.RouterDBService
+
+      if (this.app.config.proxyroute.forceFL) {
+        RouterFLService.createSeries(data)
+          .then(created => {
+            // Mock the DB return
+            return resolve(created)
+          })
+          .catch(err => {
+            return reject(err)
+          })
+      }
+      else {
+        let created
+        RouterDBService.createSeries(data)
+          .then(createdRecord => {
+            created = createdRecord
+            return RouterFLService.createSeries(data)
+          })
+          .then(createdFile => {
+            return resolve(created)
+          })
+          .catch(err => {
+            return reject(err)
+          })
+      }
+    })
   }
 
   /**
