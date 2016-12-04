@@ -7,7 +7,7 @@ const path = require('path')
 const fs = require('fs')
 const mkdirp = require('mkdirp')
 const rmdir = require('rmdir')
-const TESTS = require('../utils/enums').TESTS
+const SERIES = require('../utils/enums').SERIES
 const vc = require('version_compare')
 const errors = require('../../lib/errors')
 
@@ -157,12 +157,12 @@ module.exports = class RouterFLService extends Service {
         catch (err) {
           return reject(err)
         }
-        if (directories.length > TESTS.length) {
+        if (directories.length > SERIES.length) {
           const err = new Error('You have exceeded the amount of available series numbers')
           return reject(err)
         }
         const latest = directories[directories.length - 1]
-        const available = _.values(TESTS)
+        const available = _.values(SERIES)
         const index = available.indexOf(latest)
         series = available[index + 1]
       }
@@ -228,7 +228,7 @@ module.exports = class RouterFLService extends Service {
       }
       let dirParts = path.normalize(dir).split('/')
       // Remove the test folder from the path
-      if (_.values(TESTS).indexOf(dirParts[dirParts.length - 1] != -1)) {
+      if (_.values(SERIES).indexOf(dirParts[dirParts.length - 1] != -1)) {
         dirParts.splice(-1,1)
       }
       // Remove the series folder of the path

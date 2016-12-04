@@ -1,7 +1,7 @@
 'use strict'
 
 module.exports = {
-  TESTS: {
+  SERIES: {
     A0: 'a0',
     B0: 'b0',
     C0: 'c0',

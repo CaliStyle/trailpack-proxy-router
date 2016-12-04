@@ -3,7 +3,7 @@
 
 const Model = require('trails-model')
 const _ = require('lodash')
-const TESTS = require('../utils/enums').TESTS
+const SERIES = require('../utils/enums').SERIES
 const helpers = require('../utils/helpers')
 
 /**
@@ -20,9 +20,9 @@ module.exports = class RouteDocument extends Model {
         options: {
           classMethods: {
             /**
-             * Expose tests enums
+             * Expose SERIES enums
              */
-            TESTS: TESTS,
+            SERIES: SERIES,
             /**
              * Associate Models
              */
@@ -77,10 +77,10 @@ module.exports = class RouteDocument extends Model {
           defaultValue: '0.0.0' // Matches SemVer
         },
         // Series test: default is 'a0'
-        test: {
+        series: {
           type: Sequelize.ENUM,
-          values: _.values(TESTS),
-          defaultValue: TESTS.A0
+          values: _.values(SERIES),
+          defaultValue: SERIES.A0
         },
         // Meta of the page
         meta: helpers.JSONB('routedocument', app, Sequelize, 'meta', {
