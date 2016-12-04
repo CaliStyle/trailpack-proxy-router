@@ -135,7 +135,7 @@ module.exports = class RouterFLService extends Service {
         return reject(err)
       }
 
-      fs.writeFile(pagePath, '', (err) => {
+      fs.writeFile(pagePath, '', 'utf-8', (err) => {
         if (err) {
           return reject(err)
         }
@@ -187,11 +187,11 @@ module.exports = class RouterFLService extends Service {
       data.series = series
       data.version = version
 
-      fs.writeFile(file, data.document, (err) => {
+      fs.writeFile(file, data.document, 'utf-8', (err) => {
         if (err) {
           return reject(err)
         }
-        this.app.log.debug(`RouterFLService.create ${data.seriesPath} was created`)
+        this.app.log.debug(`RouterFLService.createSeries ${data.seriesPath} was created`)
         return resolve(data)
       })
     })
@@ -211,11 +211,29 @@ module.exports = class RouterFLService extends Service {
   }
 
   /**
+   * updateSeries
+   * @param data
+   * @returns {Promise}
+   */
+  updateSeries(data){
+    return new Promise((resolve, reject) => {
+      fs.writeFile(data.seriesPath, data.document, 'utf-8', (err) => {
+        if (err) {
+          return reject(err)
+        }
+        this.app.log.debug(`RouterFLService.updateSeries ${data.seriesPath} was updated`)
+        return resolve(data)
+      })
+    })
+  }
+
+  /**
    * destroy
    * @param pagePath
    * @param options
    * @returns {Promise}
    */
+
   destroy(pagePath, options){
     return new Promise((resolve, reject) => {
       // Try and get the directory name of the pagePath
@@ -275,6 +293,7 @@ module.exports = class RouterFLService extends Service {
       })
     })
   }
+
   /**
    * resolveFlatFilePathFromString
    * @param orgPath
@@ -335,6 +354,12 @@ module.exports = class RouterFLService extends Service {
     return res
   }
 
+  /**
+   * resolveFlatFileSeriesFromString
+   * @param orgPath
+   * @param options
+   * @returns {{orgPath: *, path: (string|*)}}
+   */
   resolveFlatFileSeriesFromString(orgPath, options) {
     const parts = path.normalize(orgPath).split('/')
     let outPath = ['']
@@ -357,7 +382,7 @@ module.exports = class RouterFLService extends Service {
   }
   /**
    * checkIfFile
-   * @param file
+   * @param {String} file
    * @returns {Promise}
    */
   checkIfFile(file) {
@@ -377,9 +402,14 @@ module.exports = class RouterFLService extends Service {
     })
   }
 
-  checkIfDir(file) {
+  /**
+   * checkIfDir
+   * @param {String} dir
+   * @returns {Promise}
+   */
+  checkIfDir(dir) {
     return new Promise((resolve, reject) => {
-      fs.stat(file, (err, stats) => {
+      fs.stat(dir, (err, stats) => {
         if (err) {
           if (err.code === 'ENOENT') {
             return resolve(false)

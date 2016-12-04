@@ -501,6 +501,7 @@ module.exports = class RouterService extends Service {
       }
     })
   }
+
   /**
    * addSeries
    * @param data
@@ -556,8 +557,7 @@ module.exports = class RouterService extends Service {
    * @returns {Promise}
    */
   createSeries(data) {
-    console.log('RouteService.createSeries', data)
-    // return Promise.resolve(data)
+    // console.log('RouteService.createSeries', data)
     return new Promise((resolve, reject) => {
       const RouterFLService = this.app.services.RouterFLService
       const RouterDBService = this.app.services.RouterDBService
@@ -600,7 +600,7 @@ module.exports = class RouterService extends Service {
       const RouterDBService = this.app.services.RouterDBService
       this.resolveIdentifier(data.identifier, !this.app.config.proxyroute.forceFL)
         .then(identifier => {
-          this.app.log.debug('routerservice:addSeries identifier', identifier)
+          this.app.log.debug('routerservice:editSeries identifier', identifier)
           if (!identifier.path && !identifier.id) {
             throw new errors.FoundError(Error(`Can not resolve ${data.identifier}, make sure it is in "path" format eg. '/hello/world'`))
           }
@@ -609,7 +609,7 @@ module.exports = class RouterService extends Service {
           data.path = identifier.path
           data.id = identifier.id
 
-          console.log('RouterService.addSeries',identifier.path)
+          // console.log('RouterService.eidtSeries',identifier.path)
           return RouterFLService.resolveFlatFilePathFromString(identifier.path, {
             version: data.version,
             series: data.series
@@ -640,10 +640,42 @@ module.exports = class RouterService extends Service {
     })
   }
 
-  // TODO
+  /**
+   * updateSeries
+   * @param data
+   * @returns {Promise}
+   */
   updateSeries(data) {
-    console.log('RouterService.updateSeries',data)
-    return Promise.resolve(data)
+    // console.log('RouterService.updateSeries',data)
+    return new Promise((resolve, reject) => {
+      const RouterFLService = this.app.services.RouterFLService
+      const RouterDBService = this.app.services.RouterDBService
+
+      if (this.app.config.proxyroute.forceFL) {
+        RouterFLService.updateSeries(data)
+          .then(destroyed => {
+            // Mock the DB return
+            return resolve(destroyed)
+          })
+          .catch(err => {
+            return reject(err)
+          })
+      }
+      else {
+        let updated
+        RouterDBService.updateSeries(data)
+          .then(destroyedRecord => {
+            updated = destroyedRecord
+            return RouterFLService.updateSeries(data)
+          })
+          .then(updatedFile => {
+            return resolve(updated)
+          })
+          .catch(err => {
+            return reject(err)
+          })
+      }
+    })
   }
 
   /**
@@ -733,4 +765,3 @@ module.exports = class RouterService extends Service {
     })
   }
 }
-
