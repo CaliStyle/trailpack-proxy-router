@@ -3,7 +3,7 @@
 const assert = require('assert')
 const supertest = require('supertest')
 
-describe('proxyroute middleware', () => {
+describe('proxyrouter middleware', () => {
   let request
 
   before((done) => {

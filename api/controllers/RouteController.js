@@ -16,14 +16,14 @@ module.exports = class RouteController extends Controller {
    * @returns html or error
    */
   view(req, res) {
-    if (req.proxyroute) {
+    if (req.proxyrouter) {
       if (!req.wantsJSON) {
         res.writeHead(200, {'Content-Type': 'text/html'})
-        res.write(req.proxyroute.document)
+        res.write(req.proxyrouter.document)
         return res.end()
       }
       else {
-        return res.json(req.proxyroute)
+        return res.json(req.proxyrouter)
       }
     }
     else {
