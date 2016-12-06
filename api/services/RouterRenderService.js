@@ -23,7 +23,7 @@ module.exports = class RouterRenderService extends Service {
       options = {}
     }
     // Set options
-    options = _.defaults(options, this.app.config.proxyroute.markdownit.options)
+    options = _.defaults(options, this.app.config.proxyrouter.markdownit.options)
     // console.log('RouterRenderService._init', options)
 
     // Make new instance
@@ -31,7 +31,7 @@ module.exports = class RouterRenderService extends Service {
     // Add markdown-it meta
     md.use(meta)
     // Set Plugins additional plugins
-    _.each(this.app.config.proxyroute.markdownit.plugins, (plugin) => {
+    _.each(this.app.config.proxyrouter.markdownit.plugins, (plugin) => {
       if (!plugin.options) {
         plugin.options = {}
       }

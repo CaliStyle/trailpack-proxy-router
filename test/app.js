@@ -29,8 +29,8 @@ if (ORM === 'waterline') {
 else if (ORM === 'js-data') {
   packs.push(require('trailpack-js-data'))
   stores.sqlitedev = {
-    database: 'dev',
-    storage: './.tmp/jsdata.sqlite',
+    database: 'ProxyRouter',
+    storage: './test/jsdata.sqlite',
     host: '127.0.0.1',
     dialect: 'sqlite'
   }
