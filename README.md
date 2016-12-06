@@ -18,7 +18,7 @@ Once a Series threshold and baseline is met, it becomes the default view for a g
 
 Say good bye to A/B testing as AAA testing can handle hundreds of different series test at once for each view in a web app and it can do it automatically.  This makes UI testing purely iterative and personable.
  - Want to find the best UI for a time of day and show it at the right time?
- - Want to find the best layouts for males or females or trans and show it to the corresponding audience automatcially?
+ - Want to find the best layouts for males or females or trans and show it to the corresponding audience automatically?
 
 AAA Testing isn't about one ~~size~~ site fits all, it's about finding the right layout per audience. Series documents are given a test number, and version. They default to the latest version, but the default can be changed to any version while keeping the run and score.
 Large changes to any version should be given another test number. The documents are markdown documents with yaml that allow you to use normal markdown, HTML, or even your own embeds.
@@ -93,12 +93,12 @@ module.exports = {
       'router'
     ],
     proxyrouter: function(req, res, next){
-      return require('trailpack-proxy-router/lib').Middleware.proxyroute(req, res, next)
+      return require('trailpack-proxy-router/lib').Middleware.proxyrouter(req, res, next)
     }
   }
 ```
 ```js
-// config/proxyroute.js
+// config/proxyrouter.js
 module.exports = {
   // Default Threshold
   threshold: 100,
@@ -140,7 +140,7 @@ module.exports = {
 ```
 
 ### Content Folder
-By default the Proxy Route content directory is `content` in the root directory of your application.  However, it can changed to any directory or even a node_module in `config/proxyroute`. Whatever the content folder, the file structure must follow these guidelines:
+By default the Proxy Route content directory is `content` in the root directory of your application.  However, it can changed to any directory or even a node_module in `config/proxyrouter`. Whatever the content folder, the file structure must follow these guidelines:
 
 - Every directory must have a series directory that contains a named test directory eg. `a0` with a SemVer versioned markdown document.
 - Named test directories follow this pattern: `a0`, `b0`, `c0` etc.  Upon exceeding `z0` change to `a1`, `b1`, `c1` etc.
@@ -171,10 +171,10 @@ By default the Proxy Route content directory is `content` in the root directory 
 
 ### req.locals
 Proxy Route merges the document's id, series, version, and metadata with req.locals so it can be used in any view template engine required.
-To access it in your template engine use `proxyroute`
+To access it in your template engine use `proxyrouter`
 
 ### Ignore Routes and Alternate Routes
-When the trails app starts, two configurations are added to trailsApp.config.proxyroute:
+When the trails app starts, two configurations are added to trailsApp.config.proxyrouter:
 - `ignoreRoutes`
 - `alternateRoutes`
 
@@ -187,7 +187,7 @@ Ignored Routes are any routes that do not use the GET method or have an app conf
     handler: 'IgnoreController.me',
     config: {
       app: {
-        proxyroute: {
+        proxyrouter: {
           ignore: true
         }
       }
