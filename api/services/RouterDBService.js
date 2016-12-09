@@ -1,7 +1,7 @@
 /* eslint no-console: [0, { allow: ["log","warn", "error"] }] */
 'use strict'
 
-const Service = require('trails-service')
+const Service = require('trails/service')
 const _ = require('lodash')
 /**
  * @module RouterDBService

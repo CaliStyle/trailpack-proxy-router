@@ -1,6 +1,6 @@
 {
   "name": "trailpack-proxy-router",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Router for Proxy Engine",
   "homepage": "https://cali-style.com",
   "author": {
@@ -17,33 +17,28 @@
   ],
   "dependencies": {
     "js-yaml": "^3.7.0",
-    "markdown-it": "^8.2.0",
+    "markdown-it": "^8.2.1",
     "mkdirp": "^0.5.1",
     "pg": "^6.1.0",
     "rmdir": "^1.2.0",
-    "trailpack": "latest",
-    "trailpack-express": "^1.0.14",
-    "trailpack-router": "^2.0.0",
-    "trailpack-sequelize": "^1.1.1",
-    "trails-controller": "^1.0.0-beta-2",
-    "trails-model": "^1.0.0-beta-2",
-    "trails-policy": "^1.0.2",
-    "trails-service": "^1.0.0-beta-2",
+    "trailpack": "v2-latest",
     "version_compare": "0.0.3"
   },
   "devDependencies": {
     "eslint": "^2.4",
-    "eslint-config-trails": "^1.0.4",
+    "eslint-config-trails": "^2",
     "express": "^4.14.0",
     "lodash": "^4.11.1",
     "mocha": "^2.4.5",
     "sails-disk": "^0.10.10",
-    "smokesignals": "^1.2.2",
+    "smokesignals": "v2-latest",
     "sqlite3": "^3.1.4",
     "supertest": "^2.0.1",
-    "trailpack-core": "^1.0.0-beta-6",
+    "trailpack-express": "^2.0.0-rc1",
     "trailpack-proxy-engine": "latest",
-    "trails": "latest"
+    "trailpack-sequelize": "^1.1.1",
+    "trailpack-router": "v2-latest",
+    "trails": "v2-latest"
   },
   "scripts": {
     "test": "eslint --fix . && mocha",

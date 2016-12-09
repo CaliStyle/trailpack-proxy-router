@@ -1,7 +1,7 @@
 /* eslint no-console: [0, { allow: ["log","warn", "error"] }] */
 'use strict'
 
-const Controller = require('trails-controller')
+const Controller = require('trails/controller')
 const lib = require('../../lib')
 // const _ = require('lodash')
 /**

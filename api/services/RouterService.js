@@ -2,7 +2,7 @@
 
 'use strict'
 
-const Service = require('trails-service')
+const Service = require('trails/service')
 // const _ = require('lodash')
 const pathToRegexp = require('path-to-regexp')
 const errors = require('../../lib/errors')

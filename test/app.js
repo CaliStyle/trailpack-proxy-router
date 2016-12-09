@@ -5,8 +5,6 @@ const fs = require('fs')
 const lib = require('../lib')
 
 const packs = [
-  smokesignals.Trailpack,
-  require('trailpack-core'),
   require('trailpack-router'),
   require('trailpack-proxy-engine'),
   require('../') // trailpack-proxy-route

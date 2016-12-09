@@ -1,7 +1,7 @@
 /* eslint new-cap: [0] */
 'use strict'
 
-const Model = require('trails-model')
+const Model = require('trails/model')
 const helpers = require('../utils/helpers')
 
 /**
