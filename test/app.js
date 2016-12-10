@@ -57,14 +57,14 @@ if ( SERVER == 'express' ) {
         'passportInit',
         'passportSession',
         'methodOverride',
-        'proxyroute',
+        'proxyRouter',
         'router',
         'www',
         '404',
         '500'
       ],
-      proxyroute: (req, res, next) => {
-        return lib.Middleware.proxyroute(req, res, next)
+      proxyRouter: (req, res, next) => {
+        return lib.Middleware.proxyRouter(req, res, next)
       },
       static: require('express').static('test/static')
     }
@@ -147,7 +147,7 @@ const App = {
     }
   }
 }
-const dbPath = __dirname + '/../.tmp/sqlitedev.db'
+const dbPath = __dirname + './test.sqlite'
 if (fs.existsSync(dbPath)) {
   fs.unlinkSync(dbPath)
 }

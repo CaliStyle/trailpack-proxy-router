@@ -4,7 +4,7 @@ const Trailpack = require('trailpack')
 const _ = require('lodash')
 const lib = require('./lib')
 
-module.exports = class RouterTrailpack extends Trailpack {
+module.exports = class ProxyRouterTrailpack extends Trailpack {
 
   /**
    * TODO document method
@@ -18,13 +18,13 @@ module.exports = class RouterTrailpack extends Trailpack {
       return Promise.reject(new Error('This Trailpack only works for Sequelize!'))
     }
 
-    if (!this.app.config.proxyrouter) {
-      return Promise.reject(new Error('No configuration found at config.proxyrouter!'))
+    if (!this.app.config.proxyRouter) {
+      return Promise.reject(new Error('No configuration found at config.proxyRouter!'))
     }
 
     return Promise.all([
       lib.Validator.validateDatabaseConfig(this.app.config.database),
-      lib.Validator.validateProxyrouteConfig(this.app.config.proxyroute),
+      lib.Validator.validateProxyRouterConfig(this.app.config.proxyRouter),
       lib.Validator.validateMiddleware(this.app.config.web.middlewares)
     ])
   }

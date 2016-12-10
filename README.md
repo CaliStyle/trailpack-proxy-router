@@ -89,16 +89,16 @@ module.exports = {
   middlewares: {
     order: [
       ... other middleware
-      'proxyrouter', // proxyrouter must be before router
+      'proxyRouter', // proxyRouter must be before router
       'router'
     ],
-    proxyrouter: function(req, res, next){
-      return require('trailpack-proxy-router/lib').Middleware.proxyrouter(req, res, next)
+    proxyRouter: function(req, res, next){
+      return require('trailpack-proxy-router/lib').Middleware.proxyRouter(req, res, next)
     }
   }
 ```
 ```js
-// config/proxyrouter.js
+// config/proxyRouter.js
 module.exports = {
   // Default Threshold
   threshold: 100,
@@ -140,7 +140,7 @@ module.exports = {
 ```
 
 ### Content Folder
-By default the Proxy Route content directory is `content` in the root directory of your application.  However, it can changed to any directory or even a node_module in `config/proxyrouter`. Whatever the content folder, the file structure must follow these guidelines:
+By default the Proxy Route content directory is `content` in the root directory of your application.  However, it can changed to any directory or even a node_module in `config/proxyRouter`. Whatever the content folder, the file structure must follow these guidelines:
 
 - Every directory must have a series directory that contains a named test directory eg. `a0` with a SemVer versioned markdown document.
 - Named test directories follow this pattern: `a0`, `b0`, `c0` etc.  Upon exceeding `z0` change to `a1`, `b1`, `c1` etc.
@@ -171,10 +171,10 @@ By default the Proxy Route content directory is `content` in the root directory 
 
 ### req.locals
 Proxy Route merges the document's id, series, version, and metadata with req.locals so it can be used in any view template engine required.
-To access it in your template engine use `proxyrouter`
+To access it in your template engine use `proxyRouter`
 
 ### Ignore Routes and Alternate Routes
-When the trails app starts, two configurations are added to trailsApp.config.proxyrouter:
+When the trails app starts, two configurations are added to trailsApp.config.proxyRouter:
 - `ignoreRoutes`
 - `alternateRoutes`
 
@@ -187,7 +187,7 @@ Ignored Routes are any routes that do not use the GET method or have an app conf
     handler: 'IgnoreController.me',
     config: {
       app: {
-        proxyrouter: {
+        proxyRouter: {
           ignore: true
         }
       }

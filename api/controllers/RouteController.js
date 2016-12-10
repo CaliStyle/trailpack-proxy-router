@@ -1,4 +1,4 @@
-/* eslint no-console: [0, { allow: ["log","warn", "error"] }] */
+/* eslint no-console: [0] */
 'use strict'
 
 const Controller = require('trails/controller')
@@ -16,14 +16,14 @@ module.exports = class RouteController extends Controller {
    * @returns html or error
    */
   view(req, res) {
-    if (req.proxyrouter) {
+    if (req.proxyRouter) {
       if (!req.wantsJSON) {
         res.writeHead(200, {'Content-Type': 'text/html'})
-        res.write(req.proxyrouter.document)
+        res.write(req.proxyRouter.document)
         return res.end()
       }
       else {
-        return res.json(req.proxyrouter)
+        return res.json(req.proxyRouter)
       }
     }
     else {

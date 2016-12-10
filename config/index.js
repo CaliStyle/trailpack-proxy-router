@@ -1,2 +1,2 @@
 exports.trailpack = require('./trailpack')
-exports.proxyrouter = require('./proxyrouter')
+exports.proxyRouter = require('./proxyRouter')

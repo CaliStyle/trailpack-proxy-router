@@ -66,17 +66,17 @@ module.exports = class Route extends Model {
         // The weight score for a series test
         weight: {
           type: Sequelize.INTEGER,
-          defaultValue: app.config.proxyrouter.weight
+          defaultValue: app.config.proxyRouter.weight
         },
         // The amount of runs required to auto serve a test series to a demographic once the baseline is met
         threshold: {
           type: Sequelize.INTEGER,
-          defaultValue: app.config.proxyrouter.threshold
+          defaultValue: app.config.proxyRouter.threshold
         },
         // the lowest score before the threshold can take over.
         baseline: {
           type: Sequelize.FLOAT,
-          defaultValue: app.config.proxyrouter.baseline
+          defaultValue: app.config.proxyRouter.baseline
         },
         // Array of Series run for particular demographics
         demographics: helpers.ARRAY('route', app, Sequelize, 'demographic', Sequelize.JSON, {
