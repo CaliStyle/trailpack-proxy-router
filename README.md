@@ -16,6 +16,8 @@ Each view has a series of tests that are displayed based on a weight, threshold,
 Each time a view is run, the engine will determine which series to display and track the runs for a given view and positive/negative control conversions for the demographic to score it.
 Once a Series threshold and baseline is met, it becomes the default view for a given demographic.
 
+To read why this is important, checkout out our [ article on AAA Testing](http://cali-style.com/blog/pioneering-aaa-webpage-testing)
+
 Say good bye to A/B testing as AAA testing can handle hundreds of different series test at once for each view in a web app and it can do it automatically.  This makes UI testing purely iterative and personable.
  - Want to find the best UI for a time of day and show it at the right time?
  - Want to find the best layouts for males or females or trans and show it to the corresponding audience automatically?
