@@ -12,13 +12,14 @@ module.exports = class RouteControl extends Model {
   static config (app, Sequelize) {
     let config = {
       options: {
+        underscored: true,
         classMethods: {
           /**
            * Associate Models
            */
           associate: (models) => {
             models.RouteControl.belongsTo(models.Route, {
-              as: 'route_id',
+              // as: 'route_id',
               onDelete: 'CASCADE'
               // ,
               // foreignKey: {
@@ -28,7 +29,7 @@ module.exports = class RouteControl extends Model {
               // }
             }),
             models.RouteControl.belongsTo(models.RouteDocument, {
-              as: 'document_id',
+              // as: 'document_id',
               onDelete: 'CASCADE'
               // ,
               // foreignKey: {

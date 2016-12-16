@@ -18,6 +18,7 @@ module.exports = class RouteDocument extends Model {
     if (app.config.database.orm === 'sequelize') {
       config = {
         options: {
+          underscored: true,
           classMethods: {
             /**
              * Expose SERIES enums
@@ -28,7 +29,7 @@ module.exports = class RouteDocument extends Model {
              */
             associate: (models) => {
               models.RouteDocument.belongsTo(models.Route, {
-                as: 'route_id',
+                // as: 'route_id',
                 onDelete: 'CASCADE'
                 // ,
                 // foreignKey: {

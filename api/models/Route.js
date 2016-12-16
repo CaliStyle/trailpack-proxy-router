@@ -16,6 +16,7 @@ module.exports = class Route extends Model {
     if (app.config.database.orm === 'sequelize') {
       config = {
         options: {
+          underscored: true,
           classMethods: {
             /**
              * Associate Models
