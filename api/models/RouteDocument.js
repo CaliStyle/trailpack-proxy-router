@@ -4,7 +4,7 @@
 const Model = require('trails/model')
 const _ = require('lodash')
 const SERIES = require('../utils/enums').SERIES
-const helpers = require('../utils/helpers')
+const helpers = require('proxy-engine-helpers')
 
 /**
  * @module RouteDocument

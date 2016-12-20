@@ -2,7 +2,7 @@
 'use strict'
 
 const Model = require('trails/model')
-const helpers = require('../utils/helpers')
+const helpers = require('proxy-engine-helpers')
 
 /**
  * @module Route
