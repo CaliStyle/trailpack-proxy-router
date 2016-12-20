@@ -16,6 +16,7 @@
     "trailjs"
   ],
   "dependencies": {
+    "joi": "^9.0.4",
     "js-yaml": "^3.7.0",
     "markdown-it": "^8.2.1",
     "mkdirp": "^0.5.1",
