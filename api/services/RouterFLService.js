@@ -1,4 +1,4 @@
-/* eslint no-console: [0, { allow: ["log","warn", "error"] }] */
+/* eslint no-console: [0] */
 'use strict'
 
 const Service = require('trails/service')
@@ -9,7 +9,7 @@ const mkdirp = require('mkdirp')
 const rmdir = require('rmdir')
 const SERIES = require('../utils/enums').SERIES
 const vc = require('version_compare')
-const errors = require('../../lib/errors')
+const Errors = require('proxy-engine-errors')
 
 /**
  * @module RouterFLService
@@ -94,7 +94,7 @@ module.exports = class RouterFLService extends Service {
             return RouterRenderService.render(doc)
           }
           else {
-            throw new errors.FoundError(Error(`${pagePath} and ${alternatePath} are not qualified resources`))
+            throw new Errors.FoundError(Error(`${pagePath} and ${alternatePath} are not qualified resources`))
           }
         })
         .then(renderedDoc => {
