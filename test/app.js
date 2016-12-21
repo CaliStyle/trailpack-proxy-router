@@ -103,6 +103,9 @@ const App = {
 
     },
     web: web,
+    log: {
+      logger: new smokesignals.Logger('debug')
+    },
     proxyrouter: {
       // Default Threshold
       threshold: 10,
