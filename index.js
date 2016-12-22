@@ -36,7 +36,9 @@ module.exports = class ProxyRouterTrailpack extends Trailpack {
     return Promise.all([
       lib.ProxyRouter.addRoutes(this.app),
       lib.ProxyRouter.ignoreRoutes(this.app),
-      lib.ProxyRouter.alternateRoutes(this.app)
+      lib.ProxyRouter.alternateRoutes(this.app),
+      lib.ProxyRouter.addPolicies(this.app),
+      lib.ProxyRouter.addAgenda(this.app)
     ])
   }
 
