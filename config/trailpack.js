@@ -32,10 +32,10 @@ module.exports = {
         // Should wait til after routes have been fully Initialized before adding to them.
         // 'trailpack:router:initialized'
         // Should wait til after proxy engine has been initialized
-        // 'tralpack:proxyengine:initialized'
+        'trailpack:proxy-engine:initialized'
       ],
       emit: [
-        'trailpack:proxyrouter:initialized'
+        'trailpack:proxy-router:initialized'
       ]
     }
   }

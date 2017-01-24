@@ -29,15 +29,16 @@ module.exports = class RouterFLService extends Service {
   /**
    * get
    * @param req
-   * @returns {Promise.<{id: number, meta: object, page: string}>}
+   * @returns {Promise.<{id: number, meta: object, document: string, path: string, series: string, version: string}>}
    */
   // TODO pass options
   get(req) {
     return new Promise((resolve, reject) => {
-      // console.log('RouterFLService.get orginal:', req.originalUrl, 'base:', req.baseUrl)
+      // this.app.log.silly('RouterFLService.get ordinal:', req.originalUrl, 'base:', req.baseUrl)
+      // TODO make accessible via API
       const pagePath = req.originalUrl
       const alternatePath = req.route && req.route.path ? req.route.path : null
-      // TODO get options form req
+      // TODO get options from req
       const options = {
         series: 'a0',
         version: 'latest'

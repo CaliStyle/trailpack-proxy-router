@@ -30,7 +30,6 @@ module.exports = class RouterService extends Service {
    * @returns {Promise.<*>}
    */
   setPreReqRoute(req) {
-    // console.time('alternative')
     let alternative
     req.trailsApp.config.proxyRouter.alternateRoutes.forEach((route)=> {
       if (alternative) {
@@ -46,7 +45,6 @@ module.exports = class RouterService extends Service {
         }
       }
     })
-    // console.timeEnd('alternative')
     return Promise.resolve(alternative)
   }
   /**
@@ -55,10 +53,10 @@ module.exports = class RouterService extends Service {
    * @returns {boolean} if url matches proxyroute pattern
    */
   isProxyRouterRequest(req) {
-    // console.time('isProxyRouterRequest')
+    const url = req.originalUrl
     // transform the method to lowercase and check if Get Request, if not, skip
-    if ( req.method.toLowerCase() !== 'get') {
-      this.app.log.silly('proxyroute:not GET request')
+    if ( !req.method || req.method.toLowerCase() !== 'get') {
+      this.app.log.silly('proxyRouter: not GET request')
       return false
     }
 
@@ -70,7 +68,6 @@ module.exports = class RouterService extends Service {
     // }
 
     // Check if this has an explicit ignore
-    // console.time('ignore')
     let ignore = false
     this.app.config.proxyRouter.ignoreRoutes.forEach((route) => {
       // If another catchall route already ignored, break immediately
@@ -79,7 +76,7 @@ module.exports = class RouterService extends Service {
       }
       // If route has a config with ignore
       const re = pathToRegexp(route, [])
-      if (re.exec(req.originalUrl)) {
+      if (re.exec(url)) {
         ignore = true
         return
       }
@@ -88,9 +85,7 @@ module.exports = class RouterService extends Service {
     if (ignore) {
       return false
     }
-    // console.timeEnd('ignore')
-    // console.timeEnd('isProxyRouterRequest')
-    // else return isProxyRouterRequest (true)
+
     return true
   }
 
@@ -102,7 +97,7 @@ module.exports = class RouterService extends Service {
   /**
    * flatfileProxyRoute
    * @param req
-   * @returns {Object} proxyroute
+   * @returns {Promise.<proxyRouter>}
    */
   flatfileProxyRoute(req) {
     const RouterFLService = this.app.services.RouterFLService
@@ -112,7 +107,7 @@ module.exports = class RouterService extends Service {
   /**
    * databaseProxyRoute
    * @param req
-   * @returns {Promise.<proxyroute>}
+   * @returns {Promise.<proxyRouter>}
    */
   // TODO
   databaseProxyRoute(req) {
@@ -130,7 +125,7 @@ module.exports = class RouterService extends Service {
   /**
    * resolveProxyRoute
    * @param req
-   * @returns {Promise.<proxyroute>}
+   * @returns {Promise.<proxyRouter>}
    */
   resolveProxyRoute(req) {
     if (this.app.config.proxyRouter.forceFL) {
@@ -149,7 +144,7 @@ module.exports = class RouterService extends Service {
   findPageByID(id) {
     return new Promise((resolve, reject) => {
       if (this.app.config.proxyRouter.forceFL) {
-        const err = new Errors.ValidationError(Error('RouterService.findPageByID is disabled while proxyroute.forceFL is true'))
+        const err = new Errors.ValidationError(Error('RouterService.findPageByID is disabled while proxyRouter.forceFL is true'))
         return reject(err)
       }
       const FootprintService = this.app.services.FootprintService
@@ -174,9 +169,10 @@ module.exports = class RouterService extends Service {
   findPageByPath(path) {
     return new Promise((resolve, reject) => {
       if (this.app.config.proxyRouter.forceFL) {
-        const err = new Errors.ValidationError(Error('RouterService.findPageByPath is disabled while proxyroute.forceFL is true'))
+        const err = new Errors.ValidationError(Error('RouterService.findPageByPath is disabled while proxyRouter.forceFL is true'))
         return reject(err)
       }
+      // TODO possibly allow this for specifying versions/series?
       // Remove all query strings just in case
       path = path.split('?')[0]
       const FootprintService = this.app.services.FootprintService
@@ -223,7 +219,7 @@ module.exports = class RouterService extends Service {
       // If this is a forced lookup
       if (lookup) {
         if (this.app.config.proxyRouter.forceFL) {
-          const err = new Errors.ValidationError(Error('RouterService.resolveIdentifier lookup == true is disabled while proxyroute.forceFL is true'))
+          const err = new Errors.ValidationError(Error('RouterService.resolveIdentifier lookup == true is disabled while proxyRouter.forceFL is true'))
           return reject(err)
         }
         this[lookupFunc](identifier)
@@ -253,11 +249,11 @@ module.exports = class RouterService extends Service {
       const RouterDBService = this.app.services.RouterDBService
       let pagePath
       let regPath
-
+      // Resolve the identifier
       this.resolveIdentifier(data.identifier)
         .then(identifier => {
           this.app.log.debug('routerservice:addPage identifier', identifier)
-          if (!identifier.path) {
+          if (!identifier || !identifier.path) {
             throw new Errors.FoundError(Error(`Can not resolve ${data.identifier}, make sure it is in "path" format eg. '/hello/world'`))
           }
           regPath = identifier.path
@@ -266,6 +262,7 @@ module.exports = class RouterService extends Service {
         .then(resolvedPath => {
           pagePath = resolvedPath
           if (this.app.config.proxyRouter.forceFL) {
+            // Check the flatfile
             return RouterFLService.checkIfFile(pagePath)
           }
           else {
@@ -291,7 +288,7 @@ module.exports = class RouterService extends Service {
    * createPage
    * @param pagePath
    * @param regPath
-   * @returns {Promise.<proxyroute>}
+   * @returns {Promise.<proxyRouter>}
    */
   createPage(pagePath, regPath) {
     return new Promise((resolve, reject) => {
@@ -420,7 +417,7 @@ module.exports = class RouterService extends Service {
   /**
    * removePage
    * @param {Object} data
-   * @returns {Promise.<proxyroute>}
+   * @returns {Promise.<proxyRouter>}
    */
   removePage(data) {
     return new Promise((resolve, reject) => {
@@ -505,7 +502,7 @@ module.exports = class RouterService extends Service {
   /**
    * addSeries
    * @param data
-   * @returns {Promise.<proxyroute>}
+   * @returns {Promise.<proxyRouter>}
    */
   addSeries(data) {
     return new Promise((resolve, reject) => {
@@ -557,7 +554,6 @@ module.exports = class RouterService extends Service {
    * @returns {Promise}
    */
   createSeries(data) {
-    // console.log('RouteService.createSeries', data)
     return new Promise((resolve, reject) => {
       const RouterFLService = this.app.services.RouterFLService
       const RouterDBService = this.app.services.RouterDBService
@@ -592,7 +588,7 @@ module.exports = class RouterService extends Service {
   /**
    * editSeries
    * @param data
-   * @returns {Promise.<proxyroute>}
+   * @returns {Promise.<proxyRouter>}
    */
   editSeries(data) {
     return new Promise((resolve, reject) => {
@@ -643,7 +639,7 @@ module.exports = class RouterService extends Service {
   /**
    * updateSeries
    * @param data
-   * @returns {Promise}
+   * @returns {Promise.<proxyRouter>}
    */
   updateSeries(data) {
     // console.log('RouterService.updateSeries',data)
@@ -681,7 +677,7 @@ module.exports = class RouterService extends Service {
   /**
    * removeSeries
    * @param data
-   * @returns {Promise.<proxyroute>}
+   * @returns {Promise.<proxyRouter>}
    */
   removeSeries(data) {
     return new Promise((resolve, reject) => {
@@ -730,10 +726,9 @@ module.exports = class RouterService extends Service {
   /**
    * destroySeries
    * @param data
-   * @returns {Promise.<proxyroute>}
+   * @returns {Promise.<proxyRouter>}
    */
   destroySeries(data) {
-    // console.log('RouterService.destroySeries', data)
     return new Promise((resolve, reject) => {
       const RouterFLService = this.app.services.RouterFLService
       const RouterDBService = this.app.services.RouterDBService

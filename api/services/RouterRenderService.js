@@ -41,15 +41,14 @@ module.exports = class RouterRenderService extends Service {
   }
 
   /**
-   * render
-   * @param document
+   * renders a document into html
+   * @param {String} document
    * @param {Object} options (optional)
-   * @returns {meta, page} markdown-it meta rendered document
+   * @returns {Object.<{meta: object, document: string}>} markdown-it meta and rendered document
    */
   render(document, options) {
     const md = this._init(options)
     const renderedDocument =  md.render(document)
-    // console.log('RouterRenderService.render', renderedDocument, md.meta)
     return {
       document: renderedDocument,
       meta: md.meta
