@@ -8,11 +8,11 @@ const _ = require('lodash')
  * @description Binds Flat Files to Router Database
  */
 module.exports = class RouterDBService extends Service {
-  // TODO
   /**
    * build
    * @returns {Promise.<T>}
    */
+  // TODO build Database to Flat File
   build() {
     return Promise.resolve()
   }
@@ -21,8 +21,12 @@ module.exports = class RouterDBService extends Service {
    * @param req
    * @returns {Promise.<{id: number, meta: {}, page: string}>}
    */
+  // TODO
   get(req) {
-    console.log('RouterDBService.get orginal:', req.originalUrl, 'base:', req.baseUrl)
+    const prefix = _.get(this.app.config, 'proxyRouter.prefix') || _.get(this.app.config, 'footprints.prefix')
+    const url = req.originalUrl.replace(prefix)
+
+    console.log('RouterDBService.get original:', req.originalUrl, 'altered:', url, 'base:', req.baseUrl)
     // const RouterService = this.app.services.RouterService
     // const FootprintService = this.app.services.FootprintService
     // return FootprintService.find('RouteDocument', id)

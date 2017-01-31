@@ -3,7 +3,7 @@
 'use strict'
 
 const Service = require('trails/service')
-// const _ = require('lodash')
+const _ = require('lodash')
 const pathToRegexp = require('path-to-regexp')
 const Errors = require('proxy-engine-errors')
 
@@ -30,13 +30,16 @@ module.exports = class RouterService extends Service {
    * @returns {Promise.<*>}
    */
   setPreReqRoute(req) {
+    const prefix = _.get(this.app.config, 'proxyRouter.prefix') || _.get(this.app.config, 'footprints.prefix')
+    const url = req.originalUrl.replace(prefix)
+
     let alternative
     req.trailsApp.config.proxyRouter.alternateRoutes.forEach((route)=> {
       if (alternative) {
         return
       }
       const re = pathToRegexp(route, [])
-      if (re.exec(req.originalUrl)) {
+      if (re.exec(url)) {
         this.app.log.silly('RouterService.setPreReqRoute alternative', route)
         alternative = {
           path: route,
@@ -53,7 +56,8 @@ module.exports = class RouterService extends Service {
    * @returns {boolean} if url matches proxyroute pattern
    */
   isProxyRouterRequest(req) {
-    const url = req.originalUrl
+    const prefix = _.get(this.app.config, 'proxyRouter.prefix') || _.get(this.app.config, 'footprints.prefix')
+    const url = req.originalUrl.replace(prefix)
     // transform the method to lowercase and check if Get Request, if not, skip
     if ( !req.method || req.method.toLowerCase() !== 'get') {
       this.app.log.silly('proxyRouter: not GET request')
@@ -62,8 +66,8 @@ module.exports = class RouterService extends Service {
 
     // TODO If a Static asset then skip
     // var reg = new RegExp('(?:\.([^.]+))?$','g')
-    // if (reg.test(req.originalUrl)) {
-    //   this.app.log.silly('proxyroute:static asset')
+    // if (reg.test(url)) {
+    //   this.app.log.silly('proxyrouter:static asset')
     //   return false
     // }
 
