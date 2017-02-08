@@ -249,7 +249,7 @@ module.exports = class RouterFLService extends Service {
       catch (err) {
         return reject(err)
       }
-      let dirParts = path.normalize(dir).split('/')
+      const dirParts = path.normalize(dir).split('/')
       // Remove the test folder from the path
       if (_.values(SERIES).indexOf(dirParts[dirParts.length - 1] != -1)) {
         dirParts.splice(-1,1)
@@ -307,7 +307,7 @@ module.exports = class RouterFLService extends Service {
    */
   resolveFlatFilePathFromString(orgPath, options){
     const parts = path.normalize(orgPath).split('/')
-    let outPath = ['','a0','0.0.0.md']
+    const outPath = ['','a0','0.0.0.md']
     if (options && options.host) {
       outPath[0] = `/${options.host}`
     }
@@ -330,7 +330,7 @@ module.exports = class RouterFLService extends Service {
         const files = fs.readdirSync(directory)
         let version = '0.0.0'
         // TODO this should compare all dirs instead of just one after another
-        for (let i of files) {
+        for (const i of files) {
           const tryVersion = i.split('.md')[0]
           if (vc.compare(version, tryVersion)) {
             this.app.log.silly('RouterFLService.resolveFlatFilePathFromString: Later Version', tryVersion)
@@ -373,7 +373,7 @@ module.exports = class RouterFLService extends Service {
    */
   resolveFlatFileSeriesFromString(orgPath, options) {
     const parts = path.normalize(orgPath).split('/')
-    let outPath = ['']
+    const outPath = ['']
     if (options && options.host) {
       outPath[0] = `/${options.host}`
     }

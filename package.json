@@ -1,6 +1,6 @@
 {
   "name": "trailpack-proxy-router",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Router for Proxy Engine",
   "homepage": "https://cali-style.com",
   "author": {
@@ -28,8 +28,8 @@
     "version_compare": "0.0.3"
   },
   "devDependencies": {
-    "eslint": "^2.4",
-    "eslint-config-trails": "^2",
+    "eslint": "^3.0.0",
+    "eslint-config-trails": "^2.0.0",
     "express": "^4.14.0",
     "lodash": "^4.11.1",
     "mocha": "^2.4.5",
