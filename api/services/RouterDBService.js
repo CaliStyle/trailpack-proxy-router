@@ -24,7 +24,7 @@ module.exports = class RouterDBService extends Service {
   // TODO
   get(req) {
     const prefix = _.get(this.app.config, 'proxyRouter.prefix') || _.get(this.app.config, 'footprints.prefix')
-    const url = req.originalUrl.replace(prefix)
+    const url = req.originalUrl.replace(prefix, '/')
 
     console.log('RouterDBService.get original:', req.originalUrl, 'altered:', url, 'base:', req.baseUrl)
     // const RouterService = this.app.services.RouterService

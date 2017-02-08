@@ -1,6 +1,6 @@
 {
   "name": "trailpack-proxy-router",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Router for Proxy Engine",
   "homepage": "https://cali-style.com",
   "author": {
@@ -37,9 +37,9 @@
     "smokesignals": "v2-latest",
     "sqlite3": "^3.1.4",
     "supertest": "^2.0.1",
-    "trailpack-express": "^2.0.0-rc1",
+    "trailpack-express": "^2.0.2",
     "trailpack-proxy-engine": "latest",
-    "trailpack-sequelize": "^1.1.1",
+    "trailpack-sequelize": "^2.0.0",
     "trailpack-router": "v2-latest",
     "trails": "v2-latest"
   },

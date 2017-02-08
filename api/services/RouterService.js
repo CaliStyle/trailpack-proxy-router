@@ -31,7 +31,7 @@ module.exports = class RouterService extends Service {
    */
   setPreReqRoute(req) {
     const prefix = _.get(this.app.config, 'proxyRouter.prefix') || _.get(this.app.config, 'footprints.prefix')
-    const url = req.originalUrl.replace(prefix)
+    const url = req.originalUrl.replace(prefix, '')
 
     let alternative
     req.trailsApp.config.proxyRouter.alternateRoutes.forEach((route)=> {
@@ -57,7 +57,7 @@ module.exports = class RouterService extends Service {
    */
   isProxyRouterRequest(req) {
     const prefix = _.get(this.app.config, 'proxyRouter.prefix') || _.get(this.app.config, 'footprints.prefix')
-    const url = req.originalUrl.replace(prefix)
+    const url = req.originalUrl.replace(prefix, '')
     // transform the method to lowercase and check if Get Request, if not, skip
     if ( !req.method || req.method.toLowerCase() !== 'get') {
       this.app.log.silly('proxyRouter: not GET request')
@@ -151,8 +151,10 @@ module.exports = class RouterService extends Service {
         const err = new Errors.ValidationError(Error('RouterService.findPageByID is disabled while proxyRouter.forceFL is true'))
         return reject(err)
       }
-      const FootprintService = this.app.services.FootprintService
-      FootprintService.find('Route', id)
+      const Route = this.app.orm.Route
+      // const FootprintService = this.app.services.FootprintService
+      // FootprintService.find('Route', id)
+      Route.findById(id)
         .then(routes => {
           if (routes.length == 0){
             throw new Error(`Route id '${id}' not found`)

@@ -35,7 +35,7 @@ module.exports = class RouterFLService extends Service {
     return new Promise((resolve, reject) => {
       // this.app.log.silly('RouterFLService.get ordinal:', req.originalUrl, 'base:', req.baseUrl)
       const prefix = _.get(this.app.config, 'proxyRouter.prefix') || _.get(this.app.config, 'footprints.prefix')
-      const pagePath = req.originalUrl.replace(prefix)
+      const pagePath = req.originalUrl.replace(prefix, '')
       const alternatePath = req.route && req.route.path ? req.route.path : null
       // TODO get options from req
       const options = {
