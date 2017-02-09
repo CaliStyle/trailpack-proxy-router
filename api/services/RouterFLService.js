@@ -326,7 +326,8 @@ module.exports = class RouterFLService extends Service {
     // If Requesting Latest Version
     if (options && options.version && options.version == 'latest') {
       try {
-        const directory = path.join(__dirname, '../../', this.app.config.proxyRouter.folder, outPath[0], outPath[1])
+        const directory = path.resolve(__dirname, '../../', this.app.config.proxyRouter.folder, outPath[0], outPath[1])
+        this.app.log.silly('RouterFLService.resolveFlatFilePathFromString: Directory ', directory)
         const files = fs.readdirSync(directory)
         let version = '0.0.0'
         // TODO this should compare all dirs instead of just one after another
@@ -360,7 +361,7 @@ module.exports = class RouterFLService extends Service {
       // The Original path (the url)
       orgPath: orgPath,
       // The Server path
-      path: path.join(__dirname, '../../', this.app.config.proxyRouter.folder, outPath.join('/'))
+      path: path.resolve(__dirname, '../../', this.app.config.proxyRouter.folder, outPath.join('/'))
     }
     return res
   }
