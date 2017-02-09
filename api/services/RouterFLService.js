@@ -361,7 +361,7 @@ module.exports = class RouterFLService extends Service {
       // The Original path (the url)
       orgPath: orgPath,
       // The Server path
-      path: path.resolve(__dirname, '../../', this.app.config.proxyRouter.folder, outPath.join('/'))
+      path: path.join(__dirname, '../../', this.app.config.proxyRouter.folder, outPath.join('/'))
     }
     return res
   }
