@@ -401,20 +401,24 @@ Calls `RouteService.destroySeries()`
 Destroys a Document (RouteDocument Model)
 
 #### Render
-##### RouteRenderService.render()
-Renders a markdown document using Markdown-it and all the plugins configured
+##### RenderGenericService.render()
+RenderGenericService is a Proxy-Generics service. This module has a default render if none is specified.
+
+Renders a markdown document using Markdown-it and all the plugins configured in proxyGeneric.render_service
 
 @returns
 ```js
 { 
-  meta: Object, // The Meta Data from the Document
-  document: String  // The Rendered HTML of the Document
+  meta: <{Object}>, // The Meta Data from the Document
+  document: <{String}>  // The Rendered HTML of the Document
 }
 ```
 
 # ROAD MAP
 ## 1.0.0
-Abstract Render as proxy generic
+Abstract Render as proxy generic - completed
+Build to DB
+Build to FL
 
 [npm-image]: https://img.shields.io/npm/v/trailpack-proxy-router.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/trailpack-proxy-router
