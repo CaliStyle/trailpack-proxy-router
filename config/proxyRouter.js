@@ -38,21 +38,6 @@ module.exports = {
   //
   //   }
   // },
-  // Markdown-it
-  markdownit: {
-    // Options for Markdown-it
-    options: {
-      // Must always be set to true
-      html: true
-    },
-    plugins: [
-      // Example Plugin (markdown-it-meta is required and already installed)
-      // {
-      //   plugin: require('markdown-it-meta'),
-      //   options: {}
-      // }
-    ]
-  },
   // If multi-site is enabled either false or an array e.g. ['website1.com','website2.com']
   multisite: false
 }

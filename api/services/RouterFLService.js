@@ -72,7 +72,7 @@ module.exports = class RouterFLService extends Service {
   renderPage(pagePath, alternatePath, options){
     return new Promise((resolve, reject) => {
       this.app.log.debug('RouterFLService.renderPage', pagePath, alternatePath, options)
-      const RouterRenderService = this.app.services.RouterRenderService
+      const RenderGenericService = this.app.services.RenderGenericService
       let fullPagePath = this.resolveFlatFilePathFromString(pagePath, options)
       let choosenPath
       this.checkIfFile(fullPagePath.path)
@@ -90,15 +90,19 @@ module.exports = class RouterFLService extends Service {
         })
         .then(fileExists => {
           if (fileExists && path.extname(fullPagePath.path) === '.md') {
-            const doc = fs.readFileSync(fullPagePath.path, 'utf8')
-            return RouterRenderService.render(doc)
+            return fs.readFileSync(fullPagePath.path, 'utf8')
+            // return RouterRenderService.render(doc)
           }
           else {
             throw new Errors.FoundError(Error(`${pagePath} and ${alternatePath} are not qualified resources`))
           }
         })
+        .then(doc => {
+          // Render the doc
+          return RenderGenericService.render(doc)
+        })
         .then(renderedDoc => {
-          const proxyroute = {
+          const proxyRoute = {
             id: null,
             // TODO mulit-site support
             host: 'localhost',
@@ -109,7 +113,7 @@ module.exports = class RouterFLService extends Service {
             meta: renderedDoc.meta ? renderedDoc.meta : {},
             document: renderedDoc.document ? renderedDoc.document : renderedDoc
           }
-          return resolve(proxyroute)
+          return resolve(proxyRoute)
         })
         .catch(err => {
           return reject(err)

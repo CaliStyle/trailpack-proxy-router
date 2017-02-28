@@ -7,6 +7,7 @@ const lib = require('../lib')
 const packs = [
   require('trailpack-router'),
   require('trailpack-proxy-engine'),
+  require('trailpack-proxy-generics'),
   require('../') // trailpack-proxy-route
 ]
 
@@ -106,7 +107,7 @@ const App = {
     log: {
       logger: new smokesignals.Logger('debug')
     },
-    proxyrouter: {
+    proxyRouter: {
       // Default Threshold
       threshold: 10,
       // Default Baseline
@@ -132,24 +133,10 @@ const App = {
         // Milliseconds before cache is ejected
         eject: 10000
       },
-      // Markdown-it
-      markdownit: {
-        // Options for Markdown-it
-        options: {
-          // Must always be set to true
-          html: true
-        },
-        plugins: [
-          // Example Plugin (markdownit-meta is required and already installed)
-          // {
-          //   plugin: require('markdownit-meta'),
-          //   options: {}
-          // }
-        ]
-      },
       // If multi-site is enabled either false or an array e.g. ['website1.com','website2.com']
       multisite: false
-    }
+    },
+    proxyGenerics: {}
   }
 }
 const dbPath = __dirname + './test.sqlite'

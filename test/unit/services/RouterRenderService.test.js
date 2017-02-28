@@ -2,8 +2,8 @@
 /* global describe, it */
 const assert = require('assert')
 
-describe('RouterRenderService', () => {
+describe('RenderGenericService', () => {
   it('should exist', () => {
-    assert(global.app.api.services['RouterRenderService'])
+    assert(global.app.api.services['RenderGenericService'])
   })
 })
