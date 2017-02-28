@@ -110,6 +110,8 @@ module.exports = {
   weight: 50,
   // Default Flat File Folder
   folder: 'content',
+  // Default name for "series"
+  series: 'series',
   // Force Flat File and ignore DB
   forceFL: true,
   // The number of controls to enqueue before flushing to processor.
@@ -124,19 +126,6 @@ module.exports = {
     allow: true,
     // Milliseconds before cache is ejected
     eject: 10000
-  },
-  // Markdown-it
-  markdownit: {
-    options: {
-      html: true
-    },
-    plugins: [
-      // Example Plugin (markdown-it meta and markdown-it components are required and already installed)
-      // {
-      //   plugin: require('markdown-it-embed'),
-      //   options: {}
-      // }
-    ]
   }
 }
 ```
@@ -419,6 +408,7 @@ Renders a markdown document using Markdown-it and all the plugins configured in 
 Abstract Render as proxy generic - completed
 Build to DB
 Build to FL
+Support Clusters
 
 [npm-image]: https://img.shields.io/npm/v/trailpack-proxy-router.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/trailpack-proxy-router

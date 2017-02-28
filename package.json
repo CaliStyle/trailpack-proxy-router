@@ -1,6 +1,6 @@
 {
   "name": "trailpack-proxy-router",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "Router for Proxy Engine",
   "homepage": "https://cali-style.com",
   "author": {
@@ -17,6 +17,9 @@
   ],
   "dependencies": {
     "joi": "^9.0.4",
+    "js-yaml": "^3.7.0",
+    "markdown-it": "^8.2.1",
+    "markdown-it-meta": "0.0.1",
     "mkdirp": "^0.5.1",
     "pg": "^6.1.0",
     "proxy-engine-errors": "^1.0.1",
