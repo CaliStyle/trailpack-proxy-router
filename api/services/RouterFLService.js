@@ -313,10 +313,10 @@ module.exports = class RouterFLService extends Service {
     }
     _.each(parts, (part, index) => {
       if (index + 1 == parts.length) {
-        outPath[0] = `/${outPath[0]}/${part}/series`
+        outPath[0] = `/${ outPath[0] }/${ part }/${ this.app.config.proxyRouter.series }`
       }
       else {
-        outPath[0] = `/${outPath[0]}/${part}`
+        outPath[0] = `/${ outPath[0] }/${ part }`
       }
     })
     // Override default series and version if set
@@ -382,10 +382,10 @@ module.exports = class RouterFLService extends Service {
     }
     _.each(parts, (part, index) => {
       if (index + 1 == parts.length) {
-        outPath[0] = `/${outPath[0]}/${part}/series`
+        outPath[0] = `/${ outPath[0] }/${ part }/${ this.app.config.proxyRouter.series }`
       }
       else {
-        outPath[0] = `/${outPath[0]}/${part}`
+        outPath[0] = `/${ outPath[0] }/${ part }`
       }
     })
 

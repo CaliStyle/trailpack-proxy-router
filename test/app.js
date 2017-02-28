@@ -115,6 +115,8 @@ const App = {
       weight: 50,
       // Default Flat File Folder
       folder: 'content',
+      // Default name for "series"
+      series: 'series',
       // Force Flat File and ignore DB
       forceFL: true,
       // The number of controls to enqueue before flushing to processor.

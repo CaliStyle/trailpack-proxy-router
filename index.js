@@ -39,6 +39,7 @@ module.exports = class ProxyRouterTrailpack extends Trailpack {
       lib.ProxyRouter.alternateRoutes(this.app),
       lib.ProxyRouter.addPolicies(this.app),
       lib.ProxyRouter.addAgenda(this.app),
+      lib.ProxyRouter.resolveGenerics(this.app),
       lib.ProxyRouter.copyDefaults(this.app)
     ])
   }

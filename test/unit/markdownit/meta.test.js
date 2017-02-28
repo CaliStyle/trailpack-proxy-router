@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const MarkdownIt = require('markdown-it')
-const meta = require('../../../lib/markdownit/meta')
+const meta = require('markdown-it-meta')
 const assert = require('assert')
 
 function fixture(name) {

@@ -12,6 +12,8 @@ module.exports = {
   weight: 50,
   // Default Flat File Folder
   folder: 'content',
+  // Default name for "series"
+  series: 'series',
   // Force Flat File and ignore DB
   forceFL: true,
   // The number of controls to enqueue before flushing to processor.
@@ -44,9 +46,9 @@ module.exports = {
       html: true
     },
     plugins: [
-      // Example Plugin (markdownit-meta is required and already installed)
+      // Example Plugin (markdown-it-meta is required and already installed)
       // {
-      //   plugin: require('markdownit-meta'),
+      //   plugin: require('markdown-it-meta'),
       //   options: {}
       // }
     ]
