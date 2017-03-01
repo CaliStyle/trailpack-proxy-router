@@ -32,34 +32,30 @@ module.exports = class RouterFLService extends Service {
    */
   // TODO pass options
   get(req) {
-    return new Promise((resolve, reject) => {
+    // return new Promise((resolve, reject) => {
       // this.app.log.silly('RouterFLService.get ordinal:', req.originalUrl, 'base:', req.baseUrl)
-      const prefix = _.get(this.app.config, 'proxyRouter.prefix') || _.get(this.app.config, 'footprints.prefix')
-      const pagePath = req.originalUrl.replace(prefix, '')
-      const alternatePath = req.route && req.route.path ? req.route.path : null
-      // TODO get options from req
-      const options = {
-        series: 'a0',
-        version: 'latest'
-      }
-      this.renderPage(pagePath, alternatePath, options)
-        .then(renderedPage => {
-          const proxyRoute = {
-            id: renderedPage.id ? renderedPage.id : null,
-            // TODO multi-site support
-            host: 'localhost',
-            path: renderedPage.orgPath ? renderedPage.orgPath : pagePath,
-            series: renderedPage.series ? renderedPage.series : 'a0',
-            version: renderedPage.version ? renderedPage.version : '0.0.0',
-            meta: renderedPage.meta ? renderedPage.meta : {},
-            document: renderedPage.document ? renderedPage.document : renderedPage
-          }
-          return resolve(proxyRoute)
-        })
-        .catch(err => {
-          return reject(err)
-        })
-    })
+    const prefix = _.get(this.app.config, 'proxyRouter.prefix') || _.get(this.app.config, 'footprints.prefix')
+    const pagePath = req.originalUrl.replace(prefix, '')
+    const alternatePath = req.route && req.route.path ? req.route.path : null
+    const options = {
+      series: req.params.series || 'a0',
+      version: req.params.latest || 'latest'
+    }
+    return this.renderPage(pagePath, alternatePath, options)
+      .then(renderedPage => {
+        const proxyRoute = {
+          id: renderedPage.id ? renderedPage.id : null,
+          // TODO multi-site support
+          host: 'localhost',
+          path: renderedPage.orgPath ? renderedPage.orgPath : pagePath,
+          series: renderedPage.series ? renderedPage.series : 'a0',
+          version: renderedPage.version ? renderedPage.version : '0.0.0',
+          meta: renderedPage.meta ? renderedPage.meta : {},
+          document: renderedPage.document ? renderedPage.document : renderedPage,
+          children: renderedPage.children ? renderedPage.children : {}
+        }
+        return proxyRoute
+      })
   }
 
   /**
@@ -67,58 +63,53 @@ module.exports = class RouterFLService extends Service {
    * @param pagePath (relative to domain)
    * @param alternatePath (relative to domain)
    * @param options to be passed to resolveFlatFilePathFromString
-   * @returns {Promise.<T>}
+   * @returns {Promise.<{id: any, host: string, path: string, orgPath: string, series: string, version: string, meta: Object, document: string, children: Object }>}
    */
   renderPage(pagePath, alternatePath, options){
-    return new Promise((resolve, reject) => {
-      this.app.log.debug('RouterFLService.renderPage', pagePath, alternatePath, options)
-      const RenderGenericService = this.app.services.RenderGenericService
-      let fullPagePath = this.resolveFlatFilePathFromString(pagePath, options)
-      let choosenPath
-      this.checkIfFile(fullPagePath.path)
-        .then(fileExists =>{
-          if (fileExists) {
-            choosenPath = fullPagePath
-            return fileExists
-          }
-          else {
-            choosenPath = alternatePath
-            this.app.log.silly(`RouterFLService.renderPage rendering ${alternatePath} as ${pagePath} is not set`)
-            fullPagePath = this.resolveFlatFilePathFromString(alternatePath, options)
-            return this.checkIfFile(fullPagePath.path)
-          }
-        })
-        .then(fileExists => {
-          if (fileExists && path.extname(fullPagePath.path) === '.md') {
-            return fs.readFileSync(fullPagePath.path, 'utf8')
-            // return RouterRenderService.render(doc)
-          }
-          else {
-            throw new Errors.FoundError(Error(`${pagePath} and ${alternatePath} are not qualified resources`))
-          }
-        })
-        .then(doc => {
-          // Render the doc
-          return RenderGenericService.render(doc)
-        })
-        .then(renderedDoc => {
-          const proxyRoute = {
-            id: null,
-            // TODO mulit-site support
-            host: 'localhost',
-            path: choosenPath.path,
-            orgPath: choosenPath.orgPath,
-            series: choosenPath.series ? choosenPath.series : 'a0',
-            version: choosenPath.version ? choosenPath.version : '0.0.0',
-            meta: renderedDoc.meta ? renderedDoc.meta : {},
-            document: renderedDoc.document ? renderedDoc.document : renderedDoc
-          }
-          return resolve(proxyRoute)
-        })
-        .catch(err => {
-          return reject(err)
-        })
-    })
+    this.app.log.debug('RouterFLService.renderPage', pagePath, alternatePath, options)
+    const RenderGenericService = this.app.services.RenderGenericService
+    let fullPagePath = this.resolveFlatFilePathFromString(pagePath, options)
+    let choosenPath
+    return this.checkIfFile(fullPagePath.path)
+      .then(fileExists =>{
+        if (fileExists) {
+          choosenPath = fullPagePath
+          return fileExists
+        }
+        else {
+          choosenPath = alternatePath
+          this.app.log.silly(`RouterFLService.renderPage rendering ${alternatePath} as ${pagePath} is not set`)
+          fullPagePath = this.resolveFlatFilePathFromString(alternatePath, options)
+          return this.checkIfFile(fullPagePath.path)
+        }
+      })
+      .then(fileExists => {
+        if (fileExists && path.extname(fullPagePath.path) === '.md') {
+          return fs.readFileSync(fullPagePath.path, 'utf8')
+        }
+        else {
+          throw new Errors.FoundError(Error(`${pagePath} and ${alternatePath} are not qualified resources`))
+        }
+      })
+      .then(doc => {
+        // Render the doc
+        return RenderGenericService.render(doc)
+      })
+      .then(renderedDoc => {
+        const proxyRoute = {
+          id: null,
+          // TODO mulit-site support
+          host: 'localhost',
+          path: choosenPath.path,
+          orgPath: choosenPath.orgPath,
+          series: choosenPath.series ? choosenPath.series : 'a0',
+          version: choosenPath.version ? choosenPath.version : '0.0.0',
+          meta: renderedDoc.meta ? renderedDoc.meta : {},
+          document: renderedDoc.document ? renderedDoc.document : renderedDoc,
+          children: this.app.services.RouterSitemapService.buildChildrenFL(fullPagePath.resolvedPath).children
+        }
+        return proxyRoute
+      })
   }
   /**
    * create
@@ -354,6 +345,7 @@ module.exports = class RouterFLService extends Service {
     else if (options && options.version && options.version !== ''){
       outPath[2] = `${options.version}.md`
     }
+
     // Construct Final Response
     const res = {
       // TODO multi-site support
@@ -365,10 +357,12 @@ module.exports = class RouterFLService extends Service {
       version: outPath[2].split('.md')[0],
       // The Original path (the url)
       orgPath: orgPath,
+      // The resolved location that this look up happened
+      resolvedPath: path.join(process.cwd(), this.app.config.proxyRouter.folder, orgPath),
       // The Server path
-      // path: path.join(__dirname, '../../', this.app.config.proxyRouter.folder, outPath.join('/'))
       path: path.join(process.cwd(), this.app.config.proxyRouter.folder, outPath.join('/'))
     }
+    // console.log('resolvedPath', res.resolvedPath)
     return res
   }
 

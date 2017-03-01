@@ -129,6 +129,7 @@ describe('RouteController', () => {
         }
       })
       .expect(200)
+      .expect('Content-Type', /json/)
       .end((err, res) => {
         done(err)
       })
@@ -144,7 +145,28 @@ describe('RouteController', () => {
         }
       })
       .expect(200)
+      .expect('Content-Type', /json/)
       .end((err, res) => {
+        done(err)
+      })
+  })
+  it('should get page as json', (done) => {
+    request
+      .get('/')
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .end((err, res) => {
+        // console.log(res.body)
+        assert.ok(res.body.path)
+        assert.ok(res.body.series)
+        assert.ok(res.body.version)
+        assert.ok(res.body.meta)
+        assert.ok(res.body.document)
+        assert.ok(res.body.children)
+        // assert.ok(res.body.changefreq)
+        // assert.ok(res.body.lastmod)
+        // assert.ok(res.body.priority)
         done(err)
       })
   })
