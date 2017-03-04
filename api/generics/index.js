@@ -1,1 +1,0 @@
-exports.renderService = require('./renderService')
