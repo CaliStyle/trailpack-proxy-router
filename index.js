@@ -38,6 +38,14 @@ module.exports = class ProxyRouterTrailpack extends Trailpack {
       return Promise.reject(new Error('No configuration found at config.proxyGenerics!'))
     }
 
+    if (
+      this.app.config.policies
+      && this.app.config.policies['*']
+      && this.app.config.policies['*'].indexOf('CheckPermissions.checkRoute') === -1
+    ) {
+      this.app.log.warn('ProxyRouter Routes are unlocked! add \'*\' : [\'CheckPermissions.checkRoute\'] to config/policies.js')
+    }
+
     return Promise.all([
       lib.Validator.validateDatabaseConfig(this.app.config.database),
       lib.Validator.validateProxyRouterConfig(this.app.config.proxyRouter),
