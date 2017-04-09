@@ -14,6 +14,7 @@ const packs = [
 
 const SERVER = process.env.SERVER || 'express'
 const ORM = process.env.ORM || 'sequelize'
+const DIALECT = process.env.DIALECT || 'sqlite'
 let web = {}
 
 const stores = {
@@ -36,11 +37,21 @@ else if (ORM === 'js-data') {
 }
 else if (ORM === 'sequelize') {
   packs.push(require('trailpack-sequelize'))
-  stores.sqlitedev = {
-    database: 'ProxyRouter',
-    storage: './test/test.sqlite',
-    host: '127.0.0.1',
-    dialect: 'sqlite'
+  if (DIALECT == 'postgres') {
+    stores.sqlitedev = {
+      database: 'ProxyRouter',
+      host: '127.0.0.1',
+      dialect: 'postgres',
+      username: 'scott'
+    }
+  }
+  else {
+    stores.sqlitedev = {
+      database: 'ProxyRouter',
+      storage: './test/test.sqlite',
+      host: '127.0.0.1',
+      dialect: 'sqlite'
+    }
   }
 }
 
@@ -136,7 +147,11 @@ const App = {
       // If multi-site is enabled either false or an array e.g. ['website1.com','website2.com']
       multisite: false
     },
-    proxyGenerics: {}
+    proxyGenerics: {},
+    proxyEngine: {
+      live_mode: false,
+      worker: 'test'
+    }
   }
 }
 const dbPath = __dirname + './test.sqlite'

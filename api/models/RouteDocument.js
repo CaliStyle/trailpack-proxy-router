@@ -90,12 +90,12 @@ module.exports = class RouteDocument extends Model {
           defaultValue: SERIES.A0
         },
         // Meta of the page
-        meta: helpers.JSONB('routedocument', app, Sequelize, 'meta', {
+        meta: helpers.JSONB('RouteDocument', app, Sequelize, 'meta', {
           defaultValue: {
-            title: '',
-            keywords: '',
-            runs: 0,
-            score: 0.0
+            'title': '',
+            'keywords': '',
+            'runs': 0,
+            'score': 0.0
           }
         }),
         // The body of a page in HTML and/or Markdown

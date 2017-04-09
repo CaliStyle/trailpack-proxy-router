@@ -58,7 +58,7 @@ module.exports = class Route extends Model {
           allowNull: false
         },
         // Array of Variation Tests to run
-        series: helpers.ARRAY('route', app, Sequelize, Sequelize.JSON, 'series', {
+        series: helpers.ARRAY('Route', app, Sequelize, Sequelize.JSON, 'series', {
           defaultValue: []
         }),
         // {
@@ -80,7 +80,7 @@ module.exports = class Route extends Model {
           defaultValue: app.config.proxyRouter.baseline
         },
         // Array of Series run for particular demographics
-        demographics: helpers.ARRAY('route', app, Sequelize, 'demographic', Sequelize.JSON, {
+        demographics: helpers.ARRAY('Route', app, Sequelize, Sequelize.JSON, 'demographics', {
           defaultValue: [
             {
               'unknown': [
