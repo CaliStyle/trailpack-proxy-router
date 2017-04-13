@@ -36,14 +36,17 @@
     "express": "^4.14.0",
     "lodash": "^4.11.1",
     "mocha": "^2.4.5",
+    "passport-local": "^1.0.0",
     "sails-disk": "^0.10.10",
     "smokesignals": "^2.0.0",
     "sqlite3": "^3.1.4",
     "supertest": "^2.0.1",
     "trailpack-express": "^2.0.2",
     "trailpack-proxy-engine": "^0.0.17",
-    "trailpack-sequelize": "^2.0.0",
+    "trailpack-proxy-passport": "0.0.7",
+    "trailpack-proxy-permissions": "0.0.23",
     "trailpack-router": "^2.0.0",
+    "trailpack-sequelize": "^2.0.0",
     "trails": "^2.0.0"
   },
   "scripts": {

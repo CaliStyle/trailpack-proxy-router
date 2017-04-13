@@ -2,12 +2,16 @@
 const _ = require('lodash')
 const smokesignals = require('smokesignals')
 const fs = require('fs')
+const ModelPassport = require('trailpack-proxy-passport/api/models/User')
+const ModelPermissions = require('trailpack-proxy-permissions/api/models/User')
 const lib = require('../lib')
 
 const packs = [
   require('trailpack-router'),
   require('trailpack-proxy-engine'),
   require('trailpack-proxy-generics'),
+  require('trailpack-proxy-passport'),
+  require('trailpack-proxy-permissions'),
   require('../') // trailpack-proxy-route
 ]
 
@@ -20,6 +24,12 @@ let web = {}
 const stores = {
   sqlitedev: {
     adapter: require('sails-disk')
+  },
+  uploads: {
+    database: 'ProxyPermissions',
+    storage: './test/test.uploads.sqlite',
+    host: '127.0.0.1',
+    dialect: 'sqlite'
   }
 }
 
@@ -88,6 +98,25 @@ const App = {
     name: 'proxy-route-trailpack-test',
     version: '1.0.0'
   },
+  api: {
+    models: {
+      User: class User extends ModelPassport {
+        static config(app, Sequelize) {
+          return {
+            options: {
+              underscored: true,
+              classMethods: {
+                associate: (models) => {
+                  ModelPassport.config(app, Sequelize).options.classMethods.associate(models)
+                  ModelPermissions.config(app, Sequelize).options.classMethods.associate(models)
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
   config: {
     database: {
       stores: stores,
@@ -151,7 +180,33 @@ const App = {
     proxyEngine: {
       live_mode: false,
       worker: 'test'
-    }
+    },
+    proxyPassport: {
+      strategies: {
+        local: {
+          strategy: require('passport-local').Strategy
+        }
+      }
+    },
+    proxyPermissions: {
+      defaultRole: 'public',
+      modelsAsResources: true,
+      fixtures: {
+        roles: [{
+          name: 'admin',
+          public_name: 'Admin'
+        }, {
+          name: 'registered' ,
+          public_name: 'Registered'
+        }, {
+          name: 'public' ,
+          public_name: 'Public'
+        }],
+        permissions: []
+      },
+      defaultAdminUsername: 'admin',
+      defaultAdminPassword: 'admin1234'
+    },
   }
 }
 const dbPath = __dirname + './test.sqlite'
