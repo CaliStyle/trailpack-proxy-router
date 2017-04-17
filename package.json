@@ -43,8 +43,8 @@
     "supertest": "^2.0.1",
     "trailpack-express": "^2.0.2",
     "trailpack-proxy-engine": "^0.0.17",
-    "trailpack-proxy-passport": "0.0.7",
-    "trailpack-proxy-permissions": "0.0.23",
+    "trailpack-proxy-passport": "^0.0.7",
+    "trailpack-proxy-permissions": "^0.0.26",
     "trailpack-router": "^2.0.0",
     "trailpack-sequelize": "^2.0.0",
     "trails": "^2.0.0"
