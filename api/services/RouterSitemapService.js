@@ -90,7 +90,7 @@ module.exports = class RouterSitemapService extends Service {
    */
   getMetaFL(pwd) {
     // TODO resolve actual meta
-    return {}
+    return this.app.services.RenderGenericService.renderSync(pwd).meta || {}
   }
 
   /**

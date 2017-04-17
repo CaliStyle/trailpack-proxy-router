@@ -8,6 +8,7 @@ describe('RouterSitemapService', () => {
   })
   it('should build children from flat file', (done) => {
     const out = global.app.services.RouterSitemapService.initFL()
+    console.log('THIS META', out)
     assert.ok(out.title)
     assert.ok(out.path)
     assert.ok(out.children)
