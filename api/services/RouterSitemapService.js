@@ -26,19 +26,25 @@ module.exports = class RouterSitemapService extends Service {
     const pwdStat = fs.statSync(pwd)
     const files = fs.readdirSync(pwd)
     const output = {}
-    const meta = this.getMetaFL(pwd)
+    let meta = {}
+
+    // TODO Make use latest series
+    const possibleSeries = `${pwdPath}/series/a0/0.0.0.md`
+    if (fs.existsSync(possibleSeries)) {
+      meta = this.getMetaFL(possibleSeries)
+    }
 
     files.forEach(file => {
 
       const absolutePath = path.resolve(pwd, file)
       // const extName = path.extname(absolutePath)
       const stat = fs.statSync(absolutePath)
-
       // If this file is a directory, pass the directory to #buildChirldrenFL, saving the
       // results to output keyed by the directory name
       if (stat.isDirectory() && file !== this.app.config.proxyRouter.series && file.charAt(0) != ':') {
         output[file] = this.buildChildrenFL(absolutePath)
       }
+
 
       // If this file is a markdown file, save the file contents to the output
       // object, keyed by the file name.
@@ -89,8 +95,9 @@ module.exports = class RouterSitemapService extends Service {
    * @returns {Object}
    */
   getMetaFL(pwd) {
-    // TODO resolve actual meta
-    return this.app.services.RenderGenericService.renderSync(pwd).meta || {}
+    const doc = fs.readFileSync(pwd, 'utf8')
+    const meta = this.app.services.RenderGenericService.renderSync(doc).meta || {}
+    return meta
   }
 
   /**
