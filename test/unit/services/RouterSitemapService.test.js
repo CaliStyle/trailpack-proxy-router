@@ -8,7 +8,10 @@ describe('RouterSitemapService', () => {
   })
   it('should build children from flat file', (done) => {
     const out = global.app.services.RouterSitemapService.initFL()
-    console.log('THIS META', out)
+    const children = Object.keys(out.children)
+    const hello = out.children['hello']
+    const helloChildren = Object.keys(hello.children)
+    // console.log('THIS META', out, hello)
     assert.ok(out.title)
     assert.ok(out.path)
     assert.ok(out.children)
@@ -16,7 +19,18 @@ describe('RouterSitemapService', () => {
     assert.ok(out.changefreq)
     assert.ok(out.lastmod)
     assert.ok(out.priority)
-    // console.log(out)
+    assert.equal(children.length, 8)
+    assert.equal(helloChildren.length, 1)
+
+    helloChildren.forEach(function(key) {
+      assert.ok(hello.children[key].title)
+      assert.ok(hello.children[key].path)
+      assert.ok(hello.children[key].children)
+      assert.ok(hello.children[key].meta)
+      assert.ok(hello.children[key].changefreq)
+      assert.ok(hello.children[key].lastmod)
+      assert.ok(hello.children[key].priority)
+    })
     done()
   })
 })

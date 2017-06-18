@@ -113,11 +113,11 @@ module.exports = {
   // Default name for "series"
   series: 'series',
   // Force Flat File and ignore DB
-  forceFL: true,
+  force_fl: true,
   // The number of controls to enqueue before flushing to processor.
-  flushAt: 20,
+  flush_at: 20,
   // The number of milliseconds to wait before flushing the queue automatically to processor.
-  flushAfter: 10000,
+  flush_after: 10000,
   // Cache
   cache: {
     // The redis datastore prefix

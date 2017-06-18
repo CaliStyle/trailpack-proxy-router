@@ -129,4 +129,21 @@ describe('Markdown-it Meta', () => {
     assert(md.meta, {})
     assert(expectedHtml, html)
   })
+
+  it('should parse html components in html document with metadata', function () {
+    const mdText = fixture('../../../../content/html/series/a0/0.0.0.html')
+    const md = new MarkdownIt({
+      html: true
+    })
+    md.use(meta)
+    const html = md.render(mdText)
+    const expectedHtml = [
+      '<hello>',
+      '</hello>',
+      ''
+    ].join('\n')
+    assert.equal(md.meta.title, 'Homepage Hello World')
+    assert.equal(md.meta.keywords, 'proxy-engine, amazing, does html')
+    assert.equal(expectedHtml, html)
+  })
 })

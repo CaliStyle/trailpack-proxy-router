@@ -67,4 +67,18 @@ describe('proxyrouter middleware', () => {
         done(err)
       })
   })
+  it('should match pattern /html and serve html document', (done) => {
+    request
+      .get('/html')
+      .expect(200)
+      .end((err, res) => {
+        // console.log(res)
+        const expectedHtml = [
+          '<hello>',
+          '</hello>'
+        ].join('\n')
+        assert(res.text, expectedHtml)
+        done(err)
+      })
+  })
 })

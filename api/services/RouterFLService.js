@@ -8,6 +8,7 @@ const fs = require('fs')
 const mkdirp = require('mkdirp')
 const rmdir = require('rmdir')
 const SERIES = require('../utils/enums').SERIES
+const EXTENSIONS = require('../utils/enums').EXTENSIONS
 const vc = require('version_compare')
 const Errors = require('proxy-engine-errors')
 
@@ -39,7 +40,8 @@ module.exports = class RouterFLService extends Service {
     const alternatePath = req.route && req.route.path ? req.route.path : null
     const options = {
       series: req.params.series || 'a0',
-      version: req.params.latest || 'latest'
+      version: req.params.version || 'latest',
+      extension: req.params.extension || null
     }
     return this.renderPage(pagePath, alternatePath, options)
       .then(renderedPage => {
@@ -66,31 +68,76 @@ module.exports = class RouterFLService extends Service {
    * @returns {Promise.<{id: any, host: string, path: string, orgPath: string, series: string, version: string, meta: Object, document: string, children: Object }>}
    */
   renderPage(pagePath, alternatePath, options){
+    options = options || {}
     this.app.log.debug('RouterFLService.renderPage', pagePath, alternatePath, options)
     const RenderGenericService = this.app.services.RenderGenericService
-    let fullPagePath = this.resolveFlatFilePathFromString(pagePath, options)
-    let choosenPath
-    return this.checkIfFile(fullPagePath.path)
-      .then(fileExists =>{
-        if (fileExists) {
-          choosenPath = fullPagePath
-          return fileExists
-        }
-        else {
-          choosenPath = alternatePath
-          this.app.log.silly(`RouterFLService.renderPage rendering ${alternatePath} as ${pagePath} is not set`)
-          fullPagePath = this.resolveFlatFilePathFromString(alternatePath, options)
-          return this.checkIfFile(fullPagePath.path)
-        }
-      })
-      .then(fileExists => {
-        if (fileExists && path.extname(fullPagePath.path) === '.md') {
-          return fs.readFileSync(fullPagePath.path, 'utf8')
+    const extensions = _.values(EXTENSIONS).sort(ext => {
+      if (options.extension && ext == options.extension) {
+        return -1
+      }
+      else if (!options.extension && ext == this.app.config.proxyRouter.default_extension) {
+        return -1
+      }
+      else {
+        return 1
+      }
+    })
+    const toTry = []
+    extensions.forEach(ext => {
+      toTry.push(this.resolveFlatFilePathFromString(pagePath, _.merge({},options, {
+        extension: ext
+      })))
+      toTry.push(this.resolveFlatFilePathFromString(alternatePath, _.merge({},options, {
+        extension: ext
+      })))
+    })
+    let chosenPath
+    return Promise.all(toTry.map(trial => {
+      if (chosenPath) {
+        return Promise.resolve()
+      }
+      else {
+        return this.checkIfFile(trial.path)
+         .then(fileExists => {
+           if (fileExists) {
+             chosenPath = trial
+             return Promise.resolve(chosenPath)
+           }
+           else {
+             return Promise.resolve()
+           }
+         })
+      }
+    }))
+      .then(() => {
+        if (chosenPath && _.values(EXTENSIONS).indexOf(path.extname(chosenPath.path) > -1)) {
+          return fs.readFileSync(chosenPath.path, 'utf8')
         }
         else {
           throw new Errors.FoundError(Error(`${pagePath} and ${alternatePath} are not qualified resources`))
         }
       })
+    // return this.checkIfFile(fullPagePath.path)
+    //   .then(fileExists =>{
+    //     if (fileExists) {
+    //       chosenPath = fullPagePath
+    //       return fileExists
+    //     }
+    //     else {
+    //       chosenPath = alternatePath
+    //       this.app.log.silly(`RouterFLService.renderPage rendering ${alternatePath} as ${pagePath} is not set`)
+    //       fullPagePath = this.resolveFlatFilePathFromString(alternatePath, options)
+    //       return this.checkIfFile(fullPagePath.path)
+    //     }
+    //   })
+    //   .then(fileExists => {
+    //     if (fileExists && _.values(EXTENSIONS).indexOf(path.extname(fullPagePath.path) > -1)) {
+    //       return fs.readFileSync(fullPagePath.path, 'utf8')
+    //     }
+    //     else {
+    //       throw new Errors.FoundError(Error(`${pagePath} and ${alternatePath} are not qualified resources`))
+    //     }
+    //   })
       .then(doc => {
         // Render the doc
         return RenderGenericService.render(doc)
@@ -100,13 +147,13 @@ module.exports = class RouterFLService extends Service {
           id: null,
           // TODO mulit-site support
           host: 'localhost',
-          path: choosenPath.path,
-          orgPath: choosenPath.orgPath,
-          series: choosenPath.series ? choosenPath.series : 'a0',
-          version: choosenPath.version ? choosenPath.version : '0.0.0',
+          path: chosenPath.path,
+          orgPath: chosenPath.orgPath,
+          series: chosenPath.series ? chosenPath.series : 'a0',
+          version: chosenPath.version ? chosenPath.version : '0.0.0',
           meta: renderedDoc.meta ? renderedDoc.meta : {},
           document: renderedDoc.document ? renderedDoc.document : renderedDoc,
-          children: this.app.services.RouterSitemapService.buildChildrenFL(fullPagePath.resolvedPath).children
+          children: this.app.services.RouterSitemapService.buildChildrenFL(chosenPath.resolvedPath).children
         }
         return proxyRoute
       })
@@ -175,7 +222,7 @@ module.exports = class RouterFLService extends Service {
       }
 
       const dir = path.join(data.seriesPath, series)
-      const file = path.join(dir, `${version}.md`)
+      const file = path.join(dir, `${version}${this.app.config.proxyRouter.default_extension}`)
       try {
         mkdirp.sync(dir)
       }
@@ -301,9 +348,12 @@ module.exports = class RouterFLService extends Service {
    * @returns {object|*}
    */
   resolveFlatFilePathFromString(orgPath, options){
+    options = options || {}
+    options.extension = options.extension || this.app.config.proxyRouter.default_extension
+
     const parts = path.normalize(orgPath).split('/')
-    const outPath = ['','a0','0.0.0.md']
-    if (options && options.host) {
+    const outPath = ['','a0','0.0.0']
+    if (options.host) {
       outPath[0] = `/${options.host}`
     }
     _.each(parts, (part, index) => {
@@ -315,35 +365,37 @@ module.exports = class RouterFLService extends Service {
       }
     })
     // Override default series and version if set
-    if (options && options.series && options.series !== '') {
+    if (options.series && options.series !== '') {
       outPath[1] = options.series
     }
     // If Requesting Latest Version
-    if (options && options.version && options.version == 'latest') {
+    if (options.version && options.version == 'latest') {
       try {
         const directory = path.join(process.cwd(), this.app.config.proxyRouter.folder, outPath[0], outPath[1])
-        // const directory = path.join(__dirname, '../../', this.app.config.proxyRouter.folder, outPath[0], outPath[1])
         this.app.log.silly('RouterFLService.resolveFlatFilePathFromString: Directory ', directory)
         const files = fs.readdirSync(directory)
         let version = '0.0.0'
         // TODO this should compare all dirs instead of just one after another
         for (const i of files) {
-          const tryVersion = i.split('.md')[0]
+          const tryVersion = i.split(/.md|.html/)[0]
           if (vc.compare(version, tryVersion)) {
             this.app.log.silly('RouterFLService.resolveFlatFilePathFromString: Later Version', tryVersion)
             version = tryVersion
           }
         }
-        outPath[2] = `${version}.md`
+        outPath[2] = `${version}${options.extension}`
       }
       catch (err) {
         // This is normal to throw an error here, because this directory may not exists
-        // console.log(err)
+        // this.app.log.error(err)
       }
     }
     // If options version is set explicitly and not "latest"
     else if (options && options.version && options.version !== ''){
-      outPath[2] = `${options.version}.md`
+      outPath[2] = `${options.version}${options.extension}`
+    }
+    else {
+      outPath[2] = `${outPath[2]}${options.extension}`
     }
 
     // Construct Final Response
@@ -354,10 +406,10 @@ module.exports = class RouterFLService extends Service {
       // The final Series that was run
       series: outPath[1],
       // The final Version that was run
-      version: outPath[2].split('.md')[0],
+      version: outPath[2].split(/.md|.html/)[0],
       // The Original path (the url)
       orgPath: orgPath,
-      // The resolved location that this look up happened
+      // The resolved location of this lookup
       resolvedPath: path.join(process.cwd(), this.app.config.proxyRouter.folder, orgPath),
       // The Server path
       path: path.join(process.cwd(), this.app.config.proxyRouter.folder, outPath.join('/'))
@@ -373,9 +425,10 @@ module.exports = class RouterFLService extends Service {
    * @returns {{orgPath: *, path: (string|*)}}
    */
   resolveFlatFileSeriesFromString(orgPath, options) {
+    options = options || {}
     const parts = path.normalize(orgPath).split('/')
     const outPath = ['']
-    if (options && options.host) {
+    if (options.host) {
       outPath[0] = `/${options.host}`
     }
     _.each(parts, (part, index) => {
@@ -439,9 +492,9 @@ module.exports = class RouterFLService extends Service {
     })
   }
 
-  getDirectories(srcpath) {
-    return fs.readdirSync(srcpath).filter((file) => {
-      return fs.statSync(path.join(srcpath, file)).isDirectory()
+  getDirectories(srcPath) {
+    return fs.readdirSync(srcPath).filter((file) => {
+      return fs.statSync(path.join(srcPath, file)).isDirectory()
     })
   }
 }

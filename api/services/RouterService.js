@@ -132,7 +132,7 @@ module.exports = class RouterService extends Service {
    * @returns {Promise.<proxyRouter>}
    */
   resolveProxyRoute(req) {
-    if (this.app.config.proxyRouter.forceFL) {
+    if (this.app.config.proxyRouter.force_fl) {
       return this.flatfileProxyRoute(req)
     }
     else {
@@ -147,8 +147,8 @@ module.exports = class RouterService extends Service {
    */
   findPageByID(id) {
     return new Promise((resolve, reject) => {
-      if (this.app.config.proxyRouter.forceFL) {
-        const err = new Errors.ValidationError(Error('RouterService.findPageByID is disabled while proxyRouter.forceFL is true'))
+      if (this.app.config.proxyRouter.force_fl) {
+        const err = new Errors.ValidationError(Error('RouterService.findPageByID is disabled while proxyRouter.force_fl is true'))
         return reject(err)
       }
       const Route = this.app.orm.Route
@@ -174,8 +174,8 @@ module.exports = class RouterService extends Service {
    */
   findPageByPath(path) {
     return new Promise((resolve, reject) => {
-      if (this.app.config.proxyRouter.forceFL) {
-        const err = new Errors.ValidationError(Error('RouterService.findPageByPath is disabled while proxyRouter.forceFL is true'))
+      if (this.app.config.proxyRouter.force_fl) {
+        const err = new Errors.ValidationError(Error('RouterService.findPageByPath is disabled while proxyRouter.force_fl is true'))
         return reject(err)
       }
       // TODO possibly allow this for specifying versions/series?
@@ -224,8 +224,8 @@ module.exports = class RouterService extends Service {
       }
       // If this is a forced lookup
       if (lookup) {
-        if (this.app.config.proxyRouter.forceFL) {
-          const err = new Errors.ValidationError(Error('RouterService.resolveIdentifier lookup == true is disabled while proxyRouter.forceFL is true'))
+        if (this.app.config.proxyRouter.force_fl) {
+          const err = new Errors.ValidationError(Error('RouterService.resolveIdentifier lookup == true is disabled while proxyRouter.force_fl is true'))
           return reject(err)
         }
         this[lookupFunc](identifier)
@@ -267,7 +267,7 @@ module.exports = class RouterService extends Service {
         })
         .then(resolvedPath => {
           pagePath = resolvedPath
-          if (this.app.config.proxyRouter.forceFL) {
+          if (this.app.config.proxyRouter.force_fl) {
             // Check the flatfile
             return RouterFLService.checkIfFile(pagePath)
           }
@@ -301,7 +301,7 @@ module.exports = class RouterService extends Service {
       const RouterFLService = this.app.services.RouterFLService
       const RouterDBService = this.app.services.RouterDBService
 
-      if (this.app.config.proxyRouter.forceFL) {
+      if (this.app.config.proxyRouter.force_fl) {
         RouterFLService.create(pagePath)
           .then(createdFile => {
             // Mock the DB return
@@ -345,7 +345,7 @@ module.exports = class RouterService extends Service {
       let pagePath
       let regPath
 
-      this.resolveIdentifier(data.identifier, !this.app.config.proxyRouter.forceFL)
+      this.resolveIdentifier(data.identifier, !this.app.config.proxyRouter.force_fl)
         .then(identifier => {
           this.app.log.debug('routerservice:updatePage', identifier)
           if (!identifier.path && !identifier.id) {
@@ -356,7 +356,7 @@ module.exports = class RouterService extends Service {
         })
         .then(resolvedPath => {
           pagePath = resolvedPath
-          if (this.app.config.proxyRouter.forceFL) {
+          if (this.app.config.proxyRouter.force_fl) {
             return RouterFLService.checkIfFile(pagePath)
           }
           else {
@@ -389,7 +389,7 @@ module.exports = class RouterService extends Service {
     return new Promise((resolve, reject) => {
       const RouterFLService = this.app.services.RouterFLService
       const RouterDBService = this.app.services.RouterDBService
-      if (this.app.config.proxyRouter.forceFL) {
+      if (this.app.config.proxyRouter.force_fl) {
         RouterFLService.update(pagePath)
           .then(updateFile => {
             // Mock the DB return
@@ -431,7 +431,7 @@ module.exports = class RouterService extends Service {
       const RouterDBService = this.app.services.RouterDBService
       let pagePath
       let regPath
-      this.resolveIdentifier(data.identifier, !this.app.config.proxyRouter.forceFL)
+      this.resolveIdentifier(data.identifier, !this.app.config.proxyRouter.force_fl)
         .then(identifier => {
           this.app.log.debug('routerservice:removePage', identifier)
           if (!identifier.path && !identifier.id) {
@@ -442,7 +442,7 @@ module.exports = class RouterService extends Service {
         })
         .then(resolvedPath => {
           pagePath = resolvedPath
-          if (this.app.config.proxyRouter.forceFL) {
+          if (this.app.config.proxyRouter.force_fl) {
             return RouterFLService.checkIfFile(pagePath)
           }
           else {
@@ -473,7 +473,7 @@ module.exports = class RouterService extends Service {
     return new Promise((resolve, reject) => {
       const RouterFLService = this.app.services.RouterFLService
       const RouterDBService = this.app.services.RouterDBService
-      if (this.app.config.proxyRouter.forceFL) {
+      if (this.app.config.proxyRouter.force_fl) {
         RouterFLService.destroy(pagePath)
           .then(destroyedFile => {
             // Mock the DB return
@@ -514,7 +514,7 @@ module.exports = class RouterService extends Service {
     return new Promise((resolve, reject) => {
       const RouterFLService = this.app.services.RouterFLService
       const RouterDBService = this.app.services.RouterDBService
-      this.resolveIdentifier(data.identifier, !this.app.config.proxyRouter.forceFL)
+      this.resolveIdentifier(data.identifier, !this.app.config.proxyRouter.force_fl)
         .then(identifier => {
           this.app.log.debug('routerservice:addSeries identifier', identifier)
           if (!identifier.path && !identifier.id) {
@@ -531,7 +531,7 @@ module.exports = class RouterService extends Service {
         .then(resolvedPath => {
           // Add the Series Path
           data.seriesPath = resolvedPath
-          if (this.app.config.proxyRouter.forceFL) {
+          if (this.app.config.proxyRouter.force_fl) {
             return RouterFLService.checkIfDir(data.seriesPath)
           }
           else {
@@ -564,7 +564,7 @@ module.exports = class RouterService extends Service {
       const RouterFLService = this.app.services.RouterFLService
       const RouterDBService = this.app.services.RouterDBService
 
-      if (this.app.config.proxyRouter.forceFL) {
+      if (this.app.config.proxyRouter.force_fl) {
         RouterFLService.createSeries(data)
           .then(created => {
             // Mock the DB return
@@ -600,7 +600,7 @@ module.exports = class RouterService extends Service {
     return new Promise((resolve, reject) => {
       const RouterFLService = this.app.services.RouterFLService
       const RouterDBService = this.app.services.RouterDBService
-      this.resolveIdentifier(data.identifier, !this.app.config.proxyRouter.forceFL)
+      this.resolveIdentifier(data.identifier, !this.app.config.proxyRouter.force_fl)
         .then(identifier => {
           this.app.log.debug('routerservice:editSeries identifier', identifier)
           if (!identifier.path && !identifier.id) {
@@ -620,7 +620,7 @@ module.exports = class RouterService extends Service {
         .then(resolvedPath => {
           // Add the Series Path
           data.seriesPath = resolvedPath
-          if (this.app.config.proxyRouter.forceFL) {
+          if (this.app.config.proxyRouter.force_fl) {
             return RouterFLService.checkIfFile(data.seriesPath)
           }
           else {
@@ -653,7 +653,7 @@ module.exports = class RouterService extends Service {
       const RouterFLService = this.app.services.RouterFLService
       const RouterDBService = this.app.services.RouterDBService
 
-      if (this.app.config.proxyRouter.forceFL) {
+      if (this.app.config.proxyRouter.force_fl) {
         RouterFLService.updateSeries(data)
           .then(destroyed => {
             // Mock the DB return
@@ -689,7 +689,7 @@ module.exports = class RouterService extends Service {
     return new Promise((resolve, reject) => {
       const RouterFLService = this.app.services.RouterFLService
       const RouterDBService = this.app.services.RouterDBService
-      this.resolveIdentifier(data.identifier, !this.app.config.proxyRouter.forceFL)
+      this.resolveIdentifier(data.identifier, !this.app.config.proxyRouter.force_fl)
         .then(identifier => {
           this.app.log.debug('routerservice:addSeries identifier', identifier)
           if (!identifier.path && !identifier.id) {
@@ -706,7 +706,7 @@ module.exports = class RouterService extends Service {
         .then(resolvedPath => {
           // Add the Series Path
           data.seriesPath = resolvedPath
-          if (this.app.config.proxyRouter.forceFL) {
+          if (this.app.config.proxyRouter.force_fl) {
             return RouterFLService.checkIfDir(data.seriesPath)
           }
           else {
@@ -739,7 +739,7 @@ module.exports = class RouterService extends Service {
       const RouterFLService = this.app.services.RouterFLService
       const RouterDBService = this.app.services.RouterDBService
 
-      if (this.app.config.proxyRouter.forceFL) {
+      if (this.app.config.proxyRouter.force_fl) {
         RouterFLService.destroySeries(data)
           .then(destroyed => {
             // Mock the DB return

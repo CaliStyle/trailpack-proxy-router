@@ -1,6 +1,10 @@
 'use strict'
 
 module.exports = {
+  EXTENSIONS: {
+    MD: '.md',
+    HTML: '.html'
+  },
   SERIES: {
     A0: 'a0',
     B0: 'b0',
