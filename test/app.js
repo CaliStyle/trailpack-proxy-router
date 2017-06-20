@@ -120,7 +120,7 @@ const App = {
     controllers: {
       TestController: class TestController extends Controller {
         test(req, res) {
-          if (req.proxyRouter) {
+          if (req.proxyRouter.document || req.proxyRouter.meta) {
             return res.serverError('THIS SHOULD NOT HAVE A PROXY ROUTER OBJECT')
           }
           return res.sendStatus(200)

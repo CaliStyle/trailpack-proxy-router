@@ -58,9 +58,8 @@ module.exports = class ProxyRouterTrailpack extends Trailpack {
    */
   configure () {
     return Promise.all([
+      lib.ProxyRouter.config(this.app),
       lib.ProxyRouter.addRoutes(this.app),
-      lib.ProxyRouter.ignoreRoutes(this.app),
-      lib.ProxyRouter.alternateRoutes(this.app),
       lib.ProxyRouter.addPolicies(this.app),
       lib.ProxyRouter.resolveGenerics(this.app),
       lib.ProxyRouter.copyDefaults(this.app),
@@ -74,10 +73,11 @@ module.exports = class ProxyRouterTrailpack extends Trailpack {
    * TODO document method
    */
   initialize () {
-    // return Promise.all([
-    lib.ProxyRouter.init(this.app)
-
-    // ])
+    return Promise.all([
+      lib.ProxyRouter.init(this.app),
+      lib.ProxyRouter.ignoreRoutes(this.app),
+      lib.ProxyRouter.alternateRoutes(this.app)
+    ])
   }
 
   constructor (app) {

@@ -34,7 +34,7 @@ module.exports = class RouterService extends Service {
     const url = req.originalUrl.replace(prefix, '')
 
     let alternative
-    req.trailsApp.config.proxyRouter.alternateRoutes.forEach((route)=> {
+    req.trailsApp.proxyRouter.alternateRoutes.forEach((route)=> {
       if (alternative) {
         return
       }
@@ -73,7 +73,7 @@ module.exports = class RouterService extends Service {
 
     // Check if this has an explicit ignore
     let ignore = false
-    this.app.config.proxyRouter.ignoreRoutes.forEach((route) => {
+    this.app.proxyRouter.ignoreRoutes.forEach((route) => {
       // If another catchall route already ignored, break immediately
       if (ignore) {
         return
@@ -89,11 +89,11 @@ module.exports = class RouterService extends Service {
     if (ignore) {
       return false
     }
-
+    // default return true
     return true
   }
 
-  // TODO
+  // TODO pick which series test to use
   pickSeries() {
 
   }

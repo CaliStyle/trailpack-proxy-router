@@ -33,7 +33,7 @@ module.exports = {
         // 'trailpack:router:initialized'
         // Should wait til after proxy engine has been initialized
         'trailpack:proxy-engine:initialized',
-        'trailpack:proxy-generics:configured'
+        'trailpack:proxy-generics:initialized'
       ],
       emit: [
         'trailpack:proxy-router:initialized'

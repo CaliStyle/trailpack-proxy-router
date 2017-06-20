@@ -101,24 +101,28 @@ module.exports = class RouterFLService extends Service {
         })))
       }
     })
+    // Set a null chosenPath
     let chosenPath
-    return Promise.all(toTry.map(trial => {
+
+    // Create checkTrial Function that can use the null choosenPath
+    const checkTrial = (trial) => {
       if (chosenPath) {
         return Promise.resolve()
       }
       else {
         return this.checkIfFile(trial.path)
-         .then(fileExists => {
-           if (fileExists) {
-             chosenPath = trial
-             return Promise.resolve(chosenPath)
-           }
-           else {
-             return Promise.resolve()
-           }
-         })
+          .then(fileExists => {
+            if (fileExists) {
+              chosenPath = trial
+              return Promise.resolve(chosenPath)
+            }
+            else {
+              return Promise.resolve()
+            }
+          })
       }
-    }))
+    }
+    return this.sequence(toTry, checkTrial)
       .then(() => {
         if (chosenPath && _.values(EXTENSIONS).indexOf(path.extname(chosenPath.path) !== -1)) {
           return fs.readFileSync(chosenPath.path, 'utf8')
@@ -500,5 +504,19 @@ module.exports = class RouterFLService extends Service {
     return fs.readdirSync(srcPath).filter((file) => {
       return fs.statSync(path.join(srcPath, file)).isDirectory()
     })
+  }
+
+  sequence(objectsArray, iterator, callback) {
+    const startPromise = objectsArray.reduce((prom, object) => {
+      return prom.then(function () {
+        return iterator(object)
+      })
+    }, Promise.resolve()) // initial
+    if (callback) {
+      startPromise.then(callback)
+    }
+    else {
+      return startPromise
+    }
   }
 }
