@@ -57,7 +57,7 @@ module.exports = class RouterService extends Service {
    */
   isProxyRouterRequest(req) {
     const prefix = _.get(this.app.config, 'proxyRouter.prefix') || _.get(this.app.config, 'footprints.prefix')
-    const url = req.originalUrl.replace(prefix, '')
+    const url = req.originalUrl.replace(prefix, '').split('?')[0]
     // transform the method to lowercase and check if Get Request, if not, skip
     if ( !req.method || req.method.toLowerCase() !== 'get') {
       this.app.log.silly('proxyRouter: not GET request')

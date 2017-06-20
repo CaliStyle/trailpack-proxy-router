@@ -148,7 +148,7 @@ const App = {
         handler: 'RouteController.view'
       },
       {
-        method: [ 'GET' ],
+        method: [ 'GET', 'POST' ],
         path: '/hello/ignore',
         handler: 'TestController.test',
         config: {

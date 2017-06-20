@@ -103,4 +103,12 @@ describe('proxyrouter middleware', () => {
         done(err)
       })
   })
+  it('should be ignored by ProxyRouter', (done) => {
+    request
+      .get('/hello/ignore?test=hello')
+      .expect(200)
+      .end((err, res) => {
+        done(err)
+      })
+  })
 })
