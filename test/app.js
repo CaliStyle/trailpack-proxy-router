@@ -5,6 +5,7 @@ const fs = require('fs')
 const ModelPassport = require('trailpack-proxy-passport/api/models/User')
 const ModelPermissions = require('trailpack-proxy-permissions/api/models/User')
 const lib = require('../lib')
+const Controller = require('trails/controller')
 
 const packs = [
   require('trailpack-router'),
@@ -115,6 +116,16 @@ const App = {
           }
         }
       }
+    },
+    controllers: {
+      TestController: class TestController extends Controller {
+        test(req, res) {
+          if (req.proxyRouter) {
+            return res.serverError('THIS SHOULD NOT HAVE A PROXY ROUTER OBJECT')
+          }
+          return res.sendStatus(200)
+        }
+      }
     }
   },
   config: {
@@ -128,17 +139,29 @@ const App = {
     routes: [
       {
         method: [ 'GET' ],
-        path: '/*',
-        handler: 'RouteController.view'
-      },
-      {
-        method: [ 'GET' ],
         path: '/html',
         handler: 'RouteController.view'
       },
       {
         method: [ 'GET' ],
         path: '/hello/:world',
+        handler: 'RouteController.view'
+      },
+      {
+        method: [ 'GET' ],
+        path: '/hello/ignore',
+        handler: 'TestController.test',
+        config: {
+          app: {
+            proxyRouter: {
+              ignore: true
+            }
+          }
+        }
+      },
+      {
+        method: [ 'GET' ],
+        path: '/*',
         handler: 'RouteController.view'
       }
     ],

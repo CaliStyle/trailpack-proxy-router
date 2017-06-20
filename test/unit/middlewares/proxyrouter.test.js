@@ -81,4 +81,26 @@ describe('proxyrouter middleware', () => {
         done(err)
       })
   })
+  it('should match pattern /html and serve html document ignoring url params', (done) => {
+    request
+      .get('/html?test=hello')
+      .expect(200)
+      .end((err, res) => {
+        // console.log(res)
+        const expectedHtml = [
+          '<hello>',
+          '</hello>'
+        ].join('\n')
+        assert(res.text, expectedHtml)
+        done(err)
+      })
+  })
+  it('should be ignored by ProxyRouter', (done) => {
+    request
+      .get('/hello/ignore')
+      .expect(200)
+      .end((err, res) => {
+        done(err)
+      })
+  })
 })

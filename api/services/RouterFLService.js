@@ -60,7 +60,7 @@ module.exports = class RouterFLService extends Service {
       })
   }
   alternatePath(route) {
-    route = route && route.path ? route.path.replace('*/', '').replace('*', '') : null
+    route = route && route.path ? route.path.replace('*/', '').replace('*', '').split('?')[0] : null
     // if (route) {
     //   route = route.replace('*/', '').replace('*', '')
     // }
