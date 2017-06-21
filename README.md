@@ -52,6 +52,9 @@ Proxy Engine's router takes care of these pain points by:
 - Flatfile CMS for non database driven web apps.
 - Versioned display structure for web apps using Angular2 ngRX or React Flux.
 
+### Sitemap
+- Proxy Router is very fast with an average of just a few millaseconds per non-cached page render and less than a millasecond when cached. In addition to rendering a page, it also sitemaps a page's children and sitemaps all content on server start/edit.
+
 ### Gotchas
 - This style of CMS requires a "Single Source of Truth" for Frontend Components to bind too. Try using Redux or ngRX for your frontend.
 - Mechanisms to determine/set Score and Demographic are up to you.
@@ -102,6 +105,8 @@ module.exports = {
 ```js
 // config/proxyRouter.js
 module.exports = {
+  // The Default Extension to use when creating/updating/reading files, falls back to either .md or .html
+  default_extension: '.md',
   // Default Threshold
   threshold: 100,
   // Default Baseline
@@ -131,11 +136,12 @@ module.exports = {
 ```
 
 ### Content Folder
-By default the Proxy Route content directory is `content` in the root directory of your application.  However, it can changed to any directory or even a node_module in `config/proxyRouter`. Whatever the content folder, the file structure must follow these guidelines:
+By default the Proxy Route content directory is `content` in the root directory of your application.  However, it can changed to any directory or even a node_module by setting the `folder` value in `config/proxyRouter`. Whatever the content folder, the file structure must follow these guidelines:
 
 - Every directory must have a series directory that contains a named test directory eg. `a0` with a SemVer versioned markdown document.
 - Named test directories follow this pattern: `a0`, `b0`, `c0` etc.  Upon exceeding `z0` change to `a1`, `b1`, `c1` etc.
 - Directories that start with wild cards eg. `:world` or `*` will match express routes.
+- Files must end in a `.md` (markdown) or `.html` (HTML) file extension, but the entire folder must be of all one file type.
 
 ##### Example
 ```
@@ -149,6 +155,11 @@ By default the Proxy Route content directory is `content` in the root directory 
        - series
          - a0
            - 0.0.0.md
+     - html
+       - series
+         - a0
+           - 0.0.0.html
+           - 0.0.1.html
      - series
        - a0
          - 0.0.0.md
@@ -162,7 +173,7 @@ By default the Proxy Route content directory is `content` in the root directory 
 
 ### req.locals
 Proxy Route merges the document's id, series, version, and metadata with req.locals so it can be used in any view template engine required.
-To access it in your template engine use `proxyRouter`
+To access it in your template engine use the request's local variable `proxyRouter.document` and `proxyRouter.meta`
 
 ### Ignore Routes and Alternate Routes
 When the trails app starts, two configurations are added to trailsApp.config.proxyRouter:
@@ -191,7 +202,7 @@ Alternate Routes are any routes that use the GET method and have a wildcard or a
 This is useful for when a child route may not have a specific view eg. `/products/1` and the wildcard might eg. `products/:id`.  With this schema, you need not make a view for each product, and instead just define the wildcard templates which the product will inherit.  This does allow you to still have extreme control over any individual page while also having a fallback.
 
 ### Add Policies to RouteController Methods
-By default trailpack-proxy-route has no policies to prevent anything from hitting the RouteController endpoints. You will need to create policies with your authentication strategy to determine what is allowed to hit them. 
+By default trailpack-proxy-route has no policies to prevent anything from hitting the RouteController endpoints. You will need to create policies with your authentication strategy to determine what is allowed to hit them. We recommend using [Proxy Permissions](https://github.com/calistyle/trailpack-proxy-permissions) which makes this easy and will lock down admininstrative endpoints automatically.
 
 ### Server Clusters with Flat File (TODO)
 For Proxy Router to work on a server cluster as a Flat File server, Redis is required. 
@@ -405,10 +416,13 @@ Renders a markdown document using Markdown-it and all the plugins configured in 
 
 # ROAD MAP
 ## 1.0.0
-Abstract Render as proxy generic - completed
-Build to DB
-Build to FL
-Support Clusters
+- Abstract Render as proxy generic - completed
+- Allow folders to not use a series folder
+- Build to DB
+- Build to FL
+- Ignore Staic Assests
+- Support Cacheing and Cache Busting
+- Support Server Clusters for CMS functions
 
 [npm-image]: https://img.shields.io/npm/v/trailpack-proxy-router.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/trailpack-proxy-router
