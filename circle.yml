@@ -1,3 +1,10 @@
 machine:
   node:
-    version: 5
+    version: 6.7.0
+  environment:
+    DIALECT: postgres
+  services:
+    - postgresql
+database:
+  override:
+    - createdb ProxyRouter
