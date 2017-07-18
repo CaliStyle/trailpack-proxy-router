@@ -64,12 +64,12 @@ module.exports = class RouterService extends Service {
       return false
     }
 
-    // TODO If a Static asset then skip
-    // var reg = new RegExp('(?:\.([^.]+))?$','g')
-    // if (reg.test(url)) {
-    //   this.app.log.silly('proxyrouter:static asset')
-    //   return false
-    // }
+    // If a Static asset then skip
+    const reg = new RegExp('^\.[\w]+$')
+    if (reg.test(url)) {
+      this.app.log.silly('proxyrouter:static asset')
+      return false
+    }
 
     // Check if this has an explicit ignore
     let ignore = false
