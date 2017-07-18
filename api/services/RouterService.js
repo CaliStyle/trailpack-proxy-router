@@ -64,6 +64,10 @@ module.exports = class RouterService extends Service {
       return false
     }
 
+    // If the url is null then skip
+    if (!url) {
+      return false
+    }
     // If a Static asset then skip
     const reg = new RegExp('^\.[\w]+$')
     if (reg.test(url)) {
