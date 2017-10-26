@@ -47,7 +47,7 @@ else if (ORM === 'js-data') {
   }
 }
 else if (ORM === 'sequelize') {
-  packs.push(require('trailpack-sequelize'))
+  packs.push(require('trailpack-proxy-sequelize'))
   if (DIALECT == 'postgres') {
     stores.sqlitedev = {
       database: 'ProxyRouter',
@@ -109,7 +109,15 @@ const App = {
                 associate: (models) => {
                   ModelPassport.config(app, Sequelize).options.classMethods.associate(models)
                   ModelPermissions.config(app, Sequelize).options.classMethods.associate(models)
-                }
+                },
+                findByIdDefault: ModelPermissions.config(app, Sequelize).options.classMethods.findByIdDefault,
+                findOneDefault: ModelPermissions.config(app, Sequelize).options.classMethods.findOneDefault,
+                resolve: ModelPassport.config(app, Sequelize).options.classMethods.resolve
+              },
+              instanceMethods: {
+                getSalutation: ModelPassport.config(app, Sequelize).options.instanceMethods.getSalutation,
+                resolvePassports: ModelPassport.config(app, Sequelize).options.instanceMethods.resolvePassports,
+                resolveRoles: ModelPermissions.config(app, Sequelize).options.instanceMethods.resolveRoles
               }
             }
           }
@@ -208,7 +216,7 @@ const App = {
     proxyGenerics: {},
     proxyEngine: {
       live_mode: false,
-      worker: 'test'
+      profile: 'test'
     },
     proxyPassport: {
       strategies: {

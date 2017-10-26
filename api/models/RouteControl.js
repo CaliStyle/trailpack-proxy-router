@@ -10,7 +10,7 @@ const Model = require('trails/model')
 module.exports = class RouteControl extends Model {
 
   static config (app, Sequelize) {
-    let config = {
+    return {
       options: {
         underscored: true,
         classMethods: {
@@ -42,28 +42,19 @@ module.exports = class RouteControl extends Model {
         }
       }
     }
-
-    if (app.config.database.orm === 'sequelize') {
-      config = {}
-    }
-    return config
   }
 
   static schema (app, Sequelize) {
-    let schema = {}
-    if (app.config.database.orm === 'sequelize') {
-      schema = {
-        // The Score of this control
-        score: {
-          type: Sequelize.INTEGER,
-          defaultValue: 0
-        },
-        positive: {
-          type: Sequelize.BOOLEAN,
-          defaultValue: true
-        }
+    return {
+      // The Score of this control
+      score: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0
+      },
+      positive: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true
       }
     }
-    return schema
   }
 }

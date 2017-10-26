@@ -1,6 +1,6 @@
 {
   "name": "trailpack-proxy-router",
-  "version": "0.0.40",
+  "version": "2.1.0",
   "description": "Router for Proxy Engine",
   "homepage": "https://cali-style.com",
   "author": {
@@ -27,7 +27,7 @@
     "proxy-generics-render": "^0.0.3",
     "rmdir": "^1.2.0",
     "trailpack": "^2.0.0",
-    "trailpack-proxy-generics": "^1.0.1",
+    "trailpack-proxy-generics": "^2.1.0",
     "version_compare": "0.0.3"
   },
   "devDependencies": {
@@ -42,11 +42,11 @@
     "sqlite3": "^3.1.4",
     "supertest": "^2.0.1",
     "trailpack-express": "^2.0.2",
-    "trailpack-proxy-engine": "^1.0.4",
-    "trailpack-proxy-passport": "^1.0.4",
-    "trailpack-proxy-permissions": "^1.0.7",
+    "trailpack-proxy-engine": "^2.1.0",
+    "trailpack-proxy-passport": "^2.1.1",
+    "trailpack-proxy-permissions": "^2.1.0",
+    "trailpack-proxy-sequelize": "^2.0.0-beta",
     "trailpack-router": "^2.0.0",
-    "trailpack-sequelize": "^2.0.0",
     "trails": "^2.0.0"
   },
   "scripts": {

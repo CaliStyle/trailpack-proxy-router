@@ -11,11 +11,11 @@ module.exports = class ProxyRouterTrailpack extends Trailpack {
    */
   validate () {
     if (!_.includes(_.keys(this.app.packs), 'express')) {
-      return Promise.reject(new Error('This Trailpack only works for express!'))
+      return Promise.reject(new Error('This Trailpack currently only works with express!'))
     }
 
-    if (!_.includes(_.keys(this.app.packs), 'sequelize')) {
-      return Promise.reject(new Error('This Trailpack only works for Sequelize!'))
+    if (!_.includes(_.keys(this.app.packs), 'proxy-sequelize')) {
+      return Promise.reject(new Error('This Trailpack currently only works with trailpack-proxy-sequelize!'))
     }
 
     if (!_.includes(_.keys(this.app.packs), 'proxy-engine')) {

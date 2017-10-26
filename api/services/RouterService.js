@@ -65,7 +65,7 @@ module.exports = class RouterService extends Service {
     }
 
     // If the url is null then skip
-    if (!url) {
+    if (!url || url === '/null') {
       return false
     }
     // If a Static asset then skip
