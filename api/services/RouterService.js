@@ -3,7 +3,6 @@
 'use strict'
 
 const Service = require('trails/service')
-const _ = require('lodash')
 const pathToRegexp = require('path-to-regexp')
 const Errors = require('proxy-engine-errors')
 
@@ -24,13 +23,14 @@ module.exports = class RouterService extends Service {
     }
     return Promise.resolve(false)
   }
+
   /**
    * setPreReqRoute req.route is not available at this time, so we mock it
    * @param req
    * @returns {Promise.<*>}
    */
   setPreReqRoute(req) {
-    const prefix = _.get(this.app.config, 'proxyRouter.prefix') || _.get(this.app.config, 'footprints.prefix')
+    const prefix = this.app.config.get('proxyRouter.prefix') || this.app.config.get('footprints.prefix')
     const url = req.originalUrl.replace(prefix, '')
 
     let alternative
@@ -50,13 +50,14 @@ module.exports = class RouterService extends Service {
     })
     return Promise.resolve(alternative)
   }
+
   /**
    * isProxyRouteRequest
    * @param req
    * @returns {boolean} if url matches proxyroute pattern
    */
   isProxyRouterRequest(req) {
-    const prefix = _.get(this.app.config, 'proxyRouter.prefix') || _.get(this.app.config, 'footprints.prefix')
+    const prefix = this.app.config.get('proxyRouter.prefix') || this.app.config.get('footprints.prefix')
     const url = req.originalUrl.replace(prefix, '').split('?')[0]
     // transform the method to lowercase and check if Get Request, if not, skip
     if ( !req.method || req.method.toLowerCase() !== 'get') {
@@ -85,8 +86,7 @@ module.exports = class RouterService extends Service {
       // If route has a config with ignore
       const re = pathToRegexp(route, [])
       if (re.exec(url)) {
-        ignore = true
-        return
+        return ignore = true
       }
     })
     // If this route is ignored.
@@ -99,7 +99,7 @@ module.exports = class RouterService extends Service {
 
   // TODO pick which series test to use
   pickSeries() {
-
+    //
   }
 
   /**
@@ -109,7 +109,7 @@ module.exports = class RouterService extends Service {
    */
   flatfileProxyRoute(req) {
     const RouterFLService = this.app.services.RouterFLService
-    return RouterFLService.get(req)
+    return RouterFLService.lookup(req)
   }
 
   /**
@@ -147,57 +147,57 @@ module.exports = class RouterService extends Service {
   /**
    * findPageByID
    * @param id
+   * @param options
    * @returns {Promise}
    */
-  findPageByID(id) {
-    return new Promise((resolve, reject) => {
-      if (this.app.config.proxyRouter.force_fl) {
-        const err = new Errors.ValidationError(Error('RouterService.findPageByID is disabled while proxyRouter.force_fl is true'))
-        return reject(err)
-      }
-      const Route = this.app.orm.Route
-      // const FootprintService = this.app.services.FootprintService
-      // FootprintService.find('Route', id)
-      Route.findById(id)
-        .then(routes => {
-          if (routes.length == 0){
-            throw new Error(`Route id '${id}' not found`)
-          }
-          return resolve(routes[0])
-        })
-        .catch(err =>{
-          return reject(err)
-        })
-    })
+  findPageByID(id, options) {
+    options = options || {}
+    const Route = this.app.orm['Route']
+
+    return Promise.resolve()
+      .then(() => {
+        if (this.app.config.get('proxyRouter.force_fl')) {
+          throw new Errors.ValidationError(Error('RouterService.findPageByID is disabled while proxyRouter.force_fl is true'))
+        }
+        return Route.findById(id, {transaction: options.transaction || null})
+          .then(_route => {
+            if (!_route){
+              throw new Error(`Route id '${id}' not found`)
+            }
+            return _route
+          })
+      })
   }
 
   /**
    * findPageByPath
    * @param path
+   * @param options
    * @returns {Promise}
    */
-  findPageByPath(path) {
-    return new Promise((resolve, reject) => {
-      if (this.app.config.proxyRouter.force_fl) {
-        const err = new Errors.ValidationError(Error('RouterService.findPageByPath is disabled while proxyRouter.force_fl is true'))
-        return reject(err)
-      }
-      // TODO possibly allow this for specifying versions/series?
-      // Remove all query strings just in case
-      path = path.split('?')[0]
-      const FootprintService = this.app.services.FootprintService
-      FootprintService.find('Route', { path: path })
-        .then(routes => {
-          if (routes.length == 0){
-            throw new Error(`Route not found for: ${path}`)
-          }
-          return resolve(routes[0])
-        })
-        .catch(err =>{
-          return reject(err)
-        })
-    })
+  findPageByPath(path, options) {
+    options = options || {}
+    const Route = this.app.orm['Route']
+    return Promise.resolve()
+      .then(() => {
+        if (this.app.config.get('proxyRouter.force_fl')) {
+          throw new Errors.ValidationError(Error('RouterService.findPageByPath is disabled while proxyRouter.force_fl is true'))
+        }
 
+        path = path.split('?')[0]
+        return Route.findOne({
+          where: {
+            path: path
+          },
+          transaction: options.transaction || null
+        })
+      })
+      .then(_route => {
+        if (!_route) {
+          throw new Error(`Route not found for: ${path}`)
+        }
+        return _route
+      })
   }
   /**
    * resolveIdentifier
@@ -213,6 +213,7 @@ module.exports = class RouterService extends Service {
         path: null
       }
       let lookupFunc
+
       if (pathPattern.test(identifier)) {
         lookupFunc = 'findPageByPath'
         page.path = identifier
@@ -251,56 +252,59 @@ module.exports = class RouterService extends Service {
   /**
    * addPage
    * @param data
+   * @param options
    * @returns {Promise.<proxyroute>}
    */
-  addPage(data) {
-    return new Promise((resolve, reject) => {
-      const RouterFLService = this.app.services.RouterFLService
-      const RouterDBService = this.app.services.RouterDBService
-      let pagePath
-      let regPath
-      // Resolve the identifier
-      this.resolveIdentifier(data.identifier)
-        .then(identifier => {
-          this.app.log.debug('routerservice:addPage identifier', identifier)
-          if (!identifier || !identifier.path) {
-            throw new Errors.FoundError(Error(`Can not resolve ${data.identifier}, make sure it is in "path" format eg. '/hello/world'`))
-          }
-          regPath = identifier.path
-          return RouterFLService.resolveFlatFilePathFromString(identifier.path).path
-        })
-        .then(resolvedPath => {
-          pagePath = resolvedPath
-          if (this.app.config.proxyRouter.force_fl) {
-            // Check the flatfile
-            return RouterFLService.checkIfFile(pagePath)
-          }
-          else {
-            return RouterDBService.checkIfRecord({path: regPath})
-          }
-        })
-        .then(isCreated => {
-          if (isCreated) {
-            throw new Errors.ConflictError(Error(`${regPath} is already created, use RouterController.editPage or RouterService.editPage instead`))
-          }
-          return this.createPage(pagePath, regPath)
-        })
-        .then(page => {
-          return resolve(page)
-        })
-        .catch(err => {
-          return reject(err)
-        })
-    })
+  addPage(data, options) {
+    options = options || {}
+    const RouterFLService = this.app.services.RouterFLService
+    const RouterDBService = this.app.services.RouterDBService
+    let pagePath
+    let regPath
+
+    // Resolve the identifier
+    return this.resolveIdentifier(data.identifier)
+      .then(identifier => {
+        this.app.log.debug('routerservice:addPage identifier', identifier)
+        if (!identifier || !identifier.path) {
+          throw new Errors.FoundError(Error(`Can not resolve ${data.identifier}, make sure it is in "path" format eg. '/hello/world'`))
+        }
+        regPath = identifier.path
+        return RouterFLService.resolveFlatFilePathFromString(identifier.path).path
+      })
+      .then(_resolvedPath => {
+        if (!_resolvedPath) {
+          throw new Error(`${regPath} did not resolve`)
+        }
+        pagePath = _resolvedPath
+        if (this.app.config.get('proxyRouter.force_fl')) {
+          // Check the flatfile
+          return RouterFLService.checkIfFile(pagePath)
+        }
+        else {
+          return RouterDBService.checkIfRecord({path: regPath})
+        }
+      })
+      .then(_isCreated => {
+        if (_isCreated) {
+          throw new Errors.ConflictError(Error(`${regPath} is already created, use RouterController.editPage or RouterService.editPage instead`))
+        }
+        return this.createPage(pagePath, regPath)
+      })
+      .then(page => {
+        return page
+      })
   }
 
   /**
    * createPage
    * @param pagePath
    * @param regPath
+   * @param options
    * @returns {Promise.<proxyRouter>}
    */
-  createPage(pagePath, regPath) {
+  createPage(pagePath, regPath, options) {
+    options = options || {}
     return new Promise((resolve, reject) => {
       const RouterFLService = this.app.services.RouterFLService
       const RouterDBService = this.app.services.RouterDBService
@@ -393,7 +397,7 @@ module.exports = class RouterService extends Service {
     return new Promise((resolve, reject) => {
       const RouterFLService = this.app.services.RouterFLService
       const RouterDBService = this.app.services.RouterDBService
-      if (this.app.config.proxyRouter.force_fl) {
+      if (this.app.config.get('proxyRouter.force_fl')) {
         RouterFLService.update(pagePath)
           .then(updateFile => {
             // Mock the DB return

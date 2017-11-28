@@ -11,27 +11,47 @@ const Service = require('trails/service')
  * @description Build Sitemap
  */
 module.exports = class RouterSitemapService extends Service {
+  constructor(app) {
+    super(app)
+    // Flat Map
+    this.pwd = this.app.config.get('proxyRouter.folder')
+    this.flat = []
+  }
+
   initFL() {
-    const pwd = this.app.config.proxyRouter.folder
+    const pwd = this.app.config.get('proxyRouter.folder')
     const sitemap = this.buildChildrenFL(pwd)
     return this.app.proxyRouter.sitemap = sitemap
   }
-  buildChildrenFL(pwd) {
 
+  flatMap() {
+    const pwd = this.app.config.get('proxyRouter.folder')
+    this.flat = []
+    this.buildChildrenFL(pwd, true)
+    return this.flat.slice()
+  }
+
+  buildChildrenFL(pwd, flat = false) {
     if (!pwd) {
       throw 'Please include the absolute path of the directory containing the docs you want to map.'
     }
-    const rootPath = path.resolve(this.app.config.proxyRouter.folder)
+    const rootPath = path.resolve(this.app.config.get('proxyRouter.folder'))
     const pwdPath = path.resolve(pwd)
     const pwdStat = fs.statSync(pwd)
     const files = fs.readdirSync(pwd)
     const output = {}
     let meta = {}
+    let compiled
 
-    // TODO Make use latest series
-    const possibleSeries = `${pwdPath}/series/a0/0.0.0.md`
-    if (fs.existsSync(possibleSeries)) {
-      meta = this.getMetaFL(possibleSeries)
+    // TODO Make it use latest series
+    const possibleSeries = `${pwdPath}/series/a0/0.0.0`
+
+    if (fs.existsSync(`${possibleSeries}.md`)) {
+      meta = this.getMetaFL(`${possibleSeries}.md`)
+    }
+
+    if (fs.existsSync(`${possibleSeries}.html`)) {
+      meta = this.getMetaFL(`${possibleSeries}.html`)
     }
 
     files.forEach(file => {
@@ -41,8 +61,8 @@ module.exports = class RouterSitemapService extends Service {
       const stat = fs.statSync(absolutePath)
       // If this file is a directory, pass the directory to #buildChirldrenFL, saving the
       // results to output keyed by the directory name
-      if (stat.isDirectory() && file !== this.app.config.proxyRouter.series && file.charAt(0) != ':') {
-        output[file] = this.buildChildrenFL(absolutePath)
+      if (stat.isDirectory() && file !== this.app.config.get('proxyRouter.series') && file.charAt(0) !== ':') {
+        output[file] = this.buildChildrenFL(absolutePath, flat)
       }
 
 
@@ -58,9 +78,10 @@ module.exports = class RouterSitemapService extends Service {
 
     })
 
-    return {
+    compiled = {
       // Fake id to mimic response from DB
       id: null,
+      // The object key name
       key: this.pathToKey(pwdPath),
       // Link Title
       title: this.getTitleFL(meta.title, pwd),
@@ -68,6 +89,8 @@ module.exports = class RouterSitemapService extends Service {
       meta: meta,
       // Link
       path: `/${ pwdPath.split(rootPath + '/')[1] || '' }`,
+      // URL for sitemap
+      url: `/${ pwdPath.split(rootPath + '/')[1] || '' }`,
       // Children of Link
       children: output,
       // Sitemap.xml lastmod
@@ -77,6 +100,12 @@ module.exports = class RouterSitemapService extends Service {
       // Sitemap.xml priority
       priority: meta.priority || '0.5'
     }
+    // let {children:c, ...rest} = compiled
+    if (flat) {
+      this.flat.push(_.omit(compiled, ['id','key','children','path','meta']))
+    }
+
+    return compiled
   }
 
   /**
@@ -118,8 +147,9 @@ module.exports = class RouterSitemapService extends Service {
   keyToSitemap(key) {
     return _.get(this.app.proxyRouter.sitemap, key)
   }
+
   pathToKey(pwd) {
-    const rootPath = path.resolve(this.app.config.proxyRouter.folder)
+    const rootPath = path.resolve(this.app.config.get('proxyRouter.folder'))
     let key
     // pwd = pwd.replace(rootPath + '/', '') || ''
     pwd = pwd.split(rootPath + '/')[1] || ''

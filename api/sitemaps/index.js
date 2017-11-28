@@ -1,0 +1,1 @@
+exports.ContentSitemap = require('./ContentSitemap')

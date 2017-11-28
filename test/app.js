@@ -13,6 +13,7 @@ const packs = [
   require('trailpack-proxy-generics'),
   require('trailpack-proxy-passport'),
   require('trailpack-proxy-permissions'),
+  require('trailpack-proxy-sitemap'),
   require('../') // trailpack-proxy-route
 ]
 
@@ -224,6 +225,10 @@ const App = {
           strategy: require('passport-local').Strategy
         }
       }
+    },
+    proxySitemap: {
+      host: 'https://test.com',
+      cache: 100000
     },
     proxyPermissions: {
       defaultRole: 'public',

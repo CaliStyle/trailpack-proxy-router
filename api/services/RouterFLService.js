@@ -32,9 +32,9 @@ module.exports = class RouterFLService extends Service {
    * @returns {Promise.<{id: number, meta: object, document: string, path: string, series: string, version: string}>}
    */
   // TODO pass options
-  get(req) {
+  lookup(req) {
     // return new Promise((resolve, reject) => {
-      // this.app.log.silly('RouterFLService.get ordinal:', req.originalUrl, 'base:', req.baseUrl)
+      // this.app.log.silly('RouterFLService.lookup ordinal:', req.originalUrl, 'base:', req.baseUrl)
     const prefix = _.get(this.app.config, 'proxyRouter.prefix') || _.get(this.app.config, 'footprints.prefix')
     const pagePath = req.originalUrl.replace(prefix, '')
     const alternatePath = this.alternatePath(req.route)
@@ -59,6 +59,12 @@ module.exports = class RouterFLService extends Service {
         return proxyRoute
       })
   }
+
+  /**
+   *
+   * @param route
+   * @returns {string|null}
+   */
   alternatePath(route) {
     route = route && route.path ? route.path.replace('*/', '').replace('*', '').split('?')[0] : null
     // if (route) {
@@ -78,10 +84,10 @@ module.exports = class RouterFLService extends Service {
     this.app.log.debug('RouterFLService.renderPage', pagePath, alternatePath, options)
     const RenderGenericService = this.app.services.RenderGenericService
     const extensions = _.values(EXTENSIONS).sort(ext => {
-      if (options.extension && ext == options.extension) {
+      if (options.extension && ext === options.extension) {
         return -1
       }
-      else if (!options.extension && ext == _.get(this.app.config,'proxyRouter.default_extension')) {
+      else if (!options.extension && ext === this.app.config.get('proxyRouter.default_extension')) {
         return -1
       }
       else {
@@ -185,6 +191,11 @@ module.exports = class RouterFLService extends Service {
     })
   }
 
+  /**
+   *
+   * @param data
+   * @returns {Promise}
+   */
   createSeries(data) {
     return new Promise((resolve, reject) => {
       let directories
@@ -278,8 +289,8 @@ module.exports = class RouterFLService extends Service {
    * @param options
    * @returns {Promise}
    */
-
   destroy(pagePath, options){
+    options = options || {}
     return new Promise((resolve, reject) => {
       // Try and get the directory name of the pagePath
       let dir
@@ -291,11 +302,11 @@ module.exports = class RouterFLService extends Service {
       }
       const dirParts = path.normalize(dir).split('/')
       // Remove the test folder from the path
-      if (_.values(SERIES).indexOf(dirParts[dirParts.length - 1] != -1)) {
+      if (_.values(SERIES).indexOf(dirParts[dirParts.length - 1] !== -1)) {
         dirParts.splice(-1,1)
       }
       // Remove the series folder of the path
-      if (dirParts[dirParts.length - 1] == 'series') {
+      if (dirParts[dirParts.length - 1] === 'series') {
         dirParts.splice(-1,1)
       }
       // Remove the folder entirely if it is not the root
@@ -347,7 +358,7 @@ module.exports = class RouterFLService extends Service {
    */
   resolveFlatFilePathFromString(orgPath, options){
     options = options || {}
-    options.extension = options.extension || _.get(this.app.config, 'proxyRouter.default_extension')
+    options.extension = options.extension || this.app.config.get('proxyRouter.default_extension')
     const defaultVersion = '0.0.0'
     const parts = path.normalize(orgPath).split('/')
     const outPath = ['', SERIES.A0, defaultVersion]
@@ -357,7 +368,7 @@ module.exports = class RouterFLService extends Service {
     }
     // Loop through folder
     _.each(parts, (part, index) => {
-      if (index + 1 == parts.length) {
+      if (index + 1 === parts.length) {
         outPath[0] = `/${ outPath[0] }/${ part }/${ this.app.config.proxyRouter.series }`
       }
       else {
@@ -369,9 +380,14 @@ module.exports = class RouterFLService extends Service {
       outPath[1] = options.series
     }
     // If Requesting Latest Version
-    if (options.version && options.version == 'latest') {
+    if (options.version && options.version === 'latest') {
       try {
-        const directory = path.join(process.cwd(), this.app.config.proxyRouter.folder, outPath[0], outPath[1])
+        const directory = path.join(
+          process.cwd(),
+          this.app.config.get('proxyRouter.folder'),
+          outPath[0],
+          outPath[1]
+        )
         this.app.log.silly('RouterFLService.resolveFlatFilePathFromString: Directory ', directory)
         const files = fs.readdirSync(directory)
         let version = defaultVersion
@@ -402,8 +418,6 @@ module.exports = class RouterFLService extends Service {
       outPath[2] = `${outPath[2]}${options.extension}`
       // console.log('broke default', orgPath, outPath[2])
     }
-
-
 
     // Construct Final Response
     const res = {
@@ -440,7 +454,7 @@ module.exports = class RouterFLService extends Service {
       outPath[0] = `/${options.host}`
     }
     _.each(parts, (part, index) => {
-      if (index + 1 == parts.length) {
+      if (index + 1 === parts.length) {
         outPath[0] = `/${ outPath[0] }/${ part }/${ this.app.config.proxyRouter.series }`
       }
       else {
@@ -452,7 +466,12 @@ module.exports = class RouterFLService extends Service {
       // The Original path (the url)
       orgPath: orgPath,
       // The Server path
-      path: path.join(__dirname, '../../', this.app.config.proxyRouter.folder, outPath.join('/'))
+      path: path.join(
+        __dirname,
+        '../../',
+        this.app.config.get('proxyRouter.folder'),
+        outPath.join('/')
+      )
     }
     return res
   }
@@ -500,12 +519,24 @@ module.exports = class RouterFLService extends Service {
     })
   }
 
+  /**
+   *
+   * @param srcPath
+   * @returns {Array.<T>}
+   */
   getDirectories(srcPath) {
     return fs.readdirSync(srcPath).filter((file) => {
       return fs.statSync(path.join(srcPath, file)).isDirectory()
     })
   }
 
+  /**
+   *
+   * @param objectsArray
+   * @param iterator
+   * @param callback
+   * @returns {*}
+   */
   sequence(objectsArray, iterator, callback) {
     const startPromise = objectsArray.reduce((prom, object) => {
       return prom.then(function () {

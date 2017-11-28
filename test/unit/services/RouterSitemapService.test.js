@@ -11,7 +11,6 @@ describe('RouterSitemapService', () => {
     const children = Object.keys(out.children)
     const hello = out.children['hello']
     const helloChildren = Object.keys(hello.children)
-    // console.log('THIS META', out, hello)
     assert.ok(out.title)
     assert.ok(out.path)
     assert.ok(out.children)
@@ -31,6 +30,11 @@ describe('RouterSitemapService', () => {
       assert.ok(hello.children[key].lastmod)
       assert.ok(hello.children[key].priority)
     })
+    done()
+  })
+  it('should build flat map file', (done) => {
+    const out = global.app.services.RouterSitemapService.flatMap()
+    assert.equal(out.length, 10)
     done()
   })
 })

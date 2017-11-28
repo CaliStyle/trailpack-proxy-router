@@ -141,7 +141,7 @@ By default the Proxy Route content directory is `content` in the root directory 
 - Every directory must have a series directory that contains a named test directory eg. `a0` with a SemVer versioned markdown document.
 - Named test directories follow this pattern: `a0`, `b0`, `c0` etc.  Upon exceeding `z0` change to `a1`, `b1`, `c1` etc.
 - Directories that start with wild cards eg. `:world` or `*` will match express routes.
-- Files must end in a `.md` (markdown) or `.html` (HTML) file extension, but the entire folder must be of all one file type.
+- Files must end in a `.md` (markdown) or `.html` (HTML) file extension, but a test directory must be of all one file type.
 
 ##### Example
 ```
@@ -181,8 +181,9 @@ When the trails app starts, two configurations are added to trailsApp.config.pro
 - `alternateRoutes`
 
 Ignored Routes are any routes that do not use the GET method or have an app config with ignore set to true 
-```js
+```
   // config/routes.js
+  ...
   {
     method: ['GET'],
     path: '/ignore/me',
@@ -202,7 +203,7 @@ Alternate Routes are any routes that use the GET method and have a wildcard or a
 This is useful for when a child route may not have a specific view eg. `/products/1` and the wildcard might eg. `products/:id`.  With this schema, you need not make a view for each product, and instead just define the wildcard templates which the product will inherit.  This does allow you to still have extreme control over any individual page while also having a fallback.
 
 ### Add Policies to RouteController Methods
-By default trailpack-proxy-route has no policies to prevent anything from hitting the RouteController endpoints. You will need to create policies with your authentication strategy to determine what is allowed to hit them. We recommend using [Proxy Permissions](https://github.com/calistyle/trailpack-proxy-permissions) which makes this easy and will lock down admininstrative endpoints automatically.
+By default trailpack-proxy-route has no policies to prevent anything from hitting the RouteController endpoints. You will need to create policies with your authentication strategy to determine what is allowed to hit them. We recommend using [Proxy Permissions](https://github.com/calistyle/trailpack-proxy-permissions) which makes this easy and will lock down administrative endpoints automatically.
 
 ### Server Clusters with Flat File (TODO)
 For Proxy Router to work on a server cluster as a Flat File server, Redis is required. 
@@ -211,6 +212,7 @@ After any route or series is updated as a Flat File, an event is produced to all
 ### Pull Requests to Source (TODO)
 If you are hosting your repository on GitHub, then great news, when you create/update/destroy a Page or Series on a production web app, Proxy Router can issue a pull request to your repo. This keeps your remote Flat Files in sync with your production application.
 ```
+TODO example
 ```
 
 ## Usage
@@ -240,7 +242,7 @@ og: {'image': '/and/cool/things/like/og-tags.jpg'}
 I can even use embeds like a youtube video or my own custom ones.
 @[youtube](lJIrF4YjHfQ)
 
-I can even use custom HTML DOM like ones from Angular2
+I can even use custom HTML DOM like ones from Angular
 
 <login>
 </login>
