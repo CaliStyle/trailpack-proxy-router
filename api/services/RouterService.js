@@ -5,6 +5,7 @@
 const Service = require('trails/service')
 const pathToRegexp = require('path-to-regexp')
 const Errors = require('proxy-engine-errors')
+const _ = require('lodash')
 
 /**
  * @module RouterService
@@ -21,7 +22,14 @@ module.exports = class RouterService extends Service {
     if (!req.trailsApp.config.proxyRouter.cache.allow) {
       return Promise.resolve(false)
     }
-    return Promise.resolve(false)
+    // console.log('WILL CACHE')
+    const prefix = _.get(this.app.config, 'proxyRouter.prefix') || _.get(this.app.config, 'footprints.prefix')
+    const pagePath = req.originalUrl.replace(prefix, '')
+
+    // console.log('CACHED', pagePath, req.trailsApp.proxyRouter.cache[pagePath])
+    return Promise.resolve(req.trailsApp.proxyRouter.cache[pagePath])
+
+    // return Promise.resolve(false)
   }
 
   /**

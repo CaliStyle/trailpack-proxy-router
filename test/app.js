@@ -207,7 +207,7 @@ const App = {
         // The redis datastore prefix
         prefix: 'pxy',
         // Allow Caching
-        allow: false,
+        allow: true,
         // Milliseconds before cache is ejected
         eject: 10000
       },

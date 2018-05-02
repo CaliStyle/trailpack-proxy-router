@@ -17,6 +17,12 @@ const Errors = require('proxy-engine-errors')
  * @description Binds Router Database to Flat Files
  */
 module.exports = class RouterFLService extends Service {
+  // TODO cache this in Redis
+  cache(pagePath, proxyRoute) {
+    this.app.proxyRouter.cache[pagePath] = proxyRoute
+    return
+  }
+
   /**
    * build
    * @returns {Promise.<T>}
@@ -55,6 +61,10 @@ module.exports = class RouterFLService extends Service {
           meta: renderedPage.meta ? renderedPage.meta : {},
           document: renderedPage.document ? renderedPage.document : renderedPage,
           children: renderedPage.children ? renderedPage.children : {}
+        }
+        // TODO make this use redis
+        if (this.app.config.proxyRouter.cache.allow) {
+          this.cache(pagePath, proxyRoute)
         }
         return proxyRoute
       })
