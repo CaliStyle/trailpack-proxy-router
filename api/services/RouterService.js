@@ -144,6 +144,10 @@ module.exports = class RouterService extends Service {
    * @returns {Promise.<proxyRouter>}
    */
   resolveProxyRoute(req) {
+    if (req.route && req.route.cached) {
+      this.app.log.debug('USING CACHED ROUTE', req.route.path, req.route.cached_at)
+      return req.route
+    }
     if (this.app.config.proxyRouter.force_fl) {
       return this.flatfileProxyRoute(req)
     }
