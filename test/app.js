@@ -6,6 +6,7 @@ const ModelPassport = require('trailpack-proxy-passport/api/models/User')
 const ModelPermissions = require('trailpack-proxy-permissions/api/models/User')
 const lib = require('../lib')
 const Controller = require('trails/controller')
+const fsStore = require('cache-manager-fs')
 
 const packs = [
   require('trailpack-router'),
@@ -14,6 +15,7 @@ const packs = [
   require('trailpack-proxy-passport'),
   require('trailpack-proxy-permissions'),
   require('trailpack-proxy-sitemap'),
+  require('trailpack-proxy-cache'),
   require('../') // trailpack-proxy-route
 ]
 
@@ -204,8 +206,8 @@ const App = {
       flush_after: 10000,
       // Cache
       cache: {
-        // The redis datastore prefix
-        prefix: 'pxy',
+        // The datastore prefix
+        prefix: 'memory',
         // Allow Caching
         allow: true,
         // Milliseconds before cache is ejected
@@ -213,6 +215,20 @@ const App = {
       },
       // If multi-site is enabled either false or an array e.g. ['website1.com','website2.com']
       multisite: false
+    },
+    proxyCache: {
+      stores: [
+        {
+          name: 'memory',
+          store: 'memory',
+          max: 100,
+          ttl: 0
+        }, {
+          name: 'fs',
+          store: fsStore
+        }
+      ],
+      defaults: ['memory']
     },
     proxyGenerics: {},
     proxyEngine: {

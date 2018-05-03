@@ -22,14 +22,15 @@ module.exports = class RouterService extends Service {
     if (!req.trailsApp.config.proxyRouter.cache.allow) {
       return Promise.resolve(false)
     }
-    // console.log('WILL CACHE')
+
     const prefix = _.get(this.app.config, 'proxyRouter.prefix') || _.get(this.app.config, 'footprints.prefix')
     const pagePath = req.originalUrl.replace(prefix, '')
+    const store = _.get(this.app.config, 'proxyRouter.cache.prefix')
+    const proxyDefaultCache = this.app.services.CacheService.getStore(store)
 
-    // console.log('CACHED', pagePath, req.trailsApp.proxyRouter.cache[pagePath])
-    return Promise.resolve(req.trailsApp.proxyRouter.cache[pagePath])
-
-    // return Promise.resolve(false)
+    return proxyDefaultCache.get(pagePath).then(result => {
+      return result
+    })
   }
 
   /**

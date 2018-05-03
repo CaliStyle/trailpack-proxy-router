@@ -1,5 +1,6 @@
 node_modules
 coverage
-.idea
+/.idea/
+/yarn.lock
+.nyc_output/*
 .tmp
-npm-debug.log

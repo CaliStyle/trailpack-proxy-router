@@ -19,8 +19,20 @@ const Errors = require('proxy-engine-errors')
 module.exports = class RouterFLService extends Service {
   // TODO cache this in Redis
   cache(pagePath, proxyRoute) {
-    this.app.proxyRouter.cache[pagePath] = proxyRoute
-    return
+    // this.app.proxyRouter.cache[pagePath] = proxyRoute
+    const ttl = this.app.config.proxyRouter.cache.eject || 100
+    // Return the first store into defaults config
+    const store = _.get(this.app.config, 'proxyRouter.cache.prefix')
+    const proxyDefaultCache = this.app.services.CacheService.getStore(store)
+    return proxyDefaultCache.set(pagePath, proxyRoute, {ttl: ttl})
+      // .then(result => {
+      //   //console.log('CACHED RESULT', result)
+      //   return proxyDefaultCache.get(pagePath)
+      // })
+      // .then(result => {
+      //   // console.log('CACHED RETURN', result)
+      //   return result
+      // })
   }
 
   /**
@@ -64,9 +76,11 @@ module.exports = class RouterFLService extends Service {
         }
         // TODO make this use redis
         if (this.app.config.proxyRouter.cache.allow) {
-          this.cache(pagePath, proxyRoute)
+          return this.cache(pagePath, proxyRoute)
         }
-        return proxyRoute
+        else {
+          return proxyRoute
+        }
       })
   }
 

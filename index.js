@@ -26,6 +26,10 @@ module.exports = class ProxyRouterTrailpack extends Trailpack {
       return Promise.reject(new Error('This Trailpack requires trailpack-proxy-generics!'))
     }
 
+    if (!_.includes(_.keys(this.app.packs), 'proxy-cache')) {
+      return Promise.reject(new Error('This Trailpack requires trailpack-proxy-cache!'))
+    }
+
     if (!this.app.config.proxyRouter) {
       return Promise.reject(new Error('No configuration found at config.proxyRouter!'))
     }
@@ -36,6 +40,10 @@ module.exports = class ProxyRouterTrailpack extends Trailpack {
 
     if (!this.app.config.proxyGenerics) {
       return Promise.reject(new Error('No configuration found at config.proxyGenerics!'))
+    }
+
+    if (!this.app.config.proxyCache) {
+      return Promise.reject(new Error('No configuration found at config.proxyCache!'))
     }
 
     if (
